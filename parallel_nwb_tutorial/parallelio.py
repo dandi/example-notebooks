@@ -1,8 +1,9 @@
-from mpi4py import MPI
 import numpy as np
 from dateutil import tz
-from pynwb import NWBHDF5IO, NWBFile, TimeSeries
 from datetime import datetime
+
+from pynwb import NWBHDF5IO, NWBFile, TimeSeries
+from mpi4py import MPI
 from hdmf.data_utils import DataChunkIterator
 
 start_time = datetime(2018, 4, 25, 2, 30, 3, tzinfo=tz.gettz('US/Pacific'))
