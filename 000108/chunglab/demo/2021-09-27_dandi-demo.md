@@ -230,7 +230,8 @@ chunks_41
 # This is what our sidecar looks like - we're going to use
 # the pixel size and pieces of the chunk transform matrix.
 
-get_json(get_asset_url("000108", chunks_41[0]["sidecar_asset_id"]))
+meta = get_json(get_asset_url("000108", chunks_41[0]["sidecar_asset_id"]))
+meta
 ```
 
 ```python
@@ -447,12 +448,61 @@ def find_extents(dandiset, subject, sample, stain, level=0):
 ```
 
 ```python
-extents6 = find_extents("000108", "MITU01", "41", "YO", 6)
-overview = read("000108", "MITU01", "41", "YO", 0, extents6["x1"], 0, extents6["y1"], 16, 17, 6)[0]
+level = 6
+extents6 = find_extents("000108", "MITU01", "41", "YO", level)
+overview = read("000108", "MITU01", "41", "YO", 0, extents6["x1"], 0, extents6["y1"], 0, extents6["z1"], level)
+```
+
+```python
+overview.shape
+```
+
+```python
 pyplot.figure(figsize=(12, 12))
-pyplot.imshow(overview, cmap='cubehelix')
+pyplot.imshow(overview[16, :], cmap='cubehelix')
 pyplot.figure(figsize=(12, 12))
 pyplot.imshow(photo[::-1, ::-1])
+```
+
+### Use neuroglancer to display the stitched volume
+
+```python
+import neuroglancer
+import os
+```
+
+```python
+viewer = neuroglancer.Viewer()
+```
+
+```python
+# This volume handle can be used to notify the viewer that the data has changed.
+volume = neuroglancer.LocalVolume(
+    overview,
+    dimensions=neuroglancer.CoordinateSpace(
+        names=['x', 'y', 'z'],
+        units=['um', 'um', 'um'],
+        scales=[val*level for val in meta["PixelSize"]],
+    ),
+    voxel_offset=[0,0,0]
+    )
+with viewer.txn() as s:
+    s.layers['volume'] = neuroglancer.ImageLayer(
+        source=volume,
+        # Define a custom shader to display this mask array as red+alpha.
+        shader="""
+#uicontrol vec3 color color(default="green")
+#uicontrol float brightness slider(min=-1, max=1)
+#uicontrol float contrast slider(min=-9, max=-5, step=0.1)
+void main() {
+  emitRGB(color *
+          (toNormalized(getDataValue(0)) + brightness) *
+          exp(contrast));
+}
+""",
+    )
+    s.position = np.array(overview.shape)/2
+print("Neuroglancer URL:", viewer.get_viewer_url().replace("http://127.0.0.1:", f"https://hub.dandiarchive.org/user/{os.environ['GITHUB_USER']}/proxy/"))
 ```
 
 ```python tags=[]
