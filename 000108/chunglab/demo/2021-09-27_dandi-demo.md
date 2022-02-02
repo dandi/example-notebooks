@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.0
+      jupytext_version: 1.13.6
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -82,13 +82,20 @@ session name.
 ```python
 def find_all_sessions(dandiset, subject):
     query = urlencode({"path_prefix":f"sub-{subject}"})
-    url = f"https://api.dandiarchive.org/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
-    qresult = get_json(url)
-    return sorted([_[4:] for _ in qresult["folders"] if _.startswith("ses-")])
+    api = "https://api.dandiarchive.org"
+    url = f"/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
+    sessions = []
+    qresult = {'next': url}
+    while qresult['next'] is not None:
+        if "results" in qresult:
+            qresult["next"] += f"&{query}"
+        qresult = get_json(api + qresult['next'])
+        if "results" in qresult:
+            sessions.extend(sorted([_[4:] for _ in qresult["results"]["folders"] if _.startswith("ses-")]))
+    return sessions
 
 
 find_all_sessions("000108", "MITU01")
-
 ```
 
 ## Find chunks in a session
@@ -103,8 +110,17 @@ class MissingSidecarError(ValueError):
 
 def list_directory(dandiset, path):
     query = urlencode({"path_prefix": path})
-    url = f"https://api.dandiarchive.org/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
-    return get_json(url)
+    api = "https://api.dandiarchive.org"
+    url = f"/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
+    results = {"files": {}}
+    qresult = {'next': url}
+    while qresult['next'] is not None:
+        if "results" in qresult:
+            qresult["next"] += f"&{query}"
+        qresult = get_json(api + qresult['next'])
+        if "results" in qresult:
+            results["files"].update(qresult["results"]["files"])
+    return results
 
 def find_all_chunks(dandiset, subject, session):
     """
@@ -165,7 +181,7 @@ find_all_chunks("000108", "MITU01", '20210820h19m29s49')
 Each session in the dataset has a photo of the accompanying sample (the slab).
 This is a JPEG - the following code gets you the image as an RGB image array.
 
-```python
+```python tags=[]
 def get_photo(dandiset, subject, session):
     metadata = list_directory(dandiset,  f"sub-{subject}/ses-{session}/microscopy")
     # example:
@@ -226,7 +242,7 @@ chunks_41 = find_volume_chunks("000108", "MITU01", "41", "YO")
 chunks_41
 ```
 
-```python
+```python tags=[]
 # This is what our sidecar looks like - we're going to use
 # the pixel size and pieces of the chunk transform matrix.
 
@@ -234,7 +250,7 @@ meta = get_json(get_asset_url("000108", chunks_41[0]["sidecar_asset_id"]))
 meta
 ```
 
-```python
+```python tags=[]
 class Volume:
     """
     This is a chunk record + the chunk's bounds
@@ -457,7 +473,7 @@ overview = read("000108", "MITU01", "41", "YO", 0, extents6["x1"], 0, extents6["
 overview.shape
 ```
 
-```python
+```python tags=[]
 pyplot.figure(figsize=(12, 12))
 pyplot.imshow(overview[16, :], cmap='cubehelix')
 pyplot.figure(figsize=(12, 12))
@@ -471,11 +487,11 @@ import neuroglancer
 import os
 ```
 
-```python
+```python tags=[]
 viewer = neuroglancer.Viewer()
 ```
 
-```python
+```python tags=[]
 # This volume handle can be used to notify the viewer that the data has changed.
 volume = neuroglancer.LocalVolume(
     overview,
@@ -511,7 +527,7 @@ x, y, z = 16080, 1957, 1024
 img = read("000108", "MITU01", "41", "YO", x-200, x+200, y-200, y+200, z, z+1)[0]
 ```
 
-```python
+```python tags=[]
 pyplot.figure(figsize=(12, 12))
 pyplot.imshow(img, cmap='cubehelix')
 ```
