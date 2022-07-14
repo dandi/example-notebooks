@@ -42,28 +42,32 @@ def get_url(ds, sample, ses, stain):
     zarrs = list(ds.get_assets_by_glob(f"*sub-MITU01/*_ses-{ses}*_sample-{sample}_stain-{stain}_run-1*.ome.zarr"))
 
     #print([a.path for a in zarrs])
-    layers = []
-    for val in sorted(zarrs, key=lambda x: int(x.path.split("_chunk-")[1].split("_")[0])):
-        layer = dict(
-                source=f"zarr://{val.get_content_url(regex='s3')}",
-                type="image",
-                shader=cubehelix_template % (colormap[stain] if stain in colormap else 40),
-                name=val.path.split("_sample-")[1].split("_")[0] + "-" + f'{int(val.path.split("_chunk-")[1].split("_")[0]):02d}'
-            )
-        layers.append(layer)
+    sources = [f"zarr://{val.get_content_url(regex='s3')}"
+              for val in sorted(zarrs, key=lambda x: int(x.path.split("_chunk-")[1].split("_")[0]))]
 
-    ng_url = "https://neuroglancer-demo.appspot.com/"
-    ng_str = json.dumps(dict(dimensions={"t":[1,"s"],
-                                         "z":[0.000002285,"m"],
-                                         "y":[0.0000032309999999999996,"m"],
-                                         "x":[0.000002285,"m"]},
-                             displayDimensions=["z","y","x"],
-                             crossSectionScale=50,
-                             projectionScale=500000,
-                             layers=layers,
-                             showDefaultAnnotations=False,
-                             layout="yz"))
-    url = f"{ng_url}#!%s" % quote(ng_str)
+    url = "#"
+    if len(zarrs):
+        val = zarrs[0]
+        layer = dict(
+            source=sources,
+            type="image",
+            shader=cubehelix_template % (colormap[stain] if stain in colormap else 40),
+            name=val.path.split("_sample-")[1].split("_")[0] + "-" + f'{len(zarrs)}',
+            tab='rendering',
+        )
+
+        ng_url = "https://neuroglancer-demo.appspot.com/"
+        ng_str = json.dumps(dict(dimensions={"t":[1,"s"],
+                                             "z":[0.000002285,"m"],
+                                             "y":[0.0000032309999999999996,"m"],
+                                             "x":[0.000002285,"m"]},
+                                 displayDimensions=["z","y","x"],
+                                 crossSectionScale=50,
+                                 projectionScale=500000,
+                                 layers=[layer],
+                                 showDefaultAnnotations=False,
+                                 layout="yz"))
+        url = f"{ng_url}#!%s" % quote(ng_str)
     return url, len(zarrs)
 
 
@@ -106,9 +110,9 @@ if __name__ == "__main__":
         stains = df[df['sample'] == sample].stain.unique()
         row = f"{sample}: "
         for stain in stains:
-            print(sample, ses, stain)
             url, nchunks = get_url(ds, sample, ses, stain)
             row += f'<a href="{url}" target="_blank">{stain}+{nchunks}</a> '
+        print(sample, ses, stain, nchunks, len(url))
         row += f' - <a href="https://dandiarchive.org/dandiset/000108/draft/files?location=sub-MITU01%2Fses-{ses}%2Fmicr%2F">{ses}</a>'
         photo_url = get_photo_url(photos, sample)
         if photo_url:
