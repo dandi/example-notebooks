@@ -1,4 +1,6 @@
 [codespell]
 skip = .git,*.pdf,*.svg
-#
-# ignore-words-list =
+# all images embedded in .ipynb jsons
+ignore-regex = "image/png": ".*
+# nd - people just like it
+ignore-words-list = nd
