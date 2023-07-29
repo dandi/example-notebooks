@@ -1,6 +1,6 @@
 # Yu, Gutnisky et al., 2016 - A DataJoint example
 
-## This directory a duplicate of the [DJ-NWB-Yu-Gutnisky-2016 repository](https://github.com/datajoint-company/DJ-NWB-Yu-Gutnisky-2016) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase).
+### This directory a duplicate of the [DJ-NWB-Yu-Gutnisky-2016 repository](https://github.com/datajoint-company/DJ-NWB-Yu-Gutnisky-2016) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase). Submit any issues to [DJ-NWB-Yu-Gutnisky-2016 repository](https://github.com/datajoint-company/DJ-NWB-Yu-Gutnisky-2016).
 
 
 This notebook presents data and results associated with the following papers:

@@ -1,6 +1,6 @@
 # Li et al., 2015 and Li, Daie et al., 2016
 
-## This directory a duplicate of the [DJ-NWB-Li-Daie-2015-2016 repository](https://github.com/datajoint-company/DJ-NWB-Li-Daie-2015-2016) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase).
+### This directory a duplicate of the [DJ-NWB-Li-Daie-2015-2016 repository](https://github.com/datajoint-company/DJ-NWB-Li-Daie-2015-2016) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase). Submit any issues to [DJ-NWB-Li-Daie-2015-2016 repository](https://github.com/datajoint-company/DJ-NWB-Li-Daie-2015-2016).
 
 DataJoint-NWB conversion project for Li et al. (2015) and Li, Daie et al. (2016) papers.
  

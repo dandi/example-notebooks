@@ -1,6 +1,6 @@
 # Guo, Inagaki et al., 2017
 
-## This directory a duplicate of the [DJ-NWB-Guo-Inagaki-2017 repository](https://github.com/datajoint-company/DJ-NWB-Guo-Inagaki-2017) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase).
+### This directory a duplicate of the [DJ-NWB-Guo-Inagaki-2017 repository](https://github.com/datajoint-company/DJ-NWB-Guo-Inagaki-2017) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase). Submit any issues to [DJ-NWB-Guo-Inagaki-2017 repository](https://github.com/datajoint-company/DJ-NWB-Guo-Inagaki-2017).
 
 
 Data pipeline for Guo, Inagaki et al., 2017 from Svoboda Lab.

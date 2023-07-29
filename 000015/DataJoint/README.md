@@ -1,6 +1,6 @@
 # Chen et al., 2017
 
-## This directory a duplicate of [this repository](https://github.com/datajoint-company/DJ-NWB-Chen-2017) as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase).
+### This directory a duplicate of the [DJ-NWB-Chen-2017](https://github.com/datajoint-company/DJ-NWB-Chen-2017) repository as part of the [DataJoint NWB Showcase](https://github.com/datajoint-company/DataJoint-NWB-showcase). Submit any issues to [DJ-NWB-Chen-2017](https://github.com/datajoint-company/DJ-NWB-Chen-2017).
 
 This project sets up the data pipeline corresponding to the data from Chen et al., (2017). **"A Map of Anticipatory Activity in Mouse Motor Cortex."** and provides a Jupyter Notebook demonstrating the use of the DataJoint pipeline in replicating some of the main figures.
 
