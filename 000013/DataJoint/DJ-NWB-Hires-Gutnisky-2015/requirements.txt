@@ -13,7 +13,7 @@ ipython-genutils==0.2.0
 jedi==0.14.0
 minio==4.0.18
 networkx==2.3
-numpy==1.16.4
+numpy==1.22.0
 pandas==0.25.0rc0
 parso==0.5.0
 pickleshare==0.7.5
