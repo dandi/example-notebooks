@@ -1,5 +1,5 @@
 backcall==0.1.0
-certifi==2019.6.16
+certifi==2023.7.22
 colorama==0.4.1
 datajoint
 decorator==4.4.0
