@@ -11,7 +11,7 @@ def _calc_dens_norm_factor(elec_locs, headGrid, projectionParameter):
     """Calculate the factors (scalar values, each for a electrode) that normalize the elecrode
     projected density inside brain volume (makes its sum to be equal to one)."""
 
-    # create a parameter set but withough normalization
+    # create a parameter set but without normalization
     newProjectionParemeter = projectionParameter.copy()
     newProjectionParemeter["normalizeInBrainDipoleDenisty"] = False
 
@@ -99,7 +99,7 @@ def _getProjectionMatrix(
             -dist_elec_gridlocs[dipoleNumber, :] ** 2 / (2 * sd_est_err_pow2)
         )
 
-        # truncate the dipole denisty Gaussian at ~3 standard deviation
+        # truncate the dipole density Gaussian at ~3 standard deviation
         gaussianWeightMatrix[
             dipoleNumber,
             dist_elec_gridlocs[dipoleNumber, :]
@@ -109,7 +109,7 @@ def _getProjectionMatrix(
             ),
         ] = 0
 
-        # normalize the dipole in-brain denisty (make it sum up to one)
+        # normalize the dipole in-brain density (make it sum up to one)
         if projectionParameter["normalizeInBrainDipoleDenisty"]:
             gaussianWeightMatrix[dipoleNumber, :] = (
                 gaussianWeightMatrix[dipoleNumber, :]

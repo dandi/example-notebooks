@@ -543,7 +543,7 @@ def _plot_electrodes(
             5,
             6,
             5,
-        ]  # different sized subplot to make saggital view similar size to other two slices
+        ]  # different sized subplot to make sagittal view similar size to other two slices
         current_col = 0
         total_colspans = int(np.sum(np.asarray(colspans)))
         for ind, colspan in enumerate(colspans):

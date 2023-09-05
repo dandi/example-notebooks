@@ -68,7 +68,7 @@ nwb.intervals_trials = types.core.TimeIntervals( ...
 %% Electrode table
 % Extracellular |electrodes| are stored in a electrodes, which is a 
 % |DynamicTable|. |electrodes| has several required fields: x, y, z, 
-% impedence, location, filtering, and electrode_group. Here, we also 
+% impedance, location, filtering, and electrode_group. Here, we also 
 % demonstate how to add optional columns to a table by adding the |'label'|
 % column.
 
