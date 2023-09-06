@@ -22,7 +22,7 @@ schema = dj.schema(get_schema_name('psth'))
 log = logging.getLogger(__name__)
 
 # NOW:
-# - rework Condition to TrialCondition funtion+arguments based schema
+# - rework Condition to TrialCondition function+arguments based schema
 
 
 def key_hash(key):

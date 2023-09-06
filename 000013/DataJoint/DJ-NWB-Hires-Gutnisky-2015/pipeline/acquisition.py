@@ -1,5 +1,5 @@
 '''
-Schema of aquisition information.
+Schema of acquisition information.
 '''
 
 import numpy as np
