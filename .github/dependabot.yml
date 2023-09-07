@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # do not provide pip upgrades -- notebooks might need specific versions
+  - package-ecosystem: "pip"
+    directory: "/"
+    ignore:
+      - dependency-name: "*"
