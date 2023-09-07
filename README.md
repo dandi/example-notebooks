@@ -26,7 +26,7 @@ The `environment.yml` file should define the dependencies of the environment req
 
 1. Create a new environment: `conda create -n <env-name> -python <python-version>`
 2. Switch into that environment: `conda activate <env-name>`
-3. Use `conda install <pkg>` and `pip install <pkg>` to install the necessary dependencies until the notebook runs through successfully.
+3. Use `conda install <pkg>` and `pip install <pkg>` to install the necessary dependencies until the notebook(s) run through successfully.
 4. Confirm that all the notebooks can be run without error.
 5. Export the environment: `conda env export > environment.yml`.
 
