@@ -6,7 +6,7 @@ This repository contains example notebooks associated with datasets, conference 
 To add new notebooks, please send a Pull Request. Submissions should use the following file structure:
 
 ```
-example-notebooks
+example-notebooks/
 └── <dandiset id>/
     └── <org or lab name>/
         └── <mnemonic for paper or analysis>/
