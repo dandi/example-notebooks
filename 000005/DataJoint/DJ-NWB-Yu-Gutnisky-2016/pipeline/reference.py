@@ -93,8 +93,8 @@ class ActionLocation(dj.Manual):
     -> BrainLocation
     -> CoordinateReference
     coordinate_ap: decimal(4,2)    # in mm, anterior positive, posterior negative 
-    coordinate_ml: decimal(4,2)    # in mm, always postive, number larger when more lateral
-    coordinate_dv: decimal(4,2)    # in mm, always postive, number larger when more ventral (deeper)
+    coordinate_ml: decimal(4,2)    # in mm, always positive, number larger when more lateral
+    coordinate_dv: decimal(4,2)    # in mm, always positive, number larger when more ventral (deeper)
     """
  
    

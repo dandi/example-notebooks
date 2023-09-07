@@ -95,7 +95,7 @@ def export_to_nwb(session_key, nwb_output_dir=default_nwb_output_dir, save=False
         conversion=1e-6,
         unit='micrometers')
 
-    # ----- Segementation information -----
+    # ----- Segmentation information -----
     # link the imaging segmentation to the nwb file
     ophys = nwbfile.create_processing_module('ophys', 'Processing result of imaging')
     img_seg = pynwb.ophys.ImageSegmentation()

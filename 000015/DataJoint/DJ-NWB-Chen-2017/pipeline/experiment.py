@@ -88,7 +88,7 @@ class Photostim(dj.Manual):
     ml_location=null: float # um from ref ; right is positive; based on manipulator coordinates/reconstructed track
     ap_location=null: float # um from ref; anterior is positive; based on manipulator coordinates/reconstructed track
     dv_location=null: float # um from dura; ventral is positive; based on manipulator coordinates/reconstructed track
-    ml_angle=null: float # Angle between the manipulator/reconstructed track and the Medio-Lateral axis. A tilt towards the right hemishpere is positive.
+    ml_angle=null: float # Angle between the manipulator/reconstructed track and the Medio-Lateral axis. A tilt towards the right hemisphere is positive.
     ap_angle=null: float # Angle between the manipulator/reconstructed track and the Anterior-Posterior axis. An anterior tilt is positive.
     waveform=null:  longblob       # normalized to maximal power. The value of the maximal power is specified for each PhotostimTrialEvent individually
     frequency=null: float  # (Hz)

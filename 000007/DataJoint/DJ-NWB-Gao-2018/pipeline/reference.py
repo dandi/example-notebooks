@@ -95,7 +95,7 @@ class Virus(dj.Lookup):
     virus: varchar(32) # name of the virus
     ---
     -> VirusSource
-    virus_lot_number="":  varchar(128)  # lot numnber of the virus
+    virus_lot_number="":  varchar(128)  # lot number of the virus
     """
     contents = [{
         'virus': 'AAV2-hSyn-hChR2(H134R)-EYFP',

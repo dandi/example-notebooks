@@ -1,5 +1,5 @@
 '''
-Schema of aquisition information.
+Schema of acquisition information.
 '''
 import datajoint as dj
 from pipeline import reference, subject
@@ -49,6 +49,6 @@ class PhotoStim(dj.Manual):
     -> reference.Hemisphere
     -> reference.CoordinateReference
     photo_stim_coordinate_ap: float    # in mm, anterior positive, posterior negative
-    photo_stim_coordinate_ml: float    # in mm, always postive, number larger when more lateral
-    photo_stim_coordinate_dv: float    # in mm, always postive, number larger when more ventral (deeper)
+    photo_stim_coordinate_ml: float    # in mm, always positive, number larger when more lateral
+    photo_stim_coordinate_dv: float    # in mm, always positive, number larger when more ventral (deeper)
     """

@@ -43,7 +43,7 @@ class Scan(dj.Imported):
         ---
         -> CellType
         roi_trace:          longblob        # average fluorescence of roi obj-timeSeriesArrayHash-value(1, 1)-valueMatrix
-        neuropil_trace:     longblob        # average fluorescence of neuopil surounding each ROI, obj-timeSeriesArrayHash-value(1, 1)-valueMatrix
+        neuropil_trace:     longblob        # average fluorescence of neuopil surrounding each ROI, obj-timeSeriesArrayHash-value(1, 1)-valueMatrix
         roi_pixel_list:     longblob        # pixel list of this roi
         neuropil_pixel_list:longblob        # pixel list of the neuropil surrounding the roi
         inc:                bool            # whether included (criteria - cells > 1.05 times brighter than neuropil)

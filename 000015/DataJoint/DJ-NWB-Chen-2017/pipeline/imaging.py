@@ -45,8 +45,8 @@ class Scan(dj.Imported):
         ---
         -> CellType
         roi_trace:          longblob        # average fluorescence of roi
-        neuropil_trace:     longblob        # average fluorescence of neuopil surounding each ROI
-        roi_trace_corrected:longblob        # average fluorescence of roi substracting neuropil * 0.7
+        neuropil_trace:     longblob        # average fluorescence of neuopil surrounding each ROI
+        roi_trace_corrected:longblob        # average fluorescence of roi subtracting neuropil * 0.7
         roi_pixel_list:     longblob        # pixel list of this roi
         ap_position:        float           # in um, relative to bregma
         ml_position:        float           # in um, relative to bregma

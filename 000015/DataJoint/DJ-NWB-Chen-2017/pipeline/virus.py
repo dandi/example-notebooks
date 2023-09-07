@@ -14,7 +14,7 @@ class Virus(dj.Manual):
     virus: varchar(64) # name of the virus
     ---
     -> lab.VirusSource
-    virus_lot_number="":  varchar(128)  # lot numnber of the virus
+    virus_lot_number="":  varchar(128)  # lot number of the virus
     virus_titer=null:       float     # x10^12GC/mL
     """
 

@@ -25,7 +25,7 @@ institution = 'Janelia Research Campus'
 related_publications = '10.7554/eLife.06619'
 
 # experiment description and keywords - from the abstract
-experiment_description = 'Intracellular and extracellular electrophysiology recordings performed on mouse barrel cortex in object locating task, where whisker movements and contacts with object were tracked to the milisecond precision.'
+experiment_description = 'Intracellular and extracellular electrophysiology recordings performed on mouse barrel cortex in object locating task, where whisker movements and contacts with object were tracked to the millisecond precision.'
 keywords = ['barrel cortex', 'whiskers', 'extracellular electrophysiology', 'intracellular electrophysiology']
 
 
