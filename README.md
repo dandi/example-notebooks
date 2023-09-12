@@ -18,7 +18,7 @@ example-notebooks/
             └── <analysis n>.ipynb
 ```
 
-For example, [000055/bruntonlab/peterson21](https://github.com/dandi/example-notebooks/tree/9b1fb88667595a3abcdefda46bbe08e538dcbf0f/000055/BruntonLab/peterson21)
+For example, [000055/bruntonlab/peterson21](./000055/BruntonLab/peterson21)
 
 The `README.md` file should explain the goal of the submission, provide links to relevant scientific publications, and explain the purpose of each notebook file.
 
