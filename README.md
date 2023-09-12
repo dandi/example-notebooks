@@ -30,7 +30,7 @@ The `environment.yml` file should define the dependencies of the environment req
 4. Confirm that all the notebooks can be run without error.
 5. Export the environment: `conda env export > environment.yml`.
 
-See detailed instructions for creating a `environment.yml` file [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment).
+See [detailed instructions](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment) for creating a `environment.yml` file.
 
 
 Feel free to reach out on the [DANDI helpdesk](https://github.com/dandi/helpdesk/issues/new/choose) with any questions.
