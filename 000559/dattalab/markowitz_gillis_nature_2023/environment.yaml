@@ -7,12 +7,12 @@ dependencies:
     - ipywidgets
     - pip
     - pip:
-          - cellpose==1.0.2
-          - scikit-image
-          - imagecodecs
-          - ipykernel
-          - seaborn
-          - matplotlib
-          - tqdm
-          - toml
-          - datta-lab-to-nwb @ git+https://github.com/catalystneuro/datta-lab-to-nwb.git@main
+      - cellpose==1.0.2
+      - scikit-image
+      - imagecodecs
+      - ipykernel
+      - seaborn
+      - matplotlib
+      - tqdm
+      - toml
+      - datta-lab-to-nwb @ git+https://github.com/catalystneuro/datta-lab-to-nwb.git@main
