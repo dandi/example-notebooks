@@ -1,0 +1,11 @@
+name: base
+dependencies:
+  - pynwb
+  - nwbwidgets
+  - fsspec
+  - requests
+  - aiohttp
+  - dandi
+  - numpy
+  - matplotlib
+  - pandas
