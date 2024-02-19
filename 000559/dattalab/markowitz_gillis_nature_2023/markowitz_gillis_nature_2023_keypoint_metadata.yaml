@@ -1,0 +1,68 @@
+NWBFile:
+  related_publications:
+    - https://doi.org/10.1038/s41586-022-05611-2
+  experiment_description: Abstract -- Spontaneous animal behaviour is built from action modules that are concatenated by the brain into sequences1,2. However, the neural mechanisms that guide the composition of naturalistic, self-motivated behaviour remain unknown. Here we show that dopamine systematically fluctuates in the dorsolateral striatum (DLS) as mice spontaneously express sub-second behavioural modules, despite the absence of task structure, sensory cues or exogenous reward. Photometric recordings and calibrated closed-loop optogenetic manipulations during open field behaviour demonstrate that DLS dopamine fluctuations increase sequence variation over seconds, reinforce the use of associated behavioural modules over minutes, and modulate the vigour with which modules are expressed, without directly influencing movement initiation or moment-to-moment kinematics. Although the reinforcing effects of optogenetic DLS dopamine manipulations vary across behavioural modules and individual mice, these differences are well predicted by observed variation in the relationships between endogenous dopamine and module use. Consistent with the possibility that DLS dopamine fluctuations act as a teaching signal, mice build sequences during exploration as if to maximize dopamine. Together, these findings suggest a model in which the same circuits and computations that govern action choices in structured tasks have a key role in sculpting the content of unconstrained, high-dimensional, spontaneous behaviour.
+  keywords:
+    - Basal Ganglia
+    - Neural circuits
+    - Reward
+  institution: Harvard Medical School
+  lab: Datta
+  experimenter:
+    - Markowitz, Jeffrey E.
+    - Gillis, Winthrop F.
+    - Jay, Maya
+    - Wood, Jeffrey
+    - Harris, Ryley W.
+    - Cieszkowski, Robert
+    - Scott, Rebecca
+    - Brann, David
+    - Koveal, Dorothy
+    - Kula, Tomasz
+    - Weinreb, Caleb
+    - Osman, Mohammed Abdal Monium
+    - Pinto, Sandra Romero
+    - Uchida, Naoshige
+    - Linderman, Scott W.
+    - Sabatini, Bernardo L.
+    - Datta, Sandeep Robert
+Subject:
+  species: Mus musculus
+  age: P6W/P15W
+  description: This study utilized wild-type DAT-IRES-Cre (The Jackson Laboratory 006660) and Ai32 (The Jackson Laboratory 012569) mice, both male and female, between 6-15 weeks of age.
+Constants:
+  VIDEO_SAMPLING_RATE: 30.0
+  TIMESTAMPS_TO_SECONDS: 1.25e-4
+Keypoint:
+  reference_frame: TBD
+  index_to_name: # Mapping from keypoint index --> keypoint name (unique) [See fig_s03 notebook]
+    0: 'rostral_spine'
+    1: 'medial_spine'
+    2: 'caudal_spine'
+    3: 'tail_base'
+    4: 'tail_tip'
+    5: 'head_center'
+    6: 'left_ear'
+    7: 'right_ear'
+    8: 'nose'
+    9: 'left_hind_ankle'
+    10: 'left_hindpaw'
+    11: 'right_hind_ankle'
+    12: 'right_hindpaw'
+    13: 'left_forepaw'
+    14: 'right_forepaw'
+  edges:
+    - [4, 3]
+    - [3, 2]
+    - [2, 1]
+    - [1, 0]
+    - [0, 5]
+    - [5, 6]
+    - [5, 7]
+    - [5, 8]
+    - [2, 9]
+    - [9, 10]
+    - [2, 11]
+    - [11, 12]
+    - [0, 13]
+    - [0, 14]

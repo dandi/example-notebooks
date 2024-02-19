@@ -1,0 +1,22 @@
+# run: conda env create --file environment.yaml
+name: datta_figureS3_env # The reproduce_figure_S3.ipynb notebook has conflicting dependencies with the other notebooks
+channels:
+    - conda-forge
+dependencies:
+    - python==3.10
+    - ipywidgets
+    - pip
+    - pip:
+      - ipykernel
+      - seaborn
+      - matplotlib
+      - tqdm
+      - toml
+      - pynwb
+      - h5py
+      - fsspec
+      - dandi
+      - bokeh == 2.4.3
+      - numba == 0.57.1
+      - aiohttp
+      - rl_analysis @ git+https://github.com/dattalab/dopamine-reinforces-spontaneous-behavior.git@main
