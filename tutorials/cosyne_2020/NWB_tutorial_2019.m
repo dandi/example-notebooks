@@ -69,7 +69,7 @@ nwb.intervals_trials = types.core.TimeIntervals( ...
 % Extracellular |electrodes| are stored in a electrodes, which is a 
 % |DynamicTable|. |electrodes| has several required fields: x, y, z, 
 % impedance, location, filtering, and electrode_group. Here, we also 
-% demonstate how to add optional columns to a table by adding the |'label'|
+% demonstrate how to add optional columns to a table by adding the |'label'|
 % column.
 
 shank_channels = [3, 4];
