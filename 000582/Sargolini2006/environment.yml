@@ -1,0 +1,12 @@
+name: sargolini-2006-env
+channels:
+  - defaults
+dependencies:
+  - pip
+  - python>=3.9
+  - pip:
+      - dandi==0.56.1
+      - jupyter
+      - plotly==5.17.0
+      - pynapple==0.3.6
+      - pynwb==2.5.0
