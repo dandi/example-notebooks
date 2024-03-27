@@ -39,7 +39,7 @@ photometry = [
 ]
 
 # REPLACE BASEDIR WITH WHERE YOU DOWNLOAD DATA -
-# ALTERNATIVELY USE _reformat_zenodo_download.ipynb TO REPLACE BASEDIR PROGRAMATICALLY
+# ALTERNATIVELY USE _reformat_zenodo_download.ipynb TO REPLACE BASEDIR PROGRAMMATICALLY
 [raw_data]
 dlight = "/Volumes/T7/CatalystNeuro/NWB/Datta/dopamine-reinforces-spontaneous-behavior/dlight_raw_data/"
 rl_modeling = "/Volumes/T7/CatalystNeuro/NWB/Datta/dopamine-reinforces-spontaneous-behavior/rl_raw_data/"
