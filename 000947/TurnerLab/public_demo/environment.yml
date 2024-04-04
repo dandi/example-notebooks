@@ -11,3 +11,4 @@ dependencies:
       - plotly
       - pynwb
       - remfile
+      - pynapple
