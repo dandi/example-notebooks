@@ -1,0 +1,14 @@
+name: turnerlab_000947_demo
+channels:
+    - conda-forge
+dependencies:
+    - python==3.11
+    - ipywidgets
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - plotly
+      - pynwb
+      - remfile
+      - pynapple
