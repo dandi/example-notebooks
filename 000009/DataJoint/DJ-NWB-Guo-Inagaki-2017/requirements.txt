@@ -7,7 +7,7 @@ decorator==4.4.0
 future==0.17.1
 h5py==2.9.0
 hdmf==1.1.2
-idna==2.8
+idna==3.7
 ipython==7.6.1
 ipython-genutils==0.2.0
 jedi==0.14.0
