@@ -1,9 +1,9 @@
-# Single-Unit Activity from Internal Globus Pallidus of Macaques During Reaching tutorial
+# Reach-related Single Unit Activity in the Parkinsonian Macaque Tutorial
 
 This example notebook demonstrates how to access the dataset published at [DANDI:000947](https://dandiarchive.org/dandiset/000947/draft).
 
-This example session contains recordings of single-unit activity from globus pallidus-internus (GPi) in a parkinsonian 
-monkey performing a choice reaction time reaching task.
+This example session contains recordings of single-unit activity from globus pallidus-internus (GPi) and
+ventrolateral nucleus of the thalamus (VLa) in a parkinsonian monkey performing a choice reaction time reaching task.
 
 ## Installing the dependencies
 
