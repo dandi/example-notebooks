@@ -9,7 +9,7 @@ nwbwidgets==0.7.0
 nilearn==0.6.2
 bqplot==0.12.26
 natsort==7.0.1
-tqdm==4.48.2
+tqdm==4.66.3
 neurodsp==2.1.0
 seaborn==0.11.0
 dandi==0.26.0
