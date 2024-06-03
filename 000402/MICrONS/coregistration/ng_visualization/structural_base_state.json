@@ -1,0 +1,80 @@
+{
+    "layers": [
+      {
+        "source": "precomputed://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "type": "image",
+        "blend": "default",
+        "shader": "#uicontrol float black slider(min=0, max=1, default=0.0)\n#uicontrol float white slider(min=0, max=1, default=1.0)\nfloat rescale(float value) {\n  return (value - black) / (white - black);\n}\nvoid main() {\n  float val = toNormalized(getDataValue());\n  if (val < black) {\n    emitRGB(vec3(0,0,0));\n  } else if (val > white) {\n    emitRGB(vec3(1.0, 1.0, 1.0));\n  } else {\n    emitGrayscale(rescale(val));\n  }\n}\n",
+        "shaderControls": {
+          "black": 0.35,
+          "white": 0.6
+        },
+        "name": "img"
+      },
+      {
+        "source": "graphene://https://minnie.microns-daf.com/segmentation/table/minnie3_v1",
+        "type": "segmentation_with_graph",
+        "selectedAlpha": 0.3,
+        "segments": [],
+        "skeletonRendering": {
+          "mode2d": "lines_and_points",
+          "mode3d": "lines"
+        },
+        "graphOperationMarker": [
+          {
+            "annotations": [],
+            "tags": []
+          },
+          {
+            "annotations": [],
+            "tags": []
+          }
+        ],
+        "pathFinder": {
+          "color": "#ffff00",
+          "pathObject": {
+            "annotationPath": {
+              "annotations": [],
+              "tags": []
+            },
+            "hasPath": false
+          }
+        },
+        "name": "seg"
+      },
+      {
+        "type": "annotation",
+        "annotations": [],
+        "annotationTags": [],
+        "voxelSize": [
+          4,
+          4,
+          40
+        ],
+        "bracketShortcutsShowSegmentation": true,
+        "annotationSelectionShowsSegmentation": true,
+        "name": "ann"
+      }
+    ],
+    "navigation": {
+      "pose": {
+        "position": {
+          "voxelSize": [
+            4,
+            4,
+            40
+          ],
+          "voxelCoordinates": []
+        }
+      },
+      "zoomFactor": 433.3084653616374
+    },
+    "perspectiveZoom": 774.0839833480868,
+    "showSlices": false,
+    "jsonStateServer": "https://global.daf-apis.com/nglstate/api/v1/post",
+    "selectedLayer": {
+      "layer": "seg",
+      "visible": true
+    },
+    "layout": "4panel"
+  }

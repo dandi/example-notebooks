@@ -1,0 +1,391 @@
+{
+    "dimensions": {
+      "x": [
+        0.000001,
+        "m"
+      ],
+      "y": [
+        0.000001,
+        "m"
+      ],
+      "z": [
+        0.000001,
+        "m"
+      ]
+    },
+    "position": [
+      251.5,
+      733.5,
+      359.5
+    ],
+    "crossSectionScale": 1.5,
+    "projectionOrientation": [
+      1,
+      -1,
+      0,
+      0
+    ],
+    "projectionScale": 3769.203504704791,
+    "layers": [
+      {
+        "type": "image",
+        "source": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/stack_rgb/",
+        "tab": "rendering",
+        "shader": "\n#uicontrol invlerp red(channel=1)\n#uicontrol invlerp green(channel=0)\n\nvoid main() {\n  emitRGB(vec3(red(), green(), 0));\n}\n",
+        "shaderControls": {
+          "red": {
+            "range": [
+              0,
+              310
+            ],
+            "window": [
+              0,
+              3000
+            ]
+          },
+          "green": {
+            "range": [
+              0,
+              1297
+            ],
+            "window": [
+              0,
+              3000
+            ]
+          }
+        },
+        "channelDimensions": {
+          "c^": [
+            1,
+            ""
+          ]
+        },
+        "name": "stack"
+      },
+      {
+        "type": "image",
+        "source": [
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_1",
+            "transform": {
+              "matrix": [
+                [
+                  1.01366,
+                  -0.00826935,
+                  0,
+                  166.40623782499995
+                ],
+                [
+                  -0.000894356,
+                  0.98838,
+                  0,
+                  77.15399318199991
+                ],
+                [
+                  0.00191511,
+                  -0.00646626,
+                  1,
+                  154.520483325
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_2",
+            "transform": {
+              "matrix": [
+                [
+                  1.01349,
+                  -0.0118541,
+                  0,
+                  718.99737295
+                ],
+                [
+                  -0.00302889,
+                  0.996249,
+                  0,
+                  58.78261595499998
+                ],
+                [
+                  -0.0106083,
+                  0.00570692,
+                  1,
+                  148.77131630999997
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_3",
+            "transform": {
+              "matrix": [
+                [
+                  1.01323,
+                  -0.00685865,
+                  0,
+                  159.50214317500001
+                ],
+                [
+                  0.000692124,
+                  0.989937,
+                  0,
+                  72.849406122
+                ],
+                [
+                  0.00580975,
+                  -0.00289405,
+                  1,
+                  219.38116284999998
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_4",
+            "transform": {
+              "matrix": [
+                [
+                  1.01213,
+                  -0.00931375,
+                  0,
+                  716.177770625
+                ],
+                [
+                  -0.000600391,
+                  0.996653,
+                  0,
+                  56.28499751449999
+                ],
+                [
+                  -0.00339025,
+                  0.00593962,
+                  1,
+                  215.435461185
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_5",
+            "transform": {
+              "matrix": [
+                [
+                  1.01226,
+                  -0.00449916,
+                  0,
+                  146.56281841999999
+                ],
+                [
+                  0.00356799,
+                  0.993619,
+                  0,
+                  65.7370665950001
+                ],
+                [
+                  0.000355121,
+                  0.00413598,
+                  1,
+                  355.4523690405
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_6",
+            "transform": {
+              "matrix": [
+                [
+                  1.0096,
+                  -0.00627319,
+                  0,
+                  711.706717905
+                ],
+                [
+                  0.00257479,
+                  0.998612,
+                  0,
+                  51.96980849500005
+                ],
+                [
+                  -0.00491603,
+                  0.00682901,
+                  1,
+                  353.52097029
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_7",
+            "transform": {
+              "matrix": [
+                [
+                  1.01126,
+                  -0.00358033,
+                  0,
+                  133.42042133500001
+                ],
+                [
+                  0.00397489,
+                  0.997661,
+                  0,
+                  60.82505204500001
+                ],
+                [
+                  0.0000287759,
+                  0.0000668757,
+                  1,
+                  497.9353456618
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          },
+          {
+            "url": "n5://https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/functional_data/field_summaries/session_7_scan_4_field_8",
+            "transform": {
+              "matrix": [
+                [
+                  1.00818,
+                  -0.00482558,
+                  0,
+                  707.2639462099999
+                ],
+                [
+                  0.00418602,
+                  1.00025,
+                  0,
+                  48.71005180999998
+                ],
+                [
+                  0.0000741406,
+                  0.0000185663,
+                  1,
+                  494.07285130245
+                ]
+              ],
+              "outputDimensions": {
+                "x": [
+                  0.000001,
+                  "m"
+                ],
+                "y": [
+                  0.000001,
+                  "m"
+                ],
+                "z": [
+                  0.000001,
+                  "m"
+                ]
+              }
+            }
+          }
+        ],
+        "tab": "source",
+        "opacity": 0.81,
+        "name": "ses7_scan4"
+      }
+    ],
+    "showAxisLines": false,
+    "layout": "xy",
+    "layerListPanel": {
+      "visible": true
+    }
+  }

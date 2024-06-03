@@ -1,0 +1,6 @@
+matplotlib>=3.8.3
+pynwb==2.5.0
+dandi==0.59.1
+cloud-volume==8.29.1
+caveclient==5.15.2
+fsspec==2024.2.0
