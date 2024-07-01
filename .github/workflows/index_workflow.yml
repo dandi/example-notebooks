@@ -1,0 +1,30 @@
+name: DANDI Metadata Collector
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  collect-and-render:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests jinja2 dandi
+    
+    - name: Run metadata collector and renderer
+      run: python .github/scripts/collect_and_render.py
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./output
