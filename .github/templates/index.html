@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANDI Datasets</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1 { color: #333; }
+        .dandiset { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; }
+        .dandiset h2 { margin-top: 0; }
+        .notebooks { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>DANDI Datasets with Example Notebooks</h1>
+    {% for dandiset in dandisets %}
+    <div class="dandiset">
+        <h2>{{ dandiset.metadata.name }}</h2>
+        <p><strong>ID:</strong> {{ dandiset.id }}</p>
+        <p><strong>Description:</strong> {{ dandiset.metadata.description }}</p>
+        <p><a href="https://dandiarchive.org/dandiset/{{ dandiset.id }}">View on DANDI Archive</a></p>
+        {% if dandiset.notebooks %}
+        <div class="notebooks">
+            <h3>Notebooks:</h3>
+            <ul>
+            {% for notebook in dandiset.notebooks %}
+                <li><a href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}">{{ notebook }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</body>
+</html>
