@@ -70,8 +70,18 @@
 <body>
 <div class="container">
     <h1>DANDI Datasets</h1>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            {% for dandiset in dandisets %}
+            <li><a href="#dandiset-{{ dandiset.id }}">{{ dandiset.metadata.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
     {% for dandiset in dandisets %}
-    <div class="dandiset">
+    <div id="dandiset-{{ dandiset.id }}" class="dandiset">
         <h2>{{ dandiset.metadata.name }}</h2>
         <p><strong>ID:</strong> {{ dandiset.id }}</p>
         <p><strong>Description:</strong> {{ dandiset.metadata.description }}</p>
