@@ -75,7 +75,7 @@
         <h2>Table of Contents</h2>
         <ul>
             {% for dandiset in dandisets %}
-            <li><a href="#dandiset-{{ dandiset.id }}">{{ dandiset.metadata.name }}</a></li>
+            <li><a href="#dandiset-{{ dandiset.id }}">{{ dandiset.id }} - {{ dandiset.metadata.name }}</a></li>
             {% endfor %}
         </ul>
     </div>
