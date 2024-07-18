@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANDI Datasets</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .dandiset {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        .dandiset:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .dandiset h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .dandiset p {
+            margin-bottom: 10px;
+        }
+        .dandiset a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .dandiset a:hover {
+            text-decoration: underline;
+        }
+        .notebooks {
+            margin-top: 15px;
+        }
+        .notebooks h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .notebooks ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .notebooks li {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .dandiset {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>DANDI Datasets</h1>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            {% for dandiset in dandisets %}
+            <li><a href="#dandiset-{{ dandiset.id }}">{{ dandiset.id }} - {{ dandiset.metadata.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% for dandiset in dandisets %}
+    <div id="dandiset-{{ dandiset.id }}" class="dandiset">
+        <h2>{{ dandiset.metadata.name }}</h2>
+        <p><strong>ID:</strong> {{ dandiset.id }}</p>
+        <p><strong>Description:</strong> {{ dandiset.metadata.description }}</p>
+        <p><a href="https://dandiarchive.org/dandiset/{{ dandiset.id }}" target="_blank">View on DANDI Archive</a></p>
+        {% if dandiset.notebooks %}
+        <div class="notebooks">
+            <h3>Notebooks:</h3>
+            <ul>
+                {% for notebook in dandiset.notebooks %}
+                <li><a href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}" target="_blank">{{ notebook }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+</body>
+</html>
