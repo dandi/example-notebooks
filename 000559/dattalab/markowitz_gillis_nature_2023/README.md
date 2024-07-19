@@ -11,3 +11,5 @@ Each notebook provides an example of how to access the critical data and metadat
 Note: `reproduce_figure1d.ipynb` and `reproduce_figure_S1.ipynb` use the conda environment defined by the 
 `environment.yaml` file, but `reproduce_figure_S3.ipynb` uses a different environment defined by the 
 `environment_S3.yaml` due to dependency conflicts.
+
+This submission also provides a notebook showcasing how to read the raw depth video (.avi) files: `read_avi.ipynb`
