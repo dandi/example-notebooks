@@ -1,0 +1,11 @@
+# run: conda env create --file environment.yaml
+name: blog_000458_env
+channels:
+    - conda-forge
+dependencies:
+    - python==3.12
+    - pip
+    - pip:
+      - dandi
+      - ipykernel
+      - matplotlib
