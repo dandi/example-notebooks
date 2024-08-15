@@ -103,6 +103,8 @@
             
             <li><a href="#dandiset-000409">000409 - IBL - Brain Wide Map</a></li>
             
+            <li><a href="#dandiset-000458">000458 - Simultaneous electroencephalography, extracellular electrophysiology, and cortical electrical stimulation in head-fixed mice</a></li>
+            
             <li><a href="#dandiset-000559">000559 - Spontaneous behaviour is structured by reinforcement without explicit reward</a></li>
             
             <li><a href="#dandiset-000582">000582 - Conjunctive Representation of Position, Direction, and Velocity in Entorhinal Cortex</a></li>
@@ -391,6 +393,27 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                 <li><a href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/02_behaviour_psychometric_curve.ipynb" target="_blank">IBL/02_behaviour_psychometric_curve.ipynb</a></li>
                 
                 <li><a href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/03_analysis_Imbizo_2023.ipynb" target="_blank">IBL/03_analysis_Imbizo_2023.ipynb</a></li>
+                
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div id="dandiset-000458" class="dandiset">
+        <h2>Simultaneous electroencephalography, extracellular electrophysiology, and cortical electrical stimulation in head-fixed mice</h2>
+        <p><strong>ID:</strong> 000458</p>
+        <p><strong>Description:</strong> In this set of experiments, we recorded neural signals using an electroencephalography (EEG) array and Neuropixels probes while directly electrically stimulating the cortex in awake and anesthetized head-fixed mice. Details of the experiments can be found in the associated manuscript (Claar, Rembado et al., 2023). Briefly, the recordings and stimulation commenced while the mouse was awake, free to rest or move on a rotating disc. After delivering a series of stimuli, anesthesia was induced with isoflurane (5% via inhalation). Once a surgical level of anesthesia was reached, the mouse was maintained unconscious (1-1.5% isoflurane) during the delivery of another series of stimuli. In some subjects another series of stimuli was delivered after the isoflurane was turned off, this epoch/state is referred to as “recovery” in the dataset.
+
+Each session file includes the following data: raw EEG signals from all 30 surface electrodes and the associated electrode information; raw LFP signals from all electrodes on all Neuropixels probes (if used) and the associated electrode information; spike times for all units (spike sorted with Kilosort 2.0) that passed our quality threshold with associated information (brain region, spike waveform duration, etc.); subject’s speed computed from the rotation of the disc for the entire session; epochs marking when isoflurane was induced and when it was maintained; and a trial table containing information about every stimulus delivered throughout the session.
+
+All sessions included an awake and an isoflurane epoch, but not all sessions included a recovery epoch. Some subjects received visual stimulation trials (visual stimuli presented on a screen in the subject’s right field of view) interleaved with the electrical stimulation trials.</p>
+        <p><a href="https://dandiarchive.org/dandiset/000458" target="_blank">View on DANDI Archive</a></p>
+        
+        <div class="notebooks">
+            <h3>Notebooks:</h3>
+            <ul>
+                
+                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank">AllenInstitute/reanalysis.ipynb</a></li>
                 
             </ul>
         </div>
