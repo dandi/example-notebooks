@@ -11,7 +11,7 @@ Our goal with this notebook to provide a seamless integration of  generate novel
 ## How to run
 You'll need a fresh python virtual environment (ver. 3.8 or higher) to run this notebook.
 
-1. Install python requirements from `requirements.txt` or through conda from the `enviornment.yml` file.
+1. Install python requirements from `requirements.txt` or through conda from the `environment.yml` file.
 2. Run `microns_nwb_coreg_notebook` notebook for a complete end-to-end demo of how to integrate the latest co-registed cells from CAVE with the MICrONS functiondal data stored in DANDI.
 3. Feel free to import/modify `microns_nwb_coreg.py` or `ng_utils.py` script functions for your own use-case!
 
