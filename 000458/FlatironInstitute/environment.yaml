@@ -1,0 +1,16 @@
+# run: conda env create --file environment.yaml
+# activate: conda activate 000458_fi
+# update: conda env update --file environment.yaml --prune
+name: 000458_fi
+channels:
+    - conda-forge
+dependencies:
+    - python==3.12
+    - pip
+    - pip:
+      - dandi
+      - pynwb
+      - ipykernel
+      - matplotlib
+      - lindi==0.4.0a1
+      - fsspec
