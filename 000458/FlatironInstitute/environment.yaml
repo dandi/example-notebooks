@@ -8,9 +8,9 @@ dependencies:
     - python==3.12
     - pip
     - pip:
-      - dandi
-      - pynwb
-      - ipykernel
-      - matplotlib
+      - dandi==0.63.0
+      - pynwb==2.8.1
+      - ipykernel==6.29.5
+      - matplotlib==3.9.2
       - lindi==0.4.0a1
-      - fsspec
+      - fsspec==2024.6.1
