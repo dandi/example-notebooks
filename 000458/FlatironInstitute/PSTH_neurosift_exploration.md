@@ -23,11 +23,11 @@ single pulse electrical stimuli targeted to MOs (deep layers)
     n/a: 316 valid and not running
 ```
 
-First navigate to this Dandiset on DANDI Archive: [000458](https://dandiarchive.org/dandiset/000458). On the right panel, click on "Files" and then find [subject 551397](https://dandiarchive.org/dandiset/000458/0.230317.0039/files?location=sub-551397&page=1). For that NWB file, click on "OPEN WITH -> Neurosift". That should bring you [here](https://neurosift.app/?p=/nwb&url=https://api.dandiarchive.org/api/assets/d966b247-2bac-4ef0-8b80-aae010f50c98/download/&dandisetId=000458&dandisetVersion=0.230317.0039).
+First navigate to this Dandiset on DANDI Archive: [000458](https://dandiarchive.org/dandiset/000458). On the right panel, click on "Files" and then find [subject 551397](https://dandiarchive.org/dandiset/000458/0.230317.0039/files?location=sub-551397&page=1). For that NWB file, click on "OPEN WITH -> Neurosift". That should bring you to that file's [Neurosift homepage](https://neurosift.app/?p=/nwb&url=https://api.dandiarchive.org/api/assets/d966b247-2bac-4ef0-8b80-aae010f50c98/download/&dandisetId=000458&dandisetVersion=0.230317.0039).
 
 * In Neurosift, open the "Intervals" panel and then click "PSTH" for the "trials" table.
 * Select "Group trials by: behavioral_epoch" and "Sort units by: location".
-* For trials table, enter `is_valid === 1 && is_running === 0 && stimulus_type === "electrical"`. This will restrict the trials to those that are valid, not running, and have an electrical stimulus.
+* Select "Trials filter" in the bottom right and enter `is_valid === 1 && is_running === 0 && stimulus_type === "electrical"`. This will restrict the trials to those that are valid, not running, and have an electrical stimulus.
 * Scroll down on the units table and click to select some units in the MOs region. You can also use the "Select units" link at the bottom to select all MOs units.
 * The raster plots show the spike trains for the unit where the Y-axis is the trial number and the X-axis is time aligned to the stimulus onset.
 * Unit 500 shows a clear pattern of decreased activity following the stimulus for around 0.15 seconds and then a sharp increase in activity for the "awake" trials.
