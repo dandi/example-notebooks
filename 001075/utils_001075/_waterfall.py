@@ -18,12 +18,10 @@ def plot_waterfall(
 
     Parameters
     ----------
-    imaging_nwbfile : pynwb.NWBFile
-        The NWBFile containing the imaging data.
     segmentation_nwbfile : pynwb.NWBFile
         The NWBFile containing the segmentation data.
     exclude_labels : list, optional
-        A list of NeuroPAL lables to exclude from plotting.
+        A list of NeuroPAL labels to exclude from plotting.
         For example, Fig 1d from the paper (which used session "20211104-163944" of subject 26)
         excluded ["AMsoL", "AMsoR", "AMso", "AMSoL", "AMSoR", "AmSo"].
     suppress_deviations : bool, default: True
