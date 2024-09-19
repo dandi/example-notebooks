@@ -1,3 +1,5 @@
+from typing import Optional
+
 import matplotlib.pyplot
 import numpy
 import pynwb
@@ -7,11 +9,12 @@ import scipy.optimize
 def plot_waterfall(
     *,
     segmentation_nwbfile: pynwb.NWBFile,
+    exclude_labels: Optional[list] = None,
     suppress_deviations: bool = True,
     suppress_deviations_threshold: float = 40.0,
 ) -> None:
     """
-    Recreate the Fig 1d. from "Neural signal propagation atlas of Caenorhabditis elegans".
+    Recreate the waterfall similar to Fig 1d. from "Neural signal propagation atlas of Caenorhabditis elegans".
 
     Parameters
     ----------
@@ -19,12 +22,21 @@ def plot_waterfall(
         The NWBFile containing the imaging data.
     segmentation_nwbfile : pynwb.NWBFile
         The NWBFile containing the segmentation data.
+    exclude_labels : list, optional
+        A list of NeuroPAL lables to exclude from plotting.
+        For example, Fig 1d from the paper (which used session "20211104-163944" of subject 26)
+        excluded ["AMsoL", "AMsoR", "AMso", "AMSoL", "AMSoR", "AmSo"].
     suppress_deviations : bool, default: True
         FOr unknown reasons, about 10 traces in the figure reproduction do not match the original figure from the paper.
         If True, suppresses the plotting of lines with deviations greater than the threshold.
     suppress_deviations_threshold : float, default: 40.0
         The threshold for the deviation of a line to be suppressed.
     """
+    exclude_labels = exclude_labels or []
+
+    # Always exclude unlabelled ROIs
+    excluded_labels = ["", " "] + exclude_labels
+
     # Actual parameters values as inferred from the fig1_commands.txt record
     savgol_filter_size = 13
     savgol_shift = (savgol_filter_size - 1) // 2
@@ -33,7 +45,6 @@ def plot_waterfall(
 
     # Hardcoded parameters from the original plot function
     Delta = 5.0
-    excluded_labels = ["", " ", "AMsoL", "AMsoR", "AMso", "AMSoL", "AMSoR", "AmSo"]
 
     # Fetch data from NWB source
     green_signal = segmentation_nwbfile.processing["ophys"]["GreenSignals"].microscopy_response_series["GreenSignal"]
