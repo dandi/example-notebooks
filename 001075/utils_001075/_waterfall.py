@@ -12,6 +12,7 @@ def plot_waterfall(
     exclude_labels: Optional[list] = None,
     suppress_deviations: bool = True,
     suppress_deviations_threshold: float = 40.0,
+    use_interpolated: bool = True,
 ) -> None:
     """
     Recreate the waterfall similar to Fig 1d. from "Neural signal propagation atlas of Caenorhabditis elegans".
@@ -45,10 +46,12 @@ def plot_waterfall(
     Delta = 5.0
 
     # Fetch data from NWB source
-    green_signal = segmentation_nwbfile.processing["ophys"]["GreenSignals"].microscopy_response_series["GreenSignal"]
+    signal_name = "InterpolatedGreenSignal" if use_interpolated else "BaseGreenSignal"
+    green_signal = segmentation_nwbfile.processing["ophys"]["GreenSignals"].microscopy_response_series[signal_name]
     time = green_signal.timestamps[:]
 
     neuropal_rois = segmentation_nwbfile.processing["ophys"]["NeuroPALSegmentations"].microscopy_plane_segmentations["NeuroPALPlaneSegmentation"]
+    neuropal_ids = neuropal_rois.id[:]
     green_rois = segmentation_nwbfile.processing["ophys"]["PumpProbeGreenSegmentations"]
 
     coregistered_neuropal_id_to_green_ids = {
@@ -59,6 +62,7 @@ def plot_waterfall(
         )
         if coregistered_neuropal_id != ""
     }
+    coregistered_green_ids_to_neuropal_ids = {int(value): key for key, value in coregistered_neuropal_id_to_green_ids.items()}
 
     neuropal_labels = neuropal_rois.labels.data[:]
     alphabetized_valid_neuropal_labels_with_ids = [
@@ -106,9 +110,9 @@ def plot_waterfall(
     matplotlib.pyplot.rc("xtick", labelsize=8)
 
     plotted_neuropal_ids = []
-    colors = []
+    neuropal_label_to_colors = dict()
     baseline = []
-    for plot_index, (label, neuropal_id) in enumerate(alphabetized_valid_neuropal_labels_with_ids):
+    for plot_index, (neuropal_label, neuropal_id) in enumerate(alphabetized_valid_neuropal_labels_with_ids):
         green_id = coregistered_neuropal_id_to_green_ids[neuropal_id]
 
         roi_response = green_signal.data[:, green_id]
@@ -144,12 +148,13 @@ def plot_waterfall(
         # In particular, the "M5", "AWAR", "RIMR", and "I3" traces all had massive deviations
         # from the figure in the paper that were not smoothed by any of the previous steps
         # (spike removal, photobleaching correction, or Savitzky-Golay filtering).
-        smoothed_deviations = max(smoothed[13:]) - min(smoothed[13:])
+        smoothed_deviations = max(smoothed[savgol_filter_size:]) - min(smoothed[savgol_filter_size:])
         if suppress_deviations is True and smoothed_deviations > suppress_deviations_threshold:
             line, = ax.plot([], [], lw=0.8)  # Still plotting an empty line to increment coloration to match
 
             color = line.get_color()
-            colors.append(color)
+            neuropal_label_to_colors.update({neuropal_label: color})
+
             continue
 
         # There are a few other lines in the plot that don't precisely match the figure from the paper
@@ -166,9 +171,45 @@ def plot_waterfall(
         line, = ax.plot(time[13:], plot[13:], lw=0.8)
 
         color = line.get_color()
-        colors.append(color)
+        neuropal_label_to_colors.update({neuropal_label: color})
 
-        ax.annotate(label, (-150 - 120 * (plot_index % 2), plot_index * Delta), c=color, fontsize=8)
+        ax.annotate(text=neuropal_label, xy=(-150 - 120 * (plot_index % 2), plot_index * Delta), c=color, fontsize=8)
+
+    # Optogenetic stimulation table
+    stimulation_times = segmentation_nwbfile.intervals["OptogeneticStimulusTable"]["start_time"][:]
+
+    stimulation_labels = []
+    for green_id in segmentation_nwbfile.intervals["OptogeneticStimulusTable"]["target_pumpprobe_id"][:]:
+        if numpy.isnan(green_id):
+            stimulation_labels.append("")
+            continue
+
+        neuropal_id = coregistered_green_ids_to_neuropal_ids.get(int(green_id), None)
+        if neuropal_id is  None or neuropal_id == "":
+            stimulation_labels.append("")
+            continue
+
+        stimulation_label = neuropal_labels[neuropal_id]
+        if (
+            stimulation_label in excluded_labels
+            or stimulation_label not in neuropal_label_to_colors
+        ):
+            stimulation_labels.append("")
+            continue
+
+        stimulation_labels.append(stimulation_label)
+
+    for stimulation_time, stimulation_label in zip(stimulation_times, stimulation_labels):
+        ax.axvline(x=stimulation_time, c="k", alpha=0.5, lw=1, ymax=0.98)
+
+        if stimulation_label != "":
+            ax.annotate(
+                text=stimulation_label,
+                xy=(stimulation_time, (plot_index + 6) * Delta),
+                c=neuropal_label_to_colors[stimulation_label],
+                fontsize=8,
+                rotation=90,
+            )
 
     ax.set_xlim(-270, time[-1])
     ax.set_ylim(-Delta, Delta * (plot_index + 6))
@@ -176,9 +217,9 @@ def plot_waterfall(
     ax.set_xlabel("Time (s)", fontsize=10)
     ax.set_ylabel("Responding neuron", fontsize=10)
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['left'].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["left"].set_visible(False)
 
     return None
 
