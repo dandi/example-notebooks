@@ -1,6 +1,6 @@
 from pynwb import NWBHDF5IO
-from fsspec import filesystem
-from h5py import File
+import remfile
+import h5py
 from dandi.dandiapi import DandiAPIClient
 
 def stream_nwbfile(DANDISET_ID, file_path):
@@ -27,10 +27,9 @@ def stream_nwbfile(DANDISET_ID, file_path):
     with DandiAPIClient() as client:
         client.dandi_authenticate()
         asset = client.get_dandiset(DANDISET_ID, 'draft').get_asset_by_path(file_path)
-        s3_url = asset.get_content_url(follow_redirects=1, strip_query=True)
-    fs = filesystem("http")
-    file_system = fs.open(s3_url, "rb")
-    file = File(file_system, mode="r")
+        s3_url = asset.get_content_url(follow_redirects=1, strip_query=False)
+    file_system = remfile.File(s3_url)
+    file = h5py.File(file_system, mode="r")
     io = NWBHDF5IO(file=file, load_namespaces=True)
     nwbfile = io.read()
     return nwbfile, io
