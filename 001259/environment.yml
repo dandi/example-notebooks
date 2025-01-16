@@ -4,8 +4,10 @@ channels:
     - conda-forge
 dependencies:
     - python==3.12
-    - ipywidgets
+    - ipykernel
+    - matplotlib
+    - dandi
     - pip
     - pip:
-      - matplotlib
-      - lerner-lab-to-nwb @ git+https://github.com/catalystneuro/lerner-lab-to-nwb.git@main
+      - remfile
+      - schneider-lab-to-nwb @ git+https://github.com/catalystneuro/schneider-lab-to-nwb.git@main
