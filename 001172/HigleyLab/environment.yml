@@ -1,0 +1,13 @@
+name: higleylab_001172_demo
+channels:
+    - conda-forge
+dependencies:
+    - python==3.11
+    - ipywidgets
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - matplotlib
+      - pynwb
+      - remfile
