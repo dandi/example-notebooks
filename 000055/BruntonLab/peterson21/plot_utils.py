@@ -193,7 +193,7 @@ def identify_elecs(group_names):
             is_surf.append(True)
         elif label.lower() in ["mhd", "latd", "lmtd", "ltpd"]:
             is_surf.append(True)  # special cases
-        elif (label.lower() == "ahd") & ("PHD" not in group_names):
+        elif (label.lower() == "ahd") & ("PHD" not in group_names):  # codespell:ignore
             is_surf.append(True)  # special case
         elif "d" in label.lower():
             is_surf.append(False)
