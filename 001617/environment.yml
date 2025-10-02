@@ -1,0 +1,13 @@
+# run: conda env create --file environment.yml
+name: dan_notebook_env
+channels:
+    - conda-forge
+dependencies:
+    - python==3.13
+    - ipykernel
+    - matplotlib
+    - dandi
+    - pip
+    - pip:
+      - remfile
+      - dan-lab-to-nwb @ git+https://github.com/catalystneuro/dan-lab-to-nwb.git@main
