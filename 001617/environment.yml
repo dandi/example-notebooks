@@ -6,9 +6,9 @@ dependencies:
     - python==3.13
     - ipykernel
     - matplotlib
-    - dandi
     - networkx
     - pip
     - pip:
+      - dandi
       - remfile
       - dan-lab-to-nwb @ git+https://github.com/catalystneuro/dan-lab-to-nwb.git@main
