@@ -11,4 +11,5 @@ dependencies:
     - pip:
       - dandi
       - remfile
+      - nwb-video-widgets>=0.1.6
       - dan-lab-to-nwb @ git+https://github.com/catalystneuro/dan-lab-to-nwb.git@main
