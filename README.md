@@ -34,3 +34,9 @@ See [detailed instructions](https://conda.io/projects/conda/en/latest/user-guide
 
 
 Feel free to reach out on the [DANDI helpdesk](https://github.com/dandi/helpdesk/issues/new/choose) with any questions.
+
+## Useful tools
+
+We use https://app.reviewnb.com/ to provide convenient review of notebook diffs in Pull Requests in GitHub web UI.
+
+To assist in reviewing diff's in notebooks locally we recommend to checkout [nbdime](https://nbdime.readthedocs.io) which provides comparable functionality and integrates well with your local git.
