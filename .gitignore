@@ -3,5 +3,4 @@
 *__pycache__/
 *.ipynb_checkpoints/
 output/
-
-.vscode/settings.json
+*.idea
