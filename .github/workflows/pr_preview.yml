@@ -1,0 +1,89 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    if: github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests jinja2 'dandi>=0.74.0'
+
+      - name: Render index
+        run: python .github/scripts/collect_and_render.py
+
+      - name: Deploy preview to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}
+          keep_files: true
+          commit_message: "Deploy preview for PR #${{ github.event.pull_request.number }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Comment PR with preview URL
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          message: |
+            ## Index page preview
+
+            A preview of the generated `index.html` has been deployed for this PR:
+
+            **[View preview](https://dandi.github.io/example-notebooks/pr-preview/${{ github.event.pull_request.number }}/)**
+
+            _Last updated: commit `${{ github.event.pull_request.head.sha }}`_
+
+  cleanup:
+    if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Remove preview folder
+        run: |
+          PR_DIR="pr-preview/${{ github.event.pull_request.number }}"
+          if [ -d "$PR_DIR" ]; then
+            rm -rf "$PR_DIR"
+            git config user.name 'github-actions[bot]'
+            git config user.email 'github-actions[bot]@users.noreply.github.com'
+            git add -A
+            git commit -m "Remove preview for closed PR #${{ github.event.pull_request.number }}"
+            git push
+          else
+            echo "No preview directory to remove."
+          fi
+
+      - name: Update preview comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          message: |
+            Preview for this PR has been removed (PR closed).
