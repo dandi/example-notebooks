@@ -277,15 +277,20 @@
             margin: 0;
         }
         .notebooks li {
-            padding: 8px 0;
+            padding: 10px 0;
             border-top: 1px solid var(--rule);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
         }
         .notebooks li:first-child {
             border-top: none;
-            padding-top: 2px;
+            padding-top: 4px;
         }
         .notebooks li:last-child { padding-bottom: 2px; }
-        .notebooks a {
+        .notebooks .notebook-link {
             color: var(--ink);
             text-decoration: none;
             font-size: 13.5px;
@@ -295,8 +300,10 @@
             gap: 10px;
             transition: color 0.2s;
             word-break: break-all;
+            flex: 1;
+            min-width: 0;
         }
-        .notebooks a::before {
+        .notebooks .notebook-link::before {
             content: '';
             width: 14px;
             height: 2px;
@@ -304,10 +311,40 @@
             flex-shrink: 0;
             transition: width 0.2s, background 0.2s;
         }
-        .notebooks a:hover { color: var(--navy); }
-        .notebooks a:hover::before {
+        .notebooks .notebook-link:hover { color: var(--navy); }
+        .notebooks .notebook-link:hover::before {
             width: 22px;
             background: var(--navy);
+        }
+        .nb-action {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 6px 11px;
+            border-radius: 3px;
+            transition: background 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            line-height: 1;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .nb-action.colab {
+            color: var(--rose-dark);
+            background: rgba(211, 134, 141, 0.12);
+        }
+        .nb-action.colab:hover {
+            background: var(--rose);
+            color: #fff;
+        }
+        .nb-action svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
         }
 
         /* Footer */
@@ -393,7 +430,13 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 {% for notebook in dandiset.notebooks %}
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}" target="_blank" rel="noopener">{{ notebook }}</a></li>
+                                <li>
+                                    <a class="notebook-link" href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}" target="_blank" rel="noopener">{{ notebook }}</a>
+                                    <a class="nb-action colab" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}" target="_blank" rel="noopener" aria-label="Open {{ notebook }} in Google Colab">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.54 9.46a5 5 0 0 0 0 7.08l2.12-2.12a2 2 0 0 1 0-2.84l-2.12-2.12zm15.04 7.08a5 5 0 0 0 0-7.08l-2.12 2.12a2 2 0 0 1 0 2.84l2.12 2.12zM16 7.05a5 5 0 0 0-7.07 0L6.34 9.64a5 5 0 0 0 0 7.07L9.05 14a2 2 0 0 1 0-2.83l2.54-2.54a2 2 0 0 1 2.83 0l1.58-1.58zM8 16.95a5 5 0 0 0 7.07 0l2.59-2.59a5 5 0 0 0 0-7.07L14.95 10a2 2 0 0 1 0 2.83l-2.54 2.54a2 2 0 0 1-2.83 0L8 16.95z"/></svg>
+                                        Open in Colab
+                                    </a>
+                                </li>
                                 {% endfor %}
                             </ul>
                         </div>
