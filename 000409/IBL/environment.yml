@@ -1,0 +1,21 @@
+name: ibl_000409_bwm
+channels:
+    - conda-forge
+dependencies:
+    - python==3.12
+    - ipywidgets
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - pynwb
+      - h5py
+      - remfile
+      - numpy
+      - pandas
+      - matplotlib
+      - iblatlas
+      - brainglobe-atlasapi
+      - psychofit
+      - pynapple
+      - nwb-video-widgets[dandi]>=0.1.2
