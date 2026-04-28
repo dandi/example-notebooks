@@ -1,0 +1,7 @@
+# Add Turner Lab M1 motor cortex notebooks for dandiset 001636
+
+This PR adds four notebooks under `001636/TurnerLab/motor_cortex/` for the Turner lab MPTP parkinsonism dataset, single-unit M1 recordings from macaque monkeys performing flexion/extension tasks before and after MPTP, with pyramidal tract neurons (PTNs) and corticostriatal neurons (CSNs) identified by antidromic stimulation. `turner_m1_usage.ipynb` is the entry-point usage guide that streams NWB files from DANDI and walks through the file layout. `turner_m1_peth.ipynb` builds peri-event time histograms with pynapple. `turner_m1_glm.ipynb` fits Poisson GLMs on kinematic features with NeMoS, reproducing the encoding analysis from Pasquereau and Turner (Brain 2016). `antidromic_detection_tutorial.ipynb` is a background tutorial on antidromic stimulation and how the dataset uses it for cell-type classification.
+
+The accompanying `environment.yml` pins all dependencies (Python 3.12, numpy 2.2.6, pynwb 3.1.3, pynapple 0.10.3, nemos 0.2.6, jax 0.9.0.1, and the rest), and I have verified end-to-end that all four notebooks execute cleanly in a fresh conda env created from this file. One non-obvious pin is `optimistix==0.0.11`: optimistix 0.1.0 changed an internal API that breaks NeMoS 0.2.6's FISTA solver, so the older release is required for the GLM notebook to fit.
+
+I have left the helper modules (`notebook_helpers.py`, `trial_structure_plot.py`) alongside the notebooks since they are imported directly by them.
