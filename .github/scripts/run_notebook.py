@@ -52,8 +52,14 @@ def find_install_cell(nb):
         ]
         return pins, helpers, i
     raise RuntimeError(
-        "No Colab-bootstrap install cell (with `uv pip install --system ...`) "
-        "found in the first 8 cells. This notebook may not be Colab-ready yet."
+        "Missing Colab-bootstrap install cell. "
+        "CI walks every notebook in the repo and expects each one to begin with a "
+        "code cell containing `!uv pip install --system \"pkg==ver\" ...` so that "
+        "its dep set is fully pinned and reproducible. "
+        "To fix: add the bootstrap cells (see PR #149 for the pattern) — OR, if "
+        "the notebook genuinely can't be tested headlessly (needs a database, "
+        "proprietary creds, etc), add its path to `.github/notebook-test-exclusions.txt` "
+        "with a comment explaining why."
     )
 
 

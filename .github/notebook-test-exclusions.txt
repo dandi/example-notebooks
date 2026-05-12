@@ -1,0 +1,39 @@
+# Notebooks excluded from the CI test sweep.
+#
+# Lines are fnmatch glob patterns (gitignore-style; relative to repo root).
+# Empty lines and `#` comments are ignored.
+#
+# Add a notebook here if it cannot be tested headlessly for a structural
+# reason (needs a database, needs proprietary creds, depends on a package
+# that can't run on Python 3.12, etc). DO NOT add a notebook here just to
+# silence a transient failure — fix the notebook instead, or open an issue
+# explaining what's blocking.
+#
+# Adding a NEW notebook to the repo without a Colab-bootstrap install cell
+# will fail CI by design — either add the bootstrap (see #149 for the
+# pattern) or add the notebook to this list with a comment explaining why.
+
+# DataJoint notebooks: require MySQL/Postgres servers that CI can't host.
+**/DataJoint/**
+
+# Repo-operational meta notebooks (not dandiset analyses; produce site content).
+archive_analysis/dandiset_size_plot.ipynb
+dandi/archive_stats.ipynb
+
+# Legacy tutorial pinned to a years-old NWB API; superseded by newer tutorials.
+tutorials/cosyne_2020/NWB_tutorial_2019.ipynb
+
+# Structurally blocked: depends on RutishauserLabtoNWB==1.1.0 (only PyPI ver),
+# which pins pynwb==1.1.0 — fundamentally broken on Python 3.11+.
+000004/RutishauserLab/000004_demo_analysis.ipynb
+
+# Structurally blocked: imports rl_analysis (lab package, not on PyPI).
+000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb
+
+# Structurally blocked: shares plot_utils.py with Fig_coarse_labels, which
+# calls the removed nwbwidgets.utils.timeseries.align_by_times API. A
+# ~10-line content fix to plot_utils.py would unblock all three; they
+# can come off this list together.
+000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb
+000055/BruntonLab/peterson21/Table_coarse_labels.ipynb
+000055/BruntonLab/peterson21/Table_part_characteristics.ipynb

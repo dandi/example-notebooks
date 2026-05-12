@@ -17,26 +17,35 @@ permissions:
 
 jobs:
   list:
-    name: List Colab-ready notebooks
+    name: List notebooks to test
     runs-on: ubuntu-latest
     outputs:
       notebooks: ${{ steps.list.outputs.notebooks }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Find notebooks with a Colab-bootstrap install cell
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: List all testable notebooks
         id: list
         run: |
           set -euo pipefail
+          all=$(python .github/scripts/list_notebooks.py)
           filter='${{ github.event.inputs.filter }}'
-          notebooks=$(grep -rl "uv pip install --system" --include="*.ipynb" . | sed 's|^./||' | sort)
           if [ -n "$filter" ]; then
-            notebooks=$(echo "$notebooks" | grep -E "$filter" || true)
+            all=$(echo "$all" | python -c "
+          import json, re, sys
+          pat = re.compile(r'''$filter''')
+          nbs = json.load(sys.stdin)
+          print(json.dumps([n for n in nbs if pat.search(n)]))
+          ")
           fi
-          json=$(echo -n "$notebooks" | grep -v '^$' | jq -R -s 'split("\n") | map(select(length > 0))' || echo "[]")
-          echo "notebooks=$(echo "$json" | jq -c .)" >> "$GITHUB_OUTPUT"
-          echo "Will test $(echo "$json" | jq 'length') notebooks:"
-          echo "$json" | jq -r '.[]'
+          echo "notebooks=$all" >> "$GITHUB_OUTPUT"
+          count=$(echo "$all" | python -c "import json,sys;print(len(json.load(sys.stdin)))")
+          echo "Will test $count notebooks:"
+          echo "$all" | python -m json.tool
 
   test:
     name: ${{ matrix.notebook }}
@@ -105,31 +114,48 @@ jobs:
               results.append(json.loads(f.read_text()))
           passed = [r for r in results if r.get("ok")]
           failed = [r for r in results if not r.get("ok")]
+          missing_bootstrap = [r for r in failed if r.get("stage") == "extract"]
+          other_failed = [r for r in failed if r.get("stage") != "extract"]
 
           lines = [
-              f"# Weekly notebook sweep — {os.environ['GITHUB_RUN_ID']}",
+              f"# Weekly notebook sweep — run {os.environ['GITHUB_RUN_ID']}",
               "",
               f"**Total:** {len(results)} · **Passed:** {len(passed)} · **Failed:** {len(failed)}",
               "",
           ]
-          if failed:
-              lines.append("## Failures\n")
-              for r in failed:
+          if missing_bootstrap:
+              lines.append("## Notebooks missing the Colab-bootstrap install cell")
+              lines.append("")
+              lines.append("These notebooks lack a `!uv pip install --system` install cell. ")
+              lines.append("Either add the bootstrap (see PR #149 for the pattern) or add the ")
+              lines.append("notebook to `.github/notebook-test-exclusions.txt` with a comment ")
+              lines.append("explaining why it can't be tested.")
+              lines.append("")
+              for r in missing_bootstrap:
+                  lines.append(f"- `{r['notebook']}`")
+              lines.append("")
+          if other_failed:
+              lines.append("## Other failures")
+              lines.append("")
+              for r in other_failed:
                   err = (r.get("error") or "").strip().splitlines()
                   last = next((l for l in reversed(err) if l.strip()), "")
-                  lines.append(f"- `{r['notebook']}` (stage: `{r['stage']}`, {r['duration_s']}s) — `{last[:200]}`")
+                  lines.append(
+                      f"- `{r['notebook']}` (stage: `{r['stage']}`, "
+                      f"{r['duration_s']}s) — `{last[:200]}`"
+                  )
               lines.append("")
           if passed:
-              lines.append("## Passed\n")
+              lines.append("## Passed")
+              lines.append("")
               for r in sorted(passed, key=lambda x: x["duration_s"]):
                   lines.append(f"- `{r['notebook']}` ({r['duration_s']}s)")
+              lines.append("")
 
           report = "\n".join(lines)
           Path("report.md").write_text(report)
-          # Job summary
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
               f.write(report)
-          # Output for the issue-filing step
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"failed_count={len(failed)}\n")
           EOF
@@ -142,7 +168,6 @@ jobs:
             const fs = require('fs');
             const body = fs.readFileSync('report.md', 'utf8');
             const title = `Weekly notebook sweep — failures (${new Date().toISOString().slice(0,10)})`;
-            // Look for an existing open weekly-sweep issue and update it instead of spamming new ones
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner, repo: context.repo.repo,
               state: 'open',
