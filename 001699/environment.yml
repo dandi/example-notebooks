@@ -1,0 +1,14 @@
+# run: conda env create --file environment.yml
+name: dudchenko_notebook_env
+channels:
+    - conda-forge
+dependencies:
+    - python==3.13
+    - ipykernel
+    - matplotlib
+    - numpy
+    - pip
+    - pip:
+      - dandi
+      - remfile
+      - pynwb
