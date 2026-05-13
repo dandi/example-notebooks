@@ -143,30 +143,58 @@ def main() -> int:
     r = run(["jupyter", "nbconvert", "--to", "script", "--stdout", str(tmp_nb)])
     if r.returncode != 0:
         return finalize("convert", False, error=r.stderr[-3000:])
-    script_path.write_text(r.stdout)
+    raw_script = r.stdout
 
+    # Insert progress markers before each `# In[...]` cell separator so the
+    # CI log shows which cell is running. If the process is killed mid-cell
+    # (eg OOM), the last marker tells you the offending cell.
+    instrumented = []
+    for line in raw_script.splitlines(keepends=True):
+        m = re.match(r"# In\[(.*?)\]:", line.strip())
+        if m:
+            cell_label = m.group(1) or "?"
+            instrumented.append(
+                f'import sys as _sys; print("::cell {cell_label}::", flush=True); _sys.stderr.flush()\n'
+            )
+        instrumented.append(line)
+    script_path.write_text("".join(instrumented))
+
+    # Stream ipython output live to this process's stdout/stderr so CI logs
+    # show progress in real time. Tee a copy to the log file via Popen.
+    import shlex
+    cmd = ["ipython", "--colors=NoColor", "--no-banner",
+           "--InteractiveShell.history_load_length=0", str(script_path)]
+    print(f"\n=== executing notebook (streaming) ===\n  {shlex.join(cmd)}", flush=True)
+    log_f = log_path.open("a")
+    log_f.write(f"\n=== execute (streaming) ===\n")
+    log_f.flush()
+    proc = subprocess.Popen(
+        cmd, cwd=str(nb_dir),
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        text=True, bufsize=1,
+    )
+    captured = []
     try:
-        r = run(
-            ["ipython", "--colors=NoColor", "--no-banner",
-             "--InteractiveShell.history_load_length=0", str(script_path)],
-            cwd=str(nb_dir),
-            timeout=args.timeout,
-        )
+        for line in proc.stdout:
+            sys.stdout.write(line)
+            sys.stdout.flush()
+            log_f.write(line)
+            captured.append(line)
+        proc.wait(timeout=args.timeout)
     except subprocess.TimeoutExpired:
+        proc.kill()
+        log_f.close()
         return finalize("execute", False,
                         error=f"hit overall {args.timeout}s timeout")
+    log_f.close()
 
-    with log_path.open("a") as f:
-        f.write(f"\n=== execute rc={r.returncode} ===\n")
-        f.write(f"--- stdout (tail) ---\n{r.stdout[-2000:]}\n")
-        f.write(f"--- stderr (tail) ---\n{r.stderr[-3000:]}\n")
-
+    full_output = "".join(captured)
     looks_failed = (
-        r.returncode != 0
-        or "Traceback (most recent call last)" in r.stderr
+        proc.returncode != 0
+        or "Traceback (most recent call last)" in full_output
     )
     if looks_failed:
-        return finalize("execute", False, error=r.stderr[-3000:])
+        return finalize("execute", False, error=full_output[-3000:])
 
     return finalize("done", True)
 
