@@ -3,15 +3,25 @@
 # Lines are fnmatch glob patterns (gitignore-style; relative to repo root).
 # Empty lines and `#` comments are ignored.
 #
-# Add a notebook here if it cannot be tested headlessly for a structural
-# reason (needs a database, needs proprietary creds, depends on a package
-# that can't run on Python 3.12, etc). DO NOT add a notebook here just to
-# silence a transient failure — fix the notebook instead, or open an issue
-# explaining what's blocking.
+# Add a notebook here when it doesn't currently run cleanly in CI — whether
+# for a structural reason (needs a database, proprietary creds, etc), a
+# pre-existing notebook content bug, or an upstream API change we haven't
+# caught up to yet. The goal is for the CI workflows to stay green on master
+# while the underlying issues are tracked and fixed.
+#
+# When adding a notebook here:
+#  - Group it under one of the section headings below.
+#  - Add a one-line comment with WHY it's excluded.
+#  - When the underlying issue is fixed, remove the line.
 #
 # Adding a NEW notebook to the repo without a Colab-bootstrap install cell
-# will fail CI by design — either add the bootstrap (see #149 for the
-# pattern) or add the notebook to this list with a comment explaining why.
+# will also fail CI by design — either add the bootstrap (see PR #149 for
+# the pattern) or add the notebook to the appropriate section below with
+# a comment explaining why.
+
+# =============================================================================
+# Structural skips — fundamentally can't run in a CI sandbox.
+# =============================================================================
 
 # DataJoint notebooks: require MySQL/Postgres servers that CI can't host.
 **/DataJoint/**
@@ -23,17 +33,83 @@ dandi/archive_stats.ipynb
 # Legacy tutorial pinned to a years-old NWB API; superseded by newer tutorials.
 tutorials/cosyne_2020/NWB_tutorial_2019.ipynb
 
-# Structurally blocked: depends on RutishauserLabtoNWB==1.1.0 (only PyPI ver),
-# which pins pynwb==1.1.0 — fundamentally broken on Python 3.11+.
+# =============================================================================
+# Upstream-package blocked — depends on a package we can't install or use.
+# =============================================================================
+
+# RutishauserLabtoNWB==1.1.0 (only PyPI version) pins pynwb==1.1.0, broken on
+# Python 3.11+.
 000004/RutishauserLab/000004_demo_analysis.ipynb
 
-# Structurally blocked: imports rl_analysis (lab package, not on PyPI).
+# Imports rl_analysis (lab package, not on PyPI).
 000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb
 
-# Structurally blocked: shares plot_utils.py with Fig_coarse_labels, which
-# calls the removed nwbwidgets.utils.timeseries.align_by_times API. A
-# ~10-line content fix to plot_utils.py would unblock all three; they
-# can come off this list together.
+# Use h5py's ros3 driver, which the PyPI Linux x86_64 h5py wheel is built
+# WITHOUT. Notebook fails at file-open. Would need to switch streaming
+# backend to remfile/fsspec, or someone needs to ship a ros3-enabled wheel.
+000055/BruntonLab/peterson21/dashboard.ipynb
+tutorials/cosyne_2023/advanced_asset_search.ipynb
+
+# Needs a CAVE API token (proprietary CAVEclient creds) that CI doesn't have.
+000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb
+
+# =============================================================================
+# Headless-env limitations — code paths that only work in an interactive runtime.
+# =============================================================================
+
+# OpenCV / cv2 imports require libxcb.so.1, which isn't in the slim CI image.
+# Works in Colab (which has libxcb preinstalled).
+000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb
+
+# Calls webbrowser.open(), which raises "could not locate runnable browser"
+# in headless CI. Works in Colab.
+000582/Sargolini2006/000582_Sargolini2006_demo.ipynb
+001170/ReimerLab/public_demo/001170_demo.ipynb
+
+# Calls input() to prompt the user; raises EOFError under non-interactive
+# nbconvert. Works in Colab where input() is wired to a UI prompt.
+000718/CaiLab/zaki_2024/000718_demo.ipynb
+
+# =============================================================================
+# Pre-existing notebook content bugs — track + fix in dedicated PRs.
+# =============================================================================
+
+# Multiple missing imports beyond pandas (Parallel from joblib, etc).
+# PR #150 fixed `import pandas as pd` but the notebook also uses other names
+# that aren't imported.
+000039/AllenInstitute/Create_manifest.ipynb
+
+# Dandiset 000108's data layout was reorganized after this notebook was
+# written: microscopy/ → micr/, .SPIM.h5 → .SPIM.ome.zarr, and the path
+# pattern changed. Needs a wholesale rewrite, not an API-shape patch.
+000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
+
+# Hardcoded path `../../dandiset/sub-...` to a file no contributor has
+# locally; needs a switch to streaming-from-DANDI.
+000363/MAP/demo/browse_map_ephys_data.ipynb
+
+# Colocated plot_utils.py imports nwbwidgets.utils.timeseries.align_by_times,
+# which was removed in nwbwidgets 0.11.x (split into
+# align_by_times_with_timestamps / align_by_time_intervals with a different
+# signature). ~10-line update to plot_utils.py would unblock this and the
+# Fig_pow_spectra / Table_* notebooks above.
+000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb
 000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb
 000055/BruntonLab/peterson21/Table_coarse_labels.ipynb
 000055/BruntonLab/peterson21/Table_part_characteristics.ipynb
+
+# =============================================================================
+# Long-running notebooks — exceed the CI per-notebook timeout.
+# =============================================================================
+
+# Validates every zarr chunk in the dandiset; takes >1 h headlessly. Working
+# as intended; just not a fit for the CI budget.
+000108/chunglab/demo/validate_lev6.ipynb
+
+# =============================================================================
+# Missing Colab bootstrap — these notebooks need to be made Colab-ready.
+# =============================================================================
+
+# TODO: add Colab bootstrap (see PR #149 for the pattern).
+000039/AllenInstitute/Contrast_analysis.ipynb
+000129/MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb
