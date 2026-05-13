@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANDI Example Notebooks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #00436D;
+            --navy-dark: #002f4d;
+            --navy-soft: #2a6a94;
+            --rose: #D3868D;
+            --rose-light: #F0A5AC;
+            --rose-dark: #A05A60;
+
+            --bg: #ffffff;
+            --bg-soft: #f5f7fa;
+            --bg-band: #fbfcfd;
+            --ink: #1a2733;
+            --ink-soft: #546070;
+            --ink-faint: #8a96a5;
+            --rule: #e3e8ee;
+            --rule-strong: #c8d2de;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Roboto', -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Header */
+        header.site {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+            color: #fff;
+            padding: 72px 0 72px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--rose);
+        }
+        header.site::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -80px;
+            width: 360px;
+            height: 360px;
+            background: radial-gradient(circle, var(--rose) 0%, transparent 70%);
+            opacity: 0.18;
+            pointer-events: none;
+        }
+        header.site::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 10%;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, var(--rose-light) 0%, transparent 70%);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        header.site .container { position: relative; z-index: 1; }
+        .eyebrow {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--rose-light);
+            margin-bottom: 18px;
+        }
+        h1.site-title {
+            font-family: 'Roboto Slab', Georgia, serif;
+            font-weight: 600;
+            font-size: clamp(40px, 6vw, 64px);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin: 0 0 22px;
+            color: #fff;
+        }
+        .site-lede {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            font-size: 19px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.82);
+            max-width: 62ch;
+            margin: 0;
+        }
+
+        /* Main layout */
+        .main-wrap { padding: 64px 0 0; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 64px;
+            align-items: start;
+        }
+
+        aside.toc {
+            position: sticky;
+            top: 32px;
+            max-height: calc(100vh - 64px);
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        .toc-heading {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin: 0 0 16px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--navy);
+        }
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc li { margin: 0; }
+        .toc a {
+            display: block;
+            color: var(--ink-soft);
+            text-decoration: none;
+            font-size: 13.5px;
+            line-height: 1.45;
+            padding: 10px 0 10px 14px;
+            border-left: 2px solid var(--rule);
+            transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease, background 0.2s ease;
+        }
+        .toc a:hover {
+            color: var(--navy);
+            border-left-color: var(--rose);
+            padding-left: 18px;
+            background: var(--bg-soft);
+        }
+        .toc a .toc-id {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--rose-dark);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Datasets */
+        main.datasets { min-width: 0; }
+
+        .dandiset {
+            padding: 44px 0 52px;
+            border-bottom: 1px solid var(--rule);
+        }
+        .dandiset:first-child { padding-top: 4px; }
+        .dandiset:last-child { border-bottom: none; }
+
+        .dandiset-id {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--navy);
+            background: rgba(0, 67, 109, 0.07);
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .dandiset-id::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--rose);
+            border-radius: 50%;
+        }
+
+        .dandiset h2 {
+            font-family: 'Roboto Slab', Georgia, serif;
+            font-weight: 500;
+            font-size: 28px;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin: 0 0 18px;
+            color: var(--ink);
+        }
+
+        .dandiset p.description {
+            color: var(--ink-soft);
+            font-size: 15.5px;
+            line-height: 1.65;
+            margin: 0 0 24px;
+            max-width: 70ch;
+            font-weight: 400;
+        }
+
+        .archive-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--navy);
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 3px;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .archive-link::after {
+            content: '→';
+            transition: transform 0.2s;
+            font-size: 14px;
+        }
+        .archive-link:hover {
+            background: var(--navy-dark);
+            box-shadow: 0 4px 12px rgba(0, 67, 109, 0.2);
+        }
+        .archive-link:hover::after { transform: translateX(3px); }
+
+        .notebooks {
+            margin-top: 32px;
+            padding: 24px 28px;
+            background: var(--bg-band);
+            border: 1px solid var(--rule);
+            border-left: 3px solid var(--rose);
+            border-radius: 3px;
+        }
+        .notebooks-heading {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin: 0 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notebooks-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+        .notebooks ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notebooks li {
+            padding: 8px 0;
+            border-top: 1px solid var(--rule);
+        }
+        .notebooks li:first-child {
+            border-top: none;
+            padding-top: 2px;
+        }
+        .notebooks li:last-child { padding-bottom: 2px; }
+        .notebooks a {
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-family: 'Roboto Mono', monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.2s;
+            word-break: break-all;
+        }
+        .notebooks a::before {
+            content: '';
+            width: 14px;
+            height: 2px;
+            background: var(--rose);
+            flex-shrink: 0;
+            transition: width 0.2s, background 0.2s;
+        }
+        .notebooks a:hover { color: var(--navy); }
+        .notebooks a:hover::before {
+            width: 22px;
+            background: var(--navy);
+        }
+
+        /* Footer */
+        footer.site {
+            padding: 56px 0 48px;
+            margin-top: 64px;
+            background: var(--bg-soft);
+            border-top: 1px solid var(--rule);
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            color: var(--ink-soft);
+            text-align: center;
+        }
+        footer.site .brand {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        footer.site a {
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer.site a:hover { color: var(--rose-dark); text-decoration: underline; }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            aside.toc {
+                position: static;
+                max-height: none;
+                padding: 0 0 28px;
+                border-bottom: 1px solid var(--rule);
+            }
+            header.site { padding: 56px 0 56px; }
+            .main-wrap { padding: 44px 0 0; }
+            .container { padding: 0 22px; }
+            .dandiset h2 { font-size: 23px; }
+            .dandiset { padding: 36px 0 40px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site">
+        <div class="container">
+            <div class="eyebrow">Example Notebooks Index</div>
+            <h1 class="site-title">DANDI Datasets</h1>
+            <p class="site-lede">A curated index of example Jupyter notebooks for datasets hosted on the DANDI Archive — reference workflows for exploring open neurophysiology data across labs, species, and modalities.</p>
+        </div>
+    </header>
+
+    <div class="main-wrap">
+        <div class="container">
+            <div class="layout">
+                <aside class="toc">
+                    <h2 class="toc-heading">Contents</h2>
+                    <ul>
+                        
+                        <li>
+                            <a href="#dandiset-000004">
+                                <span class="toc-id">DANDI:000004</span>
+                                A NWB-based dataset and processing pipeline of human single-neuron activity during a declarative memory task
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000005">
+                                <span class="toc-id">DANDI:000005</span>
+                                Electrophysiology data from thalamic and cortical neurons during somatosensation
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000006">
+                                <span class="toc-id">DANDI:000006</span>
+                                Mouse anterior lateral motor cortex (ALM) in delay response task
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000007">
+                                <span class="toc-id">DANDI:000007</span>
+                                A cortico-cerebellar loop for motor planning
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000009">
+                                <span class="toc-id">DANDI:000009</span>
+                                Maintenance of persistent activity in a frontal thalamocortical loop
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000010">
+                                <span class="toc-id">DANDI:000010</span>
+                                A motor cortex circuit for motor planning and movement
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000013">
+                                <span class="toc-id">DANDI:000013</span>
+                                Low-noise encoding of active touch by layer 4 in the somatosensory cortex
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000015">
+                                <span class="toc-id">DANDI:000015</span>
+                                A Map of Anticipatory Activity in Mouse Motor Cortex
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000039">
+                                <span class="toc-id">DANDI:000039</span>
+                                Allen Institute – Contrast tuning in mouse visual cortex with calcium imaging
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000055">
+                                <span class="toc-id">DANDI:000055</span>
+                                AJILE12: Long-term naturalistic human intracranial neural recordings and pose
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000108">
+                                <span class="toc-id">DANDI:000108</span>
+                                Light sheet imaging of the human brain
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000129">
+                                <span class="toc-id">DANDI:000129</span>
+                                MC_RTT: macaque motor cortex spiking activity during self-paced reaching
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000363">
+                                <span class="toc-id">DANDI:000363</span>
+                                Mesoscale Activity Map Dataset
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000402">
+                                <span class="toc-id">DANDI:000402</span>
+                                MICrONS Two Photon Functional Imaging
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000409">
+                                <span class="toc-id">DANDI:000409</span>
+                                IBL - Brain Wide Map
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000458">
+                                <span class="toc-id">DANDI:000458</span>
+                                Simultaneous electroencephalography, extracellular electrophysiology, and cortical electrical stimulation in head-fixed mice
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000559">
+                                <span class="toc-id">DANDI:000559</span>
+                                Spontaneous behaviour is structured by reinforcement without explicit reward
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000582">
+                                <span class="toc-id">DANDI:000582</span>
+                                Conjunctive Representation of Position, Direction, and Velocity in Entorhinal Cortex
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000718">
+                                <span class="toc-id">DANDI:000718</span>
+                                Offline ensemble co-reactivation links memories across days
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000727">
+                                <span class="toc-id">DANDI:000727</span>
+                                Mapping the Neural Dynamics of Locomotion across the Drosophila Brain
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000728">
+                                <span class="toc-id">DANDI:000728</span>
+                                Allen Institute - Visual Coding - Optical Physiology
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000947">
+                                <span class="toc-id">DANDI:000947</span>
+                                Reach-related Single Unit Activity in the Parkinsonian Macaque
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-000971">
+                                <span class="toc-id">DANDI:000971</span>
+                                Dopamine signaling in the dorsomedial striatum promotes compulsive behavior
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001038">
+                                <span class="toc-id">DANDI:001038</span>
+                                Unique functional responses differentially map onto genetic subtypes of dopamine neurons
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001075">
+                                <span class="toc-id">DANDI:001075</span>
+                                Neural signal propagation atlas of Caenorhabditis elegans
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001084">
+                                <span class="toc-id">DANDI:001084</span>
+                                Targeted micro-fiber arrays for measuring and manipulating localized multi-scale neural dynamics over large, deep brain volumes during behavior
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001170">
+                                <span class="toc-id">DANDI:001170</span>
+                                Mesoscale Two-Photon Calcium Imaging of Population Level Odor Responses from the Mouse Olfactory Bulb
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001636">
+                                <span class="toc-id">DANDI:001636</span>
+                                Pyramidal tract and corticostriatal neuron recordings in MPTP-treated macaque performing visuomotor tasks
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#dandiset-001754">
+                                <span class="toc-id">DANDI:001754</span>
+                                Three-dimensional spatial selectivity of hippocampal neurons during space flight
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </aside>
+
+                <main class="datasets">
+                    
+                    <article id="dandiset-000004" class="dandiset">
+                        <div class="dandiset-id">DANDI:000004</div>
+                        <h2>A NWB-based dataset and processing pipeline of human single-neuron activity during a declarative memory task</h2>
+                        <p class="description">A challenge for data sharing in systems neuroscience is the multitude of different data formats used. Neurodata Without Borders: Neurophysiology 2.0 (NWB:N) has emerged as a standardized data format for the storage of cellular-level data together with meta-data, stimulus information, and behavior. A key next step to facilitate NWB:N adoption is to provide easy to use processing pipelines to import/export data from/to NWB:N. Here, we present a NWB-formatted dataset of 1863 single neurons recorded from the medial temporal lobes of 59 human subjects undergoing intracranial monitoring while they performed a recognition memory task. We provide code to analyze and export/import stimuli, behavior, and electrophysiological recordings to/from NWB in both MATLAB and Python. The data files are NWB:N compliant, which affords interoperability between programming languages and operating systems. This combined data and code release is a case study for how to utilize NWB:N for human single-neuron recordings and enables easy re-use of this hard-to-obtain data for both teaching and research on the mechanisms of human memory.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000004" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000004/RutishauserLab/000004_demo_analysis.ipynb" target="_blank" rel="noopener">RutishauserLab/000004_demo_analysis.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000005" class="dandiset">
+                        <div class="dandiset-id">DANDI:000005</div>
+                        <h2>Electrophysiology data from thalamic and cortical neurons during somatosensation</h2>
+                        <p class="description">intracellular and extracellular electrophysiology recordings performed on mouse barrel cortex and ventral posterolateral nucleus (vpm) in whisker-based object locating task.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000005" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000005/DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000006" class="dandiset">
+                        <div class="dandiset-id">DANDI:000006</div>
+                        <h2>Mouse anterior lateral motor cortex (ALM) in delay response task</h2>
+                        <p class="description">Extracellular electrophysiology recordings performed on mouse anterior lateral motor cortex (ALM) in delay response task. Neural activity from two neuron populations, pyramidal track upper and lower, were characterized, in relation to movement execution. Some files, as originally (re)distributed from e.g. http://datasets.datalad.org/?dir=/labs/svoboda/Economo_2018 were found to be broken and would not be able available among reorganized files under sub-* directories.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000006" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000006/DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000007" class="dandiset">
+                        <div class="dandiset-id">DANDI:000007</div>
+                        <h2>A cortico-cerebellar loop for motor planning</h2>
+                        <p class="description">Extracellular recording in ALM</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000007" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000009" class="dandiset">
+                        <div class="dandiset-id">DANDI:000009</div>
+                        <h2>Maintenance of persistent activity in a frontal thalamocortical loop</h2>
+                        <p class="description">We recorded spikes from the ALM and thalamus during tactile discrimination  with a delayed directional response. Here we show that, similar to ALM  neurons, thalamic neurons exhibited selective persistent delay activity  that predicted movement direction. Unilateral photoinhibition of delay  activity in the ALM or thalamus produced contralesional neglect.  Photoinhibition of the thalamus caused a short-latency and near-complete  collapse of ALM activity. Similarly, photoinhibition of the ALM diminished  thalamic activity. Our results show that the thalamus is a circuit hub in  motor preparation and suggest that persistent activity requires reciprocal  excitation across multiple brain areas.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000009" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000010" class="dandiset">
+                        <div class="dandiset-id">DANDI:000010</div>
+                        <h2>A motor cortex circuit for motor planning and movement</h2>
+                        <p class="description">Data from "A motor cortex circuit for motor planning and movement" Li et al. Nature 2015</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000010" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000013" class="dandiset">
+                        <div class="dandiset-id">DANDI:000013</div>
+                        <h2>Low-noise encoding of active touch by layer 4 in the somatosensory cortex</h2>
+                        <p class="description">Data from "Low-noise encoding of active touch by layer 4 in the somatosensory cortex" Hires, Gutnisky et al. Elife 2015</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000013" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000013/DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000015" class="dandiset">
+                        <div class="dandiset-id">DANDI:000015</div>
+                        <h2>A Map of Anticipatory Activity in Mouse Motor Cortex</h2>
+                        <p class="description">Data from "A Map of Anticipatory Activity in Mouse Motor Cortex" Chen et al. Neuron 2017</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000015" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000039" class="dandiset">
+                        <div class="dandiset-id">DANDI:000039</div>
+                        <h2>Allen Institute – Contrast tuning in mouse visual cortex with calcium imaging</h2>
+                        <p class="description">A two photon calcium imaging dataset from Allen Institute measuring responses to full-field drifting gratings (approx. 120x90 degrees of visual space) of 8 directions and 6 contrasts (5%, 10%, 20%, 40%, 60%, 80%). Mouse Cre lines expressing GCaMP6f were imaged to record responses of   pyramidal neurons across cortical layers (Cux2: layer 2/3; Rorb: layer 4; Rbp4: layer 5; Ntsr1: layer 6) as well as inhibitory interneurons (Vip and Sst). All experimental sessions took place on the same data collection pipeline as the Allen Brain Observatory (see http://observatory.brain-map.org/visualcoding) and have the same visual stimulus monitor calibration and positioning, two photon imaging systems and image processing pipeline, and running wheel to track locomotion.
+
+ Data are subject to Allen Institute Terms of Use policy, available at: http://www.alleninstitute.org/legal/terms-use/</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000039" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Contrast_analysis.ipynb" target="_blank" rel="noopener">AllenInstitute/Contrast_analysis.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Create_manifest.ipynb" target="_blank" rel="noopener">AllenInstitute/Create_manifest.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000055" class="dandiset">
+                        <div class="dandiset-id">DANDI:000055</div>
+                        <h2>AJILE12: Long-term naturalistic human intracranial neural recordings and pose</h2>
+                        <p class="description">Understanding the neural basis of human movement in naturalistic scenarios is critical for expanding neuroscience research beyond constrained laboratory paradigms. The neural correlates of unstructured, spontaneous movements in completely naturalistic settings have rarely been studied, due in large part to a lack of available data. Here, we present our Annotated Joints in Long-term Electrocorticography for 12 human participants (AJILE12) dataset, the largest human neurobehavioral dataset that is publicly available; the dataset was recorded opportunistically during passive clinical epilepsy monitoring. AJILE12 includes synchronized intracranial neural recordings and upper body pose trajectories across 55 semi-continuous days of naturalistic movements, along with relevant metadata, including thousands of wrist movement events and annotated behavioral states. Neural recordings are available at 500 Hz from at least 64 electrodes per participant, for a total of 1280 hours. Pose trajectories at 9 upper-body keypoints, including wrist, elbow, and shoulder joints, were sampled at 30 frames per second and estimated from 118 million video frames. In adherence with the FAIR data principles, we have shared AJILE12 on The Dandi Archive in the Neurodata Without Borders (NWB) data standard and developed a browser-based dashboard to facilitate data exploration and reuse.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000055" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_coarse_labels.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_part_characteristics.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000108" class="dandiset">
+                        <div class="dandiset-id">DANDI:000108</div>
+                        <h2>Light sheet imaging of the human brain</h2>
+                        <p class="description">This dataset contains images of 1 mm sections of human brain tissue showing nuclei, NeuN+ cells and blood vessels. Each tissue section was first SHIELD-processed for protein protection and delipidated to clear the tissue. The tissues were stained with YOYO1 (nuclei), anti-NeuN antibody (with Rhodamine Red-X secondary antibody) and Lectin (blood vessel) for 8 days in total and then optically cleared using ExPROTOS (a refractive matching solution). The sample was imaged using light sheet microscopy at a resolution of ~2.5 um x 3.6 um x 2.5 um. Each slab was imaged using multiple stacks. Offset transforms are included with the dataset to enable reconstruction of each slab.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000108" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/validate_lev6.ipynb" target="_blank" rel="noopener">chunglab/demo/validate_lev6.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000129" class="dandiset">
+                        <div class="dandiset-id">DANDI:000129</div>
+                        <h2>MC_RTT: macaque motor cortex spiking activity during self-paced reaching</h2>
+                        <p class="description">This dataset contains sorted unit spiking times and behavioral data from a macaque performing a self-paced reaching task. In the experimental task, the subject reached between targets randomly selected from an 8x8 grid without gaps or pre-movement delay intervals. Neural activity was recorded from an electrode array implanted in the primary motor cortex. Finger position, cursor position, and target position were also recorded during the experiment. Provided as part of the Neural Latents Benchmark: https://neurallatents.github.io.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000129" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000129/MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb" target="_blank" rel="noopener">MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000363" class="dandiset">
+                        <div class="dandiset-id">DANDI:000363</div>
+                        <h2>Mesoscale Activity Map Dataset</h2>
+                        <p class="description">Mesoscale Activity Map Project. Map behavior-related activity in a multi-regional network supporting memory-guided movement in mice. Anatomy-guided recordings from multiple connected brain regions, from anterior lateral motor cortex to the medulla.
+
+Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, NIH U19NS123714-01, R01NS112312, R01EB028171, McKnight foundation</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000363" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000363/MAP/demo/browse_map_ephys_data.ipynb" target="_blank" rel="noopener">MAP/demo/browse_map_ephys_data.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000402" class="dandiset">
+                        <div class="dandiset-id">DANDI:000402</div>
+                        <h2>MICrONS Two Photon Functional Imaging</h2>
+                        <p class="description">The light microscopic images were acquired from a cubic millimeter volume that spanned portions of primary visual cortex and three higher visual cortical areas. The volume was imaged in vivo by two-photon random access mesoscope (2P-RAM) from postnatal days P75 to P81 in a male mouse expressing a genetically encoded calcium indicator in excitatory cells, while the mouse viewed natural movies and parametric stimuli. The calcium imaging data includes the single-cell responses of an estimated 75,000 pyramidal cells imaged over a volume of approximately 1200 x 1100 x 500 μm3 (anteroposterior x mediolateral x radial depth). The center of the volume was placed at the junction of primary visual cortex (VISp) and three higher visual areas, lateromedial area (VISlm), rostrolateral area (VISrl) and anterolateral area (VISal). During imaging, the animal was head-restrained, and the stimulus was presented to the left visual field. Treadmill rotation (single axis) and video of the animal's left eye were captured throughout the scan, yielding the locomotion velocity, eye movements, and pupil diameter data included here.
+
+The functional data were co-registered with electron microscopy (EM) data. The structural identifiers of the matched cells are added as plane segmentation columns extracted from the CAVE database. To access the latest revision see the notebook that is linked to this dandiset. The structural ids might not be present for all plane segmentations.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000402" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener">MICrONS/demo/000402_microns_demo.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000409" class="dandiset">
+                        <div class="dandiset-id">DANDI:000409</div>
+                        <h2>IBL - Brain Wide Map</h2>
+                        <p class="description">The International Brain lab (IBL) aims to understand the neural basis of decision-making in the mouse by gathering a whole-brain activity map composed of electrophysiological recordings pooled from multiple laboratories. We have systematically recorded from nearly all major brain areas with Neuropixels probes, using a grid system for unbiased sampling and replicating each recording site in at least two laboratories. These data have been used to construct a brain-wide map of activity at single-spike cellular resolution during a decision-making task. In addition to the map, this data set contains other information gathered during the task: sensory stimuli presented to the mouse; mouse decisions and response times; and mouse pose information from video recordings and DeepLabCut analysis.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000409" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener">IBL/bwm_usage_notebook.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000458" class="dandiset">
+                        <div class="dandiset-id">DANDI:000458</div>
+                        <h2>Simultaneous electroencephalography, extracellular electrophysiology, and cortical electrical stimulation in head-fixed mice</h2>
+                        <p class="description">In this set of experiments, we recorded neural signals using an electroencephalography (EEG) array and Neuropixels probes while directly electrically stimulating the cortex in awake and anesthetized head-fixed mice. Details of the experiments can be found in the associated manuscript (Claar, Rembado et al., 2023). Briefly, the recordings and stimulation commenced while the mouse was awake, free to rest or move on a rotating disc. After delivering a series of stimuli, anesthesia was induced with isoflurane (5% via inhalation). Once a surgical level of anesthesia was reached, the mouse was maintained unconscious (1-1.5% isoflurane) during the delivery of another series of stimuli. In some subjects another series of stimuli was delivered after the isoflurane was turned off, this epoch/state is referred to as “recovery” in the dataset.
+
+Each session file includes the following data: raw EEG signals from all 30 surface electrodes and the associated electrode information; raw LFP signals from all electrodes on all Neuropixels probes (if used) and the associated electrode information; spike times for all units (spike sorted with Kilosort 2.0) that passed our quality threshold with associated information (brain region, spike waveform duration, etc.); subject’s speed computed from the rotation of the disc for the entire session; epochs marking when isoflurane was induced and when it was maintained; and a trial table containing information about every stimulus delivered throughout the session.
+
+All sessions included an awake and an isoflurane epoch, but not all sessions included a recovery epoch. Some subjects received visual stimulation trials (visual stimuli presented on a screen in the subject’s right field of view) interleaved with the electrical stimulation trials.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000458" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb" target="_blank" rel="noopener">FlatironInstitute/001_summarize_contents.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb" target="_blank" rel="noopener">FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener">AllenInstitute/reanalysis.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000559" class="dandiset">
+                        <div class="dandiset-id">DANDI:000559</div>
+                        <h2>Spontaneous behaviour is structured by reinforcement without explicit reward</h2>
+                        <p class="description">Spontaneous animal behaviour is built from action modules that are concatenated by the brain into sequences. However, the neural mechanisms that guide the composition of naturalistic, self-motivated behaviour remain unknown. Here we show that dopamine systematically fluctuates in the dorsolateral striatum (DLS) as mice spontaneously express sub-second behavioural modules, despite the absence of task structure, sensory cues or exogenous reward. Photometric recordings and calibrated closed-loop optogenetic manipulations during open field behaviour demonstrate that DLS dopamine fluctuations increase sequence variation over seconds, reinforce the use of associated behavioural modules over minutes, and modulate the vigour with which modules are expressed, without directly influencing movement initiation or moment-to-moment kinematics. Although the reinforcing effects of optogenetic DLS dopamine manipulations vary across behavioural modules and individual mice, these differences are well predicted by observed variation in the relationships between endogenous dopamine and module use. Consistent with the possibility that DLS dopamine fluctuations act as a teaching signal, mice build sequences during exploration as if to maximize dopamine. Together, these findings suggest a model in which the same circuits and computations that govern action choices in structured tasks have a key role in sculpting the content of unconstrained, high-dimensional, spontaneous behavior.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000559" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/read_avi.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000582" class="dandiset">
+                        <div class="dandiset-id">DANDI:000582</div>
+                        <h2>Conjunctive Representation of Position, Direction, and Velocity in Entorhinal Cortex</h2>
+                        <p class="description">The dataset includes spike times for recorded grid cells from the medial entorhinal cortex (MEC) in rats that explored two-dimensional environments. The behavioral data includes position from the tracking LEDs. 
+
+This sample was published in Sargolini et al. (Science, 2006).
+
+Grid cells in the medial entorhinal cortex (MEC) are part of an environment-independent spatial coordinate system. To determine how information about location, direction, and distance is integrated in the grid-cell network, we recorded from each principal cell layer of MEC in rats that explored two-dimensional environments. Whereas layer II was predominated by grid cells, grid cells colocalized with head-direction cells and conjunctive grid x head-direction cells in the deeper layers. All cell types were modulated by running speed. The conjunction of positional, directional, and translational information in a single MEC cell type may enable grid coordinates to be updated during self-motion-based navigation.
+</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000582" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000582/Sargolini2006/000582_Sargolini2006_demo.ipynb" target="_blank" rel="noopener">Sargolini2006/000582_Sargolini2006_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000718" class="dandiset">
+                        <div class="dandiset-id">DANDI:000718</div>
+                        <h2>Offline ensemble co-reactivation links memories across days</h2>
+                        <p class="description">Memories are encoded in neural ensembles during learning and are stabilized by post-learning reactivation. Integrating recent experiences into existing memories ensures that memories contain the most recently available information, but how the brain accomplishes this critical process remains unclear. Here we show that in mice, a strong aversive experience drives offline ensemble reactivation of not only the recent aversive memory but also a neutral memory formed 2 days before, linking fear of the recent aversive memory to the previous neutral memory. Fear specifically links retrospectively, but not prospectively, to neutral memories across days. Consistent with previous studies, we find that the recent aversive memory ensemble is reactivated during the offline period after learning. However, a strong aversive experience also increases co-reactivation of the aversive and neutral memory ensembles during the offline period. Ensemble co-reactivation occurs more during wake than during sleep. Finally, the expression of fear in the neutral context is associated with reactivation of the shared ensemble between the aversive and neutral memories. Collectively, these results demonstrate that offline ensemble co-reactivation is a neural mechanism by which memories are integrated across days.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000718" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000718/CaiLab/zaki_2024/000718_demo.ipynb" target="_blank" rel="noopener">CaiLab/zaki_2024/000718_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000727" class="dandiset">
+                        <div class="dandiset-id">DANDI:000727</div>
+                        <h2>Mapping the Neural Dynamics of Locomotion across the Drosophila Brain</h2>
+                        <p class="description">Walking is a fundamental mode of locomotion, yet its neural correlates are unknown at brain-wide scale in any animal. We use volumetric two-photon imaging to map neural activity associated with walking across the entire brain of Drosophila. We detect locomotor signals in approximately 40% of the brain, identify a global signal associated with the transition from rest to walking, and define clustered neural signals selectively associated with changes in forward or angular velocity. These networks span functionally diverse brain regions, and include regions that have not been previously linked to locomotion. We also identify time-varying trajectories of neural activity that anticipate future movements, and that represent sequential engagement of clusters of neurons with different behavioral selectivity. These motor maps suggest a dynamical systems framework for constructing walking maneuvers reminiscent of models of forelimb reaching in primates and set a foundation for understanding how local circuits interact across large-scale networks.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000727" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener">clandinin/simple_data_access/reading_data.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000728" class="dandiset">
+                        <div class="dandiset-id">DANDI:000728</div>
+                        <h2>Allen Institute - Visual Coding - Optical Physiology</h2>
+                        <p class="description">From the Allen Institute Brain Observatory, the Visual Coding (optical physiology) dataset is a large-scale, standardized survey of physiological activity across the mouse visual cortex, hippocampus, and thalamus. This two-photon imaging dataset features visually evoked calcium responses from GCaMP6-expressing neurons in a range of cortical layers, visual areas, and Cre lines. We hope that experimentalists and modelers will use these comprehensive, open datasets as a testbed for theories of visual information processing.
+
+Full documentation of the Visual Coding Ophys dataset and tutorials can be found here: https://observatory.brain-map.org/visualcoding/
+
+The Visual Coding Ecephys (NeuroPixels) dataset can be found here: https://dandiarchive.org/dandiset/000021
+
+</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000728" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000728/AllenInstitute/visual_coding_ophys_tutorial.ipynb" target="_blank" rel="noopener">AllenInstitute/visual_coding_ophys_tutorial.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000947" class="dandiset">
+                        <div class="dandiset-id">DANDI:000947</div>
+                        <h2>Reach-related Single Unit Activity in the Parkinsonian Macaque</h2>
+                        <p class="description">This dataset contains recordings of single-unit activity from from multiple brain areas,  including globus pallidus-internus (GPi), ventrolateral nucleus of the thalamus (VLa and VLp) and the arm-related regions of primary motor cortex, including sulcus (M1-S) and gyrus (M1-G) subregions, in monkeys performing a choice reaction time reaching task. Small numbers of recordings were also obtained from supplementary motor area (SMA), external globus pallidus (GPe), the thalamic reticular nucleus (RTN), striatum (STR) and the region between RTN and VL thalamus (R-V). It contains data from two monkeys before and after the administration of MPTP (1-methyl-4-phenyl-1,2,3,6-tetrahydropyridine), which induces Parkinsonism. The neuronal activity was recorded using 16-contact linear probes (0.5–1.0 MΩ, V-probe, Plexon) or glass-insulated tungsten microelectrodes (0.5–1.5 MΩ, Alpha Omega). The neuronal data were amplified (4×, 2 Hz–7.5 kHz) and digitized at 24.414 kHz (approx., 16-bit resolution; Tucker Davis Technologies). The neuronal data were high-pass filtered (Fpass: 200 Hz, Matlab FIRPM) and thresholded, and candidate action potentials were sorted into clusters in principal components space (Off-line Sorter, Plexon or custom algorithm, TomSort, https://zenodo.org/doi/10.5281/zenodo.11176978).
+
+The recordings for subject Isis before the administration of MPTP (pre-MPTP) were collected by Daisuke Kase.
+The recordings for subject Isis after the administration of MPTP (post-MPTP) were collected by Yan Han (韩妍).
+The recordings for subject Gaia (pre-MPTP,  post-MPTP) from 2015 were collected by Andrew J. Zimnik.
+The recordings for subject Gaia (post-MPTP) from 2016-2017 were also collected by Daisuke Kase.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000947" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener">TurnerLab/public_demo/000947_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-000971" class="dandiset">
+                        <div class="dandiset-id">DANDI:000971</div>
+                        <h2>Dopamine signaling in the dorsomedial striatum promotes compulsive behavior</h2>
+                        <p class="description">Compulsive behavior is a defining feature of disorders such as substance use disorders. Current evidence
+suggests that corticostriatal circuits control the expression of established compulsions, but little is known
+about the mechanisms regulating the development of compulsions. We hypothesized that dopamine, a critical modulator of striatal synaptic plasticity, could control alterations in corticostriatal circuits leading to the
+development of compulsions (defined here as continued reward seeking in the face of punishment). We used
+dual-site fiber photometry to measure dopamine axon activity in the dorsomedial striatum (DMS) and the
+dorsolateral striatum (DLS) as compulsions emerged. Individual variability in the speed with which compulsions emerged was predicted by DMS dopamine axon activity. Amplifying this dopamine signal accelerated
+animals’ transitions to compulsion, whereas inhibition delayed it. In contrast, amplifying DLS dopamine
+signaling had no effect on the emergence of compulsions. These results establish DMS dopamine signaling
+as a key controller of the development of compulsive reward seeking.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/000971" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/optogenetics_example_notebook.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001038" class="dandiset">
+                        <div class="dandiset-id">DANDI:001038</div>
+                        <h2>Unique functional responses differentially map onto genetic subtypes of dopamine neurons</h2>
+                        <p class="description">Dopamine neurons are characterized by their response to unexpected rewards, but they also fire during movement and aversive stimuli. Dopamine neuron diversity has been observed based on molecular expression profiles; however, whether different functions map onto such genetic subtypes remains unclear. In this study, we established that three genetic dopamine neuron subtypes within the substantia nigra pars compacta, characterized by the expression of Slc17a6 (Vglut2), Calb1 and Anxa1, each have a unique set of responses to rewards, aversive stimuli and accelerations and decelerations, and these signaling patterns are highly correlated between somas and axons within subtypes. Remarkably, reward responses were almost entirely absent in the Anxa1+ subtype, which instead displayed acceleration-correlated signaling. Our findings establish a connection between functional and genetic dopamine neuron subtypes and demonstrate that molecular expression patterns can serve as a common framework to dissect dopaminergic functions.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001038" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener">DombeckLab/001038_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001075" class="dandiset">
+                        <div class="dandiset-id">DANDI:001075</div>
+                        <h2>Neural signal propagation atlas of Caenorhabditis elegans</h2>
+                        <p class="description">The dataset used in the paper "Randi, F., Sharma, A.K., Dvali, S. et al. Neural signal propagation atlas of Caenorhabditis elegans. Nature 623, 406–414 (2023)."
+
+Establishing how neural function emerges from network properties is a fundamental problem in neuroscience. Here, to better understand the relationship between the structure and the function of a nervous system, we systematically measure signal propagation in 23,433 pairs of neurons across the head of the nematode Caenorhabditis elegans by direct optogenetic activation and simultaneous whole-brain calcium imaging. We measure the sign (excitatory or inhibitory), strength, temporal properties and causal direction of signal propagation between these neurons to create a functional atlas. We find that signal propagation differs from model predictions that are based on anatomy. Using mutants, we show that extrasynaptic signalling not visible from anatomy contributes to this difference. We identify many instances of dense-core-vesicle-dependent signalling, including on timescales of less than a second, that evoke acute calcium transients—often where no direct wired connection exists but where relevant neuropeptides and receptors are expressed. We propose that, in such cases, extrasynaptically released neuropeptides serve a similar function to that of classical neurotransmitters. Finally, our measured signal propagation atlas better predicts the neural dynamics of spontaneous activity than do models based on anatomy. We conclude that both synaptic and extrasynaptic signalling drive neural dynamics on short timescales, and that measurements of evoked signal propagation are crucial for interpreting neural function.
+
+Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001075" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001075/001075_paper_figure_1d.ipynb" target="_blank" rel="noopener">001075_paper_figure_1d.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001084" class="dandiset">
+                        <div class="dandiset-id">DANDI:001084</div>
+                        <h2>Targeted micro-fiber arrays for measuring and manipulating localized multi-scale neural dynamics over large, deep brain volumes during behavior</h2>
+                        <p class="description">Neural population dynamics relevant to behavior vary over multiple spatial and temporal scales across three-dimensional volumes. Current optical approaches lack the spatial coverage and resolution necessary to measure and manipulate naturally occurring patterns of large-scale, distributed dynamics within and across deep brain regions such as the striatum. We designed a new micro-fiber array approach capable of chronically measuring and optogenetically manipulating local dynamics across over 100 targeted locations simultaneously in head-fixed and freely moving mice, enabling the investigation of cell-type- and neurotransmitter-specific signals over arbitrary 3D volumes at a spatial resolution and coverage previously inaccessible. We applied this method to resolve rapid dopamine release dynamics across the striatum, revealing distinct, modality-specific spatiotemporal patterns in response to salient sensory stimuli extending over millimeters of tissue.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001084" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001084/HoweLab/001084_demo.ipynb" target="_blank" rel="noopener">HoweLab/001084_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001170" class="dandiset">
+                        <div class="dandiset-id">DANDI:001170</div>
+                        <h2>Mesoscale Two-Photon Calcium Imaging of Population Level Odor Responses from the Mouse Olfactory Bulb</h2>
+                        <p class="description">This study explores odor-evoked activity representation in the olfactory bulb (OB) and how odor responses enable odor discrimination. Contrary to some previously cited theories that suggest a sparse representation, we hypothesize a more dense representation during odor presentation. A key question is how odors are reliably encoded in OB activity patterns, and how these patterns contribute to early odor processing. To address this problem, we recorded population level odor responses from the mouse OB with mesoscale two photon calcium imaging and applied machine learning techniques to suggest a model in which sparse coding is largely sufficient for olfaction, but redundant information may make odor coding more robust across different variables.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001170" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener">ReimerLab/public_demo/001170_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001636" class="dandiset">
+                        <div class="dandiset-id">DANDI:001636</div>
+                        <h2>Pyramidal tract and corticostriatal neuron recordings in MPTP-treated macaque performing visuomotor tasks</h2>
+                        <p class="description">Electrophysiology recordings from primary motor cortex (M1) of macaque monkeys (Macaca mulatta) during visuomotor step-tracking tasks, collected before and after MPTP-induced parkinsonism. Recorded neuron types: Pyramidal tract neurons (PTNs) and corticostriatal neurons (CSNs) identified through antidromic stimulation from chronically implanted electrodes in the cerebral peduncle and posterior putamen. Behavioral paradigm: Visuomotor step-tracking task requiring flexion or extension elbow movements to align a cursor with visual targets. Trials included center hold, target presentation, movement execution, target hold, and liquid reward delivery. Unexpected torque perturbations were applied during a subset of trials to elicit stretch reflexes.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001636" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_peth.ipynb</a></li>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_usage.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                    <article id="dandiset-001754" class="dandiset">
+                        <div class="dandiset-id">DANDI:001754</div>
+                        <h2>Three-dimensional spatial selectivity of hippocampal neurons during space flight</h2>
+                        <p class="description">This dataset contains extracellular recordings from hippocampal place cells in three freely moving rats during the Neurolab Space Shuttle mission (STS-90) in April 1998. The experiment investigated whether the hippocampus can maintain stable spatial representations during three-dimensional navigation in microgravity. Rats were implanted with multi-electrode recording arrays and trained to traverse a three-dimensional track called the "Escher staircase," in which three 90-degree yaw turns were interleaved with three 90-degree pitch turns, creating a closed loop after only 270 degrees of total yaw rotation. This design placed the spatial information from external landmarks in conflict with the expected input from the head-direction system, which normally requires 360 degrees of yaw to signal a return to the starting direction. The dataset includes both preflight recordings on a flat rectangular track and in-flight recordings on the Escher staircase track from flight days 4 and 9. Place cells eventually demonstrated normal spatially specific firing, with spatial information content comparable to preflight levels, though initial exposures on flight day 4 showed abnormal spatial selectivity patterns. Hippocampal EEG was also recorded, showing normal theta rhythm during locomotion and normal sharp waves and ripples during quiet rest. Rats received medial forebrain bundle stimulation as a reward for traversing the track.</p>
+                        <a class="archive-link" href="https://dandiarchive.org/dandiset/001754" target="_blank" rel="noopener">View on DANDI Archive</a>
+                        
+                        <div class="notebooks">
+                            <h3 class="notebooks-heading">Notebooks</h3>
+                            <ul>
+                                
+                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001754/CatalystNeuro/001754_demo.ipynb" target="_blank" rel="noopener">CatalystNeuro/001754_demo.ipynb</a></li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </article>
+                    
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site">
+        <div class="container">
+            <div class="brand">DANDI Example Notebooks</div>
+            <a href="https://github.com/dandi/example-notebooks" target="_blank" rel="noopener">github.com/dandi/example-notebooks</a>
+        </div>
+    </footer>
+</body>
+</html>
