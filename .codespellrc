@@ -3,4 +3,6 @@ skip = .git,*.pdf,*.svg
 # all images and other binaries embedded in .ipynb jsons
 ignore-regex = "image/png": ".*|^ *".*data:\S+;base64.*
 # nd - people just like it
-ignore-words-list = nd,trough,mater,makin,mebrains
+
+# makin - surname (Joseph G. Makin, cited in 000129/MathisLab CEBRA notebook)
+ignore-words-list = nd,trough,mater,mebrains,makin
