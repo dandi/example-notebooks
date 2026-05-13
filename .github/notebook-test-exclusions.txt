@@ -65,10 +65,6 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 # in headless CI. Works in Colab.
 001170/ReimerLab/public_demo/001170_demo.ipynb
 
-# Calls input() to prompt the user; raises EOFError under non-interactive
-# nbconvert. Works in Colab where input() is wired to a UI prompt.
-000718/CaiLab/zaki_2024/000718_demo.ipynb
-
 # =============================================================================
 # Pre-existing notebook content bugs — track + fix in dedicated PRs.
 # =============================================================================
