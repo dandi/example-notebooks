@@ -285,7 +285,13 @@
             padding-top: 2px;
         }
         .notebooks li:last-child { padding-bottom: 2px; }
-        .notebooks a {
+        .notebooks .nb-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .notebooks a.nb-link {
             color: var(--ink);
             text-decoration: none;
             font-size: 13.5px;
@@ -295,8 +301,10 @@
             gap: 10px;
             transition: color 0.2s;
             word-break: break-all;
+            flex: 1;
+            min-width: 0;
         }
-        .notebooks a::before {
+        .notebooks a.nb-link::before {
             content: '';
             width: 14px;
             height: 2px;
@@ -304,10 +312,22 @@
             flex-shrink: 0;
             transition: width 0.2s, background 0.2s;
         }
-        .notebooks a:hover { color: var(--navy); }
-        .notebooks a:hover::before {
+        .notebooks a.nb-link:hover { color: var(--navy); }
+        .notebooks a.nb-link:hover::before {
             width: 22px;
             background: var(--navy);
+        }
+        .notebooks a.colab-badge {
+            flex-shrink: 0;
+            line-height: 0;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .notebooks a.colab-badge:hover { opacity: 1; }
+        .notebooks a.colab-badge::before { display: none; }
+        .notebooks a.colab-badge img {
+            height: 20px;
+            display: block;
         }
 
         /* Footer */
@@ -596,7 +616,12 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000004/RutishauserLab/000004_demo_analysis.ipynb" target="_blank" rel="noopener">RutishauserLab/000004_demo_analysis.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000004/RutishauserLab/000004_demo_analysis.ipynb" target="_blank" rel="noopener">RutishauserLab/000004_demo_analysis.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -613,7 +638,12 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000005/DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000005/DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -630,7 +660,12 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000006/DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000006/DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -647,9 +682,19 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -666,9 +711,19 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -685,13 +740,33 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -708,7 +783,12 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000013/DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000013/DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -725,9 +805,19 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -746,9 +836,19 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Contrast_analysis.ipynb" target="_blank" rel="noopener">AllenInstitute/Contrast_analysis.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Contrast_analysis.ipynb" target="_blank" rel="noopener">AllenInstitute/Contrast_analysis.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Create_manifest.ipynb" target="_blank" rel="noopener">AllenInstitute/Create_manifest.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Create_manifest.ipynb" target="_blank" rel="noopener">AllenInstitute/Create_manifest.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -765,15 +865,40 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_coarse_labels.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_coarse_labels.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_part_characteristics.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_part_characteristics.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -790,11 +915,28 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/validate_lev6.ipynb" target="_blank" rel="noopener">chunglab/demo/validate_lev6.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/validate_lev6.ipynb" target="_blank" rel="noopener">chunglab/demo/validate_lev6.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -811,7 +953,12 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000129/MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb" target="_blank" rel="noopener">MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000129/MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb" target="_blank" rel="noopener">MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -830,7 +977,12 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000363/MAP/demo/browse_map_ephys_data.ipynb" target="_blank" rel="noopener">MAP/demo/browse_map_ephys_data.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000363/MAP/demo/browse_map_ephys_data.ipynb" target="_blank" rel="noopener">MAP/demo/browse_map_ephys_data.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -849,9 +1001,21 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener">MICrONS/demo/000402_microns_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener">MICrONS/demo/000402_microns_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -868,7 +1032,14 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener">IBL/bwm_usage_notebook.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener">IBL/bwm_usage_notebook.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -889,11 +1060,32 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb" target="_blank" rel="noopener">FlatironInstitute/001_summarize_contents.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb" target="_blank" rel="noopener">FlatironInstitute/001_summarize_contents.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb" target="_blank" rel="noopener">FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb" target="_blank" rel="noopener">FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener">AllenInstitute/reanalysis.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener">AllenInstitute/reanalysis.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -910,13 +1102,39 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/read_avi.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/read_avi.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -938,7 +1156,14 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000582/Sargolini2006/000582_Sargolini2006_demo.ipynb" target="_blank" rel="noopener">Sargolini2006/000582_Sargolini2006_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000582/Sargolini2006/000582_Sargolini2006_demo.ipynb" target="_blank" rel="noopener">Sargolini2006/000582_Sargolini2006_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000582/Sargolini2006/000582_Sargolini2006_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -955,7 +1180,14 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000718/CaiLab/zaki_2024/000718_demo.ipynb" target="_blank" rel="noopener">CaiLab/zaki_2024/000718_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000718/CaiLab/zaki_2024/000718_demo.ipynb" target="_blank" rel="noopener">CaiLab/zaki_2024/000718_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000718/CaiLab/zaki_2024/000718_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -972,7 +1204,14 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener">clandinin/simple_data_access/reading_data.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener">clandinin/simple_data_access/reading_data.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -995,7 +1234,14 @@ The Visual Coding Ecephys (NeuroPixels) dataset can be found here: https://dandi
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000728/AllenInstitute/visual_coding_ophys_tutorial.ipynb" target="_blank" rel="noopener">AllenInstitute/visual_coding_ophys_tutorial.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000728/AllenInstitute/visual_coding_ophys_tutorial.ipynb" target="_blank" rel="noopener">AllenInstitute/visual_coding_ophys_tutorial.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000728/AllenInstitute/visual_coding_ophys_tutorial.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1017,7 +1263,14 @@ The recordings for subject Gaia (post-MPTP) from 2016-2017 were also collected b
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener">TurnerLab/public_demo/000947_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener">TurnerLab/public_demo/000947_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1042,9 +1295,23 @@ as a key controller of the development of compulsive reward seeking.</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/optogenetics_example_notebook.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/optogenetics_example_notebook.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1061,7 +1328,14 @@ as a key controller of the development of compulsive reward seeking.</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener">DombeckLab/001038_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener">DombeckLab/001038_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1082,7 +1356,14 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001075/001075_paper_figure_1d.ipynb" target="_blank" rel="noopener">001075_paper_figure_1d.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001075/001075_paper_figure_1d.ipynb" target="_blank" rel="noopener">001075_paper_figure_1d.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001075/001075_paper_figure_1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1099,7 +1380,14 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001084/HoweLab/001084_demo.ipynb" target="_blank" rel="noopener">HoweLab/001084_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001084/HoweLab/001084_demo.ipynb" target="_blank" rel="noopener">HoweLab/001084_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001084/HoweLab/001084_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1116,7 +1404,14 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener">ReimerLab/public_demo/001170_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener">ReimerLab/public_demo/001170_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1134,7 +1429,14 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001172/HigleyLab/001172_demo.ipynb" target="_blank" rel="noopener">HigleyLab/001172_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001172/HigleyLab/001172_demo.ipynb" target="_blank" rel="noopener">HigleyLab/001172_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001172/HigleyLab/001172_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1151,13 +1453,41 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_peth.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_peth.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_usage.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_usage.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
@@ -1174,7 +1504,14 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/001754/CatalystNeuro/001754_demo.ipynb" target="_blank" rel="noopener">CatalystNeuro/001754_demo.ipynb</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001754/CatalystNeuro/001754_demo.ipynb" target="_blank" rel="noopener">CatalystNeuro/001754_demo.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001754/CatalystNeuro/001754_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
                                 
                             </ul>
                         </div>
