@@ -1,0 +1,38 @@
+# Notebooks that should NOT show an "Open in Colab" button on the index page.
+#
+# Lines are fnmatch glob patterns (gitignore-style; relative to repo root).
+# Empty lines and `#` comments are ignored.
+#
+# Add a notebook here if clicking "Open in Colab" would give the user a broken
+# experience — eg the install cell pins are fine but the notebook itself fails
+# at runtime (stale data path, removed upstream API, needs proprietary creds,
+# etc). DO NOT add a notebook here to silence a transient CI failure; fix
+# the underlying issue.
+#
+# Notebooks already on `.github/notebook-test-exclusions.txt` are also
+# implicitly excluded from Colab buttons (no need to duplicate them here).
+
+# Hardcoded local path "../../dandiset/sub-...". Needs streaming-from-DANDI
+# rewrite, not a one-line fix.
+000363/MAP/demo/browse_map_ephys_data.ipynb
+
+# Dandiset 000108 was reorganized (paths moved microscopy/ → micr/, files
+# changed .SPIM.h5 → .SPIM.ome.zarr). Notebook needs a wholesale rewrite to
+# match the current data layout.
+000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
+
+# Needs a CAVE API token (proprietary CAVEclient credentials) that Colab
+# users can't be expected to have set up.
+000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb
+
+# Uses h5py ros3 driver. The PyPI h5py wheel for Linux x86_64 is built
+# without ROS3 support, so the notebook fails at file-open time on Colab.
+# Notebook would need to switch streaming backend to remfile/fsspec.
+000055/BruntonLab/peterson21/dashboard.ipynb
+tutorials/cosyne_2023/advanced_asset_search.ipynb
+
+# Imports nwbwidgets.utils.timeseries.align_by_times which was removed in
+# nwbwidgets 0.11.x (split into align_by_times_with_timestamps /
+# align_by_time_intervals). Notebook's colocated plot_utils.py needs a
+# ~10-line update before this can come off the list.
+000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb

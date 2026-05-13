@@ -1,7 +1,14 @@
+import fnmatch
+import json
 import os
 from typing import List, Dict, Any, Optional
+
 from jinja2 import Environment, FileSystemLoader
 from dandi.dandiapi import DandiAPIClient
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+TEST_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-test-exclusions.txt")
+COLAB_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-colab-exclusions.txt")
 
 
 def get_dandiset_metadata(dandiset_id: str) -> Optional[Dict[str, Any]]:
@@ -26,6 +33,48 @@ def get_dandiset_metadata(dandiset_id: str) -> Optional[Dict[str, Any]]:
         except Exception as e:
             print(f"Error fetching metadata for dandiset {dandiset_id}: {str(e)}")
             return None
+
+
+def load_exclusion_patterns(path: str) -> List[str]:
+    """Read gitignore-style glob patterns from an exclusion file."""
+    if not os.path.exists(path):
+        return []
+    with open(path) as f:
+        return [
+            line.strip()
+            for line in f
+            if line.strip() and not line.strip().startswith("#")
+        ]
+
+
+def is_excluded(rel_path: str, patterns: List[str]) -> bool:
+    """Match a repo-relative path against gitignore-style patterns."""
+    for pat in patterns:
+        if fnmatch.fnmatch(rel_path, pat):
+            return True
+        if pat.endswith("/**") and (
+            rel_path == pat[:-3] or rel_path.startswith(pat[:-2])
+        ):
+            return True
+    return False
+
+
+def notebook_has_colab_bootstrap(abs_path: str) -> bool:
+    """Return True iff the notebook starts with a Colab-bootstrap install cell."""
+    try:
+        with open(abs_path) as f:
+            nb = json.load(f)
+    except Exception:
+        return False
+    for cell in nb.get("cells", [])[:8]:
+        if cell.get("cell_type") != "code":
+            continue
+        source = cell.get("source", "")
+        if isinstance(source, list):
+            source = "".join(source)
+        if "uv pip install --system" in source:
+            return True
+    return False
 
 
 def find_notebooks(folder: str) -> List[str]:
@@ -55,22 +104,45 @@ def collect_metadata() -> List[Dict[str, Any]]:
     """
     Collect metadata and notebook information for all dandisets in the current directory.
 
-    Returns
-    -------
-    List[Dict[str, Any]]
-        A list of dictionaries, each containing information about a dandiset,
-        sorted by dandiset ID.
+    Each notebook is represented as a dict:
+        {"path": "<relative-to-dandiset-folder>",
+         "colab_eligible": bool,
+         "colab_url": "<full https URL>" or ""}
+
+    Notebooks are eligible for a Colab button iff (a) they begin with a
+    Colab-bootstrap install cell and (b) their repo-relative path is not
+    matched by any pattern in `.github/notebook-test-exclusions.txt` or
+    `.github/notebook-colab-exclusions.txt`.
     """
+    test_excl = load_exclusion_patterns(TEST_EXCLUSIONS)
+    colab_excl = load_exclusion_patterns(COLAB_EXCLUSIONS)
+    all_excl = test_excl + colab_excl
+
     dandisets = []
     for folder in os.listdir('.'):
         if os.path.isdir(folder) and folder.isdigit():
             metadata = get_dandiset_metadata(folder)
             if metadata:
-                notebooks = find_notebooks(folder)
+                nb_paths = find_notebooks(folder)
+                notebooks = []
+                for rel in nb_paths:
+                    repo_rel = os.path.join(folder, rel)
+                    abs_path = os.path.join(REPO_ROOT, repo_rel)
+                    excluded = is_excluded(repo_rel, all_excl)
+                    eligible = (not excluded) and notebook_has_colab_bootstrap(abs_path)
+                    notebooks.append({
+                        "path": rel,
+                        "colab_eligible": eligible,
+                        "colab_url": (
+                            f"https://colab.research.google.com/github/"
+                            f"dandi/example-notebooks/blob/master/{repo_rel}"
+                            if eligible else ""
+                        ),
+                    })
                 dandisets.append({
                     'id': folder,
                     'metadata': metadata,
-                    'notebooks': notebooks
+                    'notebooks': notebooks,
                 })
 
     dandisets.sort(key=lambda x: x['id'])
