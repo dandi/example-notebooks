@@ -3,36 +3,90 @@
 # Lines are fnmatch glob patterns (gitignore-style; relative to repo root).
 # Empty lines and `#` comments are ignored.
 #
-# Add a notebook here if clicking "Open in Colab" would give the user a broken
-# experience — eg the install cell pins are fine but the notebook itself fails
-# at runtime (stale data path, removed upstream API, needs proprietary creds,
-# etc). DO NOT add a notebook here to silence a transient CI failure; fix
-# the underlying issue.
+# This list is INDEPENDENT of `.github/notebook-test-exclusions.txt`. The two
+# files answer different questions:
 #
-# Notebooks already on `.github/notebook-test-exclusions.txt` are also
-# implicitly excluded from Colab buttons (no need to duplicate them here).
+#   notebook-test-exclusions.txt   -> "skip in CI"
+#                                     (eg headless CI can't run X)
+#   notebook-colab-exclusions.txt  -> "don't surface a one-click Colab button"
+#                                     (eg even a fresh Colab runtime can't run X)
+#
+# A notebook can be on one without the other. Example: `read_avi.ipynb` calls
+# OpenCV which needs libxcb — fails in the slim CI image, but Colab has
+# libxcb and so the notebook works there. So it's on test-exclusions but
+# NOT here.
+#
+# Add a notebook here when clicking "Open in Colab" would give a user a
+# broken experience: stale data paths, removed upstream APIs, missing creds,
+# wheels that don't ship the feature the notebook uses, or runtimes far
+# beyond what a tutorial user will sit through.
 
-# Hardcoded local path "../../dandiset/sub-...". Needs streaming-from-DANDI
-# rewrite, not a one-line fix.
-000363/MAP/demo/browse_map_ephys_data.ipynb
+# =============================================================================
+# DataJoint — needs a MySQL/Postgres server. Colab won't have one either.
+# =============================================================================
 
-# Dandiset 000108 was reorganized (paths moved microscopy/ → micr/, files
-# changed .SPIM.h5 → .SPIM.ome.zarr). Notebook needs a wholesale rewrite to
-# match the current data layout.
-000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
+**/DataJoint/**
 
-# Needs a CAVE API token (proprietary CAVEclient credentials) that Colab
-# users can't be expected to have set up.
-000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb
+# =============================================================================
+# Repo-operational meta notebooks — not dandiset analyses; produce site
+# content / archive stats. Not meaningful to "open in Colab".
+# =============================================================================
 
-# Uses h5py ros3 driver. The PyPI h5py wheel for Linux x86_64 is built
-# without ROS3 support, so the notebook fails at file-open time on Colab.
-# Notebook would need to switch streaming backend to remfile/fsspec.
+archive_analysis/dandiset_size_plot.ipynb
+dandi/archive_stats.ipynb
+
+# =============================================================================
+# Legacy / superseded.
+# =============================================================================
+
+# Pinned to a years-old NWB API; superseded by newer tutorials.
+tutorials/cosyne_2020/NWB_tutorial_2019.ipynb
+
+# =============================================================================
+# Upstream-package blocked.
+# =============================================================================
+
+# RutishauserLabtoNWB==1.1.0 (only PyPI ver) pins pynwb==1.1.0, broken on
+# Python 3.11+. Same wheel issue in Colab.
+000004/RutishauserLab/000004_demo_analysis.ipynb
+
+# Imports rl_analysis (lab package, not on PyPI).
+000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb
+
+# Use h5py ros3 driver. PyPI h5py wheel is built without ROS3 support — same
+# wheel ships to Colab, so notebook fails at file-open there too.
 000055/BruntonLab/peterson21/dashboard.ipynb
 tutorials/cosyne_2023/advanced_asset_search.ipynb
 
-# Imports nwbwidgets.utils.timeseries.align_by_times which was removed in
-# nwbwidgets 0.11.x (split into align_by_times_with_timestamps /
-# align_by_time_intervals). Notebook's colocated plot_utils.py needs a
-# ~10-line update before this can come off the list.
+# Needs a CAVE API token that Colab users can't be expected to have set up.
+000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb
+
+# =============================================================================
+# Pre-existing notebook content bugs — surface as failures everywhere.
+# =============================================================================
+
+# Multiple missing imports (Parallel from joblib and others beyond pandas).
+000039/AllenInstitute/Create_manifest.ipynb
+
+# Dandiset 000108 reorganized: microscopy/ → micr/, .SPIM.h5 → .SPIM.ome.zarr.
+# Notebook needs a wholesale rewrite for the current data layout.
+000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
+
+# Hardcoded path `../../dandiset/sub-...` to a file no Colab user has.
+000363/MAP/demo/browse_map_ephys_data.ipynb
+
+# Colocated plot_utils.py imports nwbwidgets.utils.timeseries.align_by_times,
+# removed in nwbwidgets 0.11.x. The three related notebooks share this
+# helper — all four can come off this list together after a ~10-line
+# plot_utils update.
 000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb
+000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb
+000055/BruntonLab/peterson21/Table_coarse_labels.ipynb
+000055/BruntonLab/peterson21/Table_part_characteristics.ipynb
+
+# =============================================================================
+# Long-running — not suited to a "click and try" tutorial flow.
+# =============================================================================
+
+# Validates every zarr chunk in the dandiset; >1 h in Colab too.
+000108/chunglab/demo/validate_lev6.ipynb

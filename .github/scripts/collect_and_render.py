@@ -7,7 +7,6 @@ from jinja2 import Environment, FileSystemLoader
 from dandi.dandiapi import DandiAPIClient
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-TEST_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-test-exclusions.txt")
 COLAB_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-colab-exclusions.txt")
 
 
@@ -111,12 +110,17 @@ def collect_metadata() -> List[Dict[str, Any]]:
 
     Notebooks are eligible for a Colab button iff (a) they begin with a
     Colab-bootstrap install cell and (b) their repo-relative path is not
-    matched by any pattern in `.github/notebook-test-exclusions.txt` or
-    `.github/notebook-colab-exclusions.txt`.
+    matched by any pattern in `.github/notebook-colab-exclusions.txt`.
+
+    Note: the colab-exclusions list is intentionally independent of the
+    CI test-exclusions list (`.github/notebook-test-exclusions.txt`). Some
+    notebooks fail headless CI but work fine when a user opens them in
+    Colab (eg notebooks that call `webbrowser.open()`, `input()`, or
+    depend on libxcb — Colab handles all of those). Conversely, some
+    notebooks pass headless CI but we still don't want to advertise them
+    as one-click-runnable for other reasons.
     """
-    test_excl = load_exclusion_patterns(TEST_EXCLUSIONS)
     colab_excl = load_exclusion_patterns(COLAB_EXCLUSIONS)
-    all_excl = test_excl + colab_excl
 
     dandisets = []
     for folder in os.listdir('.'):
@@ -128,7 +132,7 @@ def collect_metadata() -> List[Dict[str, Any]]:
                 for rel in nb_paths:
                     repo_rel = os.path.join(folder, rel)
                     abs_path = os.path.join(REPO_ROOT, repo_rel)
-                    excluded = is_excluded(repo_rel, all_excl)
+                    excluded = is_excluded(repo_rel, colab_excl)
                     eligible = (not excluded) and notebook_has_colab_bootstrap(abs_path)
                     notebooks.append({
                         "path": rel,
