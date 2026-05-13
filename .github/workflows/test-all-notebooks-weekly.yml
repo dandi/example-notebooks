@@ -1,0 +1,191 @@
+name: Test all notebooks (weekly)
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC — pre-business-hours for both US and EU
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: 'Optional substring filter on notebook paths (regex)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  list:
+    name: List notebooks to test
+    runs-on: ubuntu-latest
+    outputs:
+      notebooks: ${{ steps.list.outputs.notebooks }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: List all testable notebooks
+        id: list
+        run: |
+          set -euo pipefail
+          all=$(python .github/scripts/list_notebooks.py)
+          filter='${{ github.event.inputs.filter }}'
+          if [ -n "$filter" ]; then
+            all=$(echo "$all" | python -c "
+          import json, re, sys
+          pat = re.compile(r'''$filter''')
+          nbs = json.load(sys.stdin)
+          print(json.dumps([n for n in nbs if pat.search(n)]))
+          ")
+          fi
+          echo "notebooks=$all" >> "$GITHUB_OUTPUT"
+          count=$(echo "$all" | python -c "import json,sys;print(len(json.load(sys.stdin)))")
+          echo "Will test $count notebooks:"
+          echo "$all" | python -m json.tool
+
+  test:
+    name: ${{ matrix.notebook }}
+    needs: list
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        notebook: ${{ fromJson(needs.list.outputs.notebooks) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir uv nbformat
+
+      - name: Run notebook
+        id: run
+        continue-on-error: true
+        run: |
+          python .github/scripts/run_notebook.py \
+            "${{ matrix.notebook }}" \
+            --output-dir "$RUNNER_TEMP/notebook-test" \
+            --timeout 3600
+
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ strategy.job-index }}
+          path: ${{ runner.temp }}/notebook-test/
+          retention-days: 30
+
+      - name: Re-fail step if notebook failed
+        if: steps.run.outcome == 'failure'
+        run: exit 1
+
+  report:
+    name: Aggregate results and file issue on failure
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: results
+          pattern: result-*
+          merge-multiple: true
+
+      - name: Build report
+        id: report
+        run: |
+          set -euo pipefail
+          python <<'EOF'
+          import json, os
+          from pathlib import Path
+          results = []
+          for f in sorted(Path("results").glob("*.result.json")):
+              results.append(json.loads(f.read_text()))
+          passed = [r for r in results if r.get("ok")]
+          failed = [r for r in results if not r.get("ok")]
+          missing_bootstrap = [r for r in failed if r.get("stage") == "extract"]
+          other_failed = [r for r in failed if r.get("stage") != "extract"]
+
+          lines = [
+              f"# Weekly notebook sweep — run {os.environ['GITHUB_RUN_ID']}",
+              "",
+              f"**Total:** {len(results)} · **Passed:** {len(passed)} · **Failed:** {len(failed)}",
+              "",
+          ]
+          if missing_bootstrap:
+              lines.append("## Notebooks missing the Colab-bootstrap install cell")
+              lines.append("")
+              lines.append("These notebooks lack a `!uv pip install --system` install cell. ")
+              lines.append("Either add the bootstrap (see PR #149 for the pattern) or add the ")
+              lines.append("notebook to `.github/notebook-test-exclusions.txt` with a comment ")
+              lines.append("explaining why it can't be tested.")
+              lines.append("")
+              for r in missing_bootstrap:
+                  lines.append(f"- `{r['notebook']}`")
+              lines.append("")
+          if other_failed:
+              lines.append("## Other failures")
+              lines.append("")
+              for r in other_failed:
+                  err = (r.get("error") or "").strip().splitlines()
+                  last = next((l for l in reversed(err) if l.strip()), "")
+                  lines.append(
+                      f"- `{r['notebook']}` (stage: `{r['stage']}`, "
+                      f"{r['duration_s']}s) — `{last[:200]}`"
+                  )
+              lines.append("")
+          if passed:
+              lines.append("## Passed")
+              lines.append("")
+              for r in sorted(passed, key=lambda x: x["duration_s"]):
+                  lines.append(f"- `{r['notebook']}` ({r['duration_s']}s)")
+              lines.append("")
+
+          report = "\n".join(lines)
+          Path("report.md").write_text(report)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write(report)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"failed_count={len(failed)}\n")
+          EOF
+
+      - name: File or update tracking issue if any failures
+        if: steps.report.outputs.failed_count != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('report.md', 'utf8');
+            const title = `Weekly notebook sweep — failures (${new Date().toISOString().slice(0,10)})`;
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open',
+              labels: 'weekly-notebook-sweep',
+              per_page: 5,
+            });
+            if (issues.data.length > 0) {
+              const num = issues.data[0].number;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: num,
+                body,
+              });
+              console.log(`Commented on existing issue #${num}`);
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['weekly-notebook-sweep'],
+              });
+              console.log('Filed new issue');
+            }
