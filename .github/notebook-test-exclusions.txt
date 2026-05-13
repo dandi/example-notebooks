@@ -63,7 +63,6 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 
 # Calls webbrowser.open(), which raises "could not locate runnable browser"
 # in headless CI. Works in Colab.
-000582/Sargolini2006/000582_Sargolini2006_demo.ipynb
 001170/ReimerLab/public_demo/001170_demo.ipynb
 
 # Calls input() to prompt the user; raises EOFError under non-interactive
