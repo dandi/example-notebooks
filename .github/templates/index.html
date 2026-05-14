@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DANDI Example Notebooks</title>
+    <link rel="icon" href="https://dandiarchive.org/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,7 +42,7 @@
         }
 
         .container {
-            max-width: 1160px;
+            max-width: 1480px;
             margin: 0 auto;
             padding: 0 32px;
         }
@@ -285,7 +286,13 @@
             padding-top: 2px;
         }
         .notebooks li:last-child { padding-bottom: 2px; }
-        .notebooks a {
+        .notebooks .nb-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .notebooks a.nb-link {
             color: var(--ink);
             text-decoration: none;
             font-size: 13.5px;
@@ -295,8 +302,10 @@
             gap: 10px;
             transition: color 0.2s;
             word-break: break-all;
+            flex: 1;
+            min-width: 0;
         }
-        .notebooks a::before {
+        .notebooks a.nb-link::before {
             content: '';
             width: 14px;
             height: 2px;
@@ -304,10 +313,22 @@
             flex-shrink: 0;
             transition: width 0.2s, background 0.2s;
         }
-        .notebooks a:hover { color: var(--navy); }
-        .notebooks a:hover::before {
+        .notebooks a.nb-link:hover { color: var(--navy); }
+        .notebooks a.nb-link:hover::before {
             width: 22px;
             background: var(--navy);
+        }
+        .notebooks a.colab-badge {
+            flex-shrink: 0;
+            line-height: 0;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .notebooks a.colab-badge:hover { opacity: 1; }
+        .notebooks a.colab-badge::before { display: none; }
+        .notebooks a.colab-badge img {
+            height: 20px;
+            display: block;
         }
 
         /* Footer */
@@ -393,7 +414,14 @@
                             <h3 class="notebooks-heading">Notebooks</h3>
                             <ul>
                                 {% for notebook in dandiset.notebooks %}
-                                <li><a href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook }}" target="_blank" rel="noopener">{{ notebook }}</a></li>
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/{{ dandiset.id }}/{{ notebook.path }}" target="_blank" rel="noopener">{{ notebook.path }}</a>
+                                        {% if notebook.colab_eligible %}
+                                        <a class="colab-badge" href="{{ notebook.colab_url }}" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        {% endif %}
+                                    </div>
+                                </li>
                                 {% endfor %}
                             </ul>
                         </div>
