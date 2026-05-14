@@ -4,13 +4,6 @@ This example notebook demonstrates how to access the dataset published at [DANDI
 
 This dataset contains widefield imaging data from mice, investigating how prior expectations and neural dynamics are modified in a mouse model of autism (CNTNALP2 knockout). The study explores sensory perception and decision-making tasks to understand the neural basis of altered prior utilization.
 
-## Installing the dependencies
+## Running the notebooks
 
-```bash
-git clone https://github.com/dandi/example-notebooks
-cd example-notebooks/001712/IBL-Widefield
-conda env create --file environment.yml
-conda activate ibl-widefield-demo
-```
-
-
+Open any of the notebooks in [Google Colab](https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/) — the first cell installs all pinned dependencies automatically.
