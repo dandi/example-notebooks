@@ -1,0 +1,19 @@
+name: pagan_lab_001550
+channels:
+  - conda-forge
+dependencies:
+  - python==3.12
+  - ipywidgets
+  - pip
+  - pip:
+    - dandi
+    - jupyter
+    - h5py
+    - remfile
+    - pynwb
+    - numpy
+    - pandas
+    - matplotlib
+    - networkx
+    - ndx-structured-behavior @ git+https://github.com/rly/ndx-structured-behavior.git@main
+    - ndx-optogenetics==0.3.0
