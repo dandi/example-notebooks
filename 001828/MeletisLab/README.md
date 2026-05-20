@@ -1,4 +1,4 @@
-# Corticostriatal dynamics underlying action control in mice
+# DANDI:001828 Example Notebooks
 
 This directory contains example notebooks demonstrating how to access and visualize
 the dataset published at [DANDI:001828](https://dandiarchive.org/dandiset/001828).
