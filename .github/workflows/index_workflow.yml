@@ -29,3 +29,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./output
         keep_files: true
+        cname: notebooks.dandiarchive.org
