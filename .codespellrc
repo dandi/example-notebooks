@@ -6,4 +6,6 @@ ignore-regex = "image/png": ".*|^ *".*data:\S+;base64.*
 
 # makin - surname (Joseph G. Makin, cited in 000129/MathisLab CEBRA notebook)
 # aci - variable name for `anatomical_coordinates_image` in 001712/IBL-Widefield
-ignore-words-list = nd,trough,mater,mebrains,makin,aci
+# fof - Frontal Orienting Field (brain region in 001550/PaganLab)
+# inactivate - standard neuroscience term (transiently silencing a region)
+ignore-words-list = nd,trough,mater,mebrains,makin,aci,fof,inactivate
