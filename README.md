@@ -32,6 +32,11 @@ The `environment.yml` file should define the dependencies of the environment req
 
 See [detailed instructions](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment) for creating a `environment.yml` file.
 
+> **Note:** notebooks are automatically tested in CI and made runnable in Google
+> Colab. Before opening a PR, see **[Adding a notebook: CI, Colab, and the
+> exclusion lists](docs/adding-notebooks.md)** for the required Colab-bootstrap
+> install cell, how the CI test works, headless-execution gotchas, and the
+> `.github` exclusion lists.
 
 Feel free to reach out on the [DANDI helpdesk](https://github.com/dandi/helpdesk/issues/new/choose) with any questions.
 

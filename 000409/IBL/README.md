@@ -1,8 +1,14 @@
-This is a collection of introductory notebooks to the IBL datasets.
-Those notebooks were written for the NeuroDataReHack 2023 event held in Granada, Spain.
+This notebook provides a comprehensive guide to accessing and analyzing data from the IBL Brain Wide Map dataset (dandiset 000409) in NWB format.
 
-
-The notebooks are organized in the following way:
-- `01_list_datasets.ipynb`: lists all the datasets available on the IBL, organize in a dataframe and search for brain regions
-- `02_behaviour_psychometric_curve.ipynb`: a minimal example to stream a dataset, load a trial table and plot a psychometric curve
-- `03_analysis_Imbizo_2023.ipynb`: a more complete tutorial on how to load a dataset, load the spike sorted data, select good units and decode a few behavioral features from the data.
+The notebook covers:
+- Locating and streaming NWB files from DANDI
+- Raw electrophysiology data (AP and LF bands) from Neuropixels probes
+- Electrode metadata and anatomical localization (Allen CCFv3 and IBL bregma coordinates)
+- Probe anatomy visualization with COSMOS parcellation
+- Video data streaming and playback (with nwb-video-widgets)
+- Spike sorting results (units table, waveforms, quality metrics)
+- Behavioral data: trials, psychometric curves, reaction times
+- Wheel position data
+- Pose estimation (DeepLabCut) with video overlay
+- Passive protocol stimulation data
+- Trial-aligned behavioral analysis using pynapple
