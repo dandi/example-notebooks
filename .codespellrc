@@ -3,4 +3,6 @@ skip = .git,*.pdf,*.svg
 # all images and other binaries embedded in .ipynb jsons
 ignore-regex = "image/png": ".*|^ *".*data:\S+;base64.*
 # nd - people just like it
-ignore-words-list = nd,trough,mater
+# fof - Frontal Orienting Field (brain region in 001550/PaganLab)
+# inactivate - standard neuroscience term (transiently silencing a region)
+ignore-words-list = nd,trough,mater,fof,inactivate
