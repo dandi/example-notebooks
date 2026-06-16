@@ -14,6 +14,9 @@ this doc picks up where that leaves off.
       install cell → restart admonition). See [below](#the-colab-bootstrap-cells).
 - [ ] Generate the install cell's pins with `uv pip compile`, constrained to
       Colab's versions. See [generating the install cell](#generating-the-install-cell).
+- [ ] **Stream data directly from the DANDI Archive** (remfile/fsspec) — don't
+      download large files or hardcode local paths. See
+      [streaming data](#stream-data-from-the-dandi-archive).
 - [ ] Make sure it runs **headlessly** — no `fig.show()` on a default plotly
       renderer, no `cv2.imshow`, no `%matplotlib widget`, no `input()`. See
       [headless gotchas](#headless-gotchas).
@@ -122,6 +125,42 @@ which is the correct trade-off.
 > **nbformat gotcha:** cell `id` fields require `nbformat_minor >= 5`. If you
 > prepend cells and validation complains about an unexpected `id`, bump the
 > notebook's `nbformat_minor` to 5.
+
+## Stream data from the DANDI Archive
+
+Notebooks should **stream their data directly from the DANDI Archive** rather
+than downloading files or reading from a local path. Streaming reads only the
+bytes a cell actually needs, so the notebook runs unattended in CI and in Colab
+with no manual data setup, no multi-GB download, and no machine-specific paths.
+
+Resolve the asset's S3 URL through the DANDI API and open it with
+[`remfile`](https://github.com/magland/remfile) (or `fsspec`):
+
+```python
+from dandi.dandiapi import DandiAPIClient
+import remfile, h5py
+from pynwb import NWBHDF5IO
+
+with DandiAPIClient() as client:
+    asset = client.get_dandiset("000000", "draft").get_asset_by_path(
+        "sub-XX/sub-XX_ecephys.nwb"
+    )
+    s3_url = asset.get_content_url(follow_redirects=1, strip_query=False)
+
+io = NWBHDF5IO(file=h5py.File(remfile.File(s3_url), "r"), load_namespaces=True)
+nwbfile = io.read()
+```
+
+Guidelines:
+
+- **Don't** `dandi download` a dandiset, read `../path/to/local.nwb`, or assume a
+  file exists on disk — that fails in CI and gives Colab users a broken notebook.
+  (Hardcoded local paths are a common reason a notebook lands on the
+  [exclusion lists](#the-three-github-lists).)
+- **Do** wrap the remote file in a cache so re-runs don't re-fetch:
+  `remfile.File(s3_url, disk_cache=remfile.DiskCache("nwb-cache"))`.
+- Pin `remfile` (and/or `fsspec`/`s3fs`) in the [install cell](#the-colab-bootstrap-cells).
+- For Zarr-based assets, stream with `fsspec` instead of `remfile`.
 
 ## Headless gotchas
 
