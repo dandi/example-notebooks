@@ -1,0 +1,13 @@
+name: schwerdtlab_001628_demo
+channels:
+    - conda-forge
+dependencies:
+    - python==3.13
+    - ipywidgets
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - matplotlib
+      - pynwb
+      - remfile
