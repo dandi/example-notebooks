@@ -1,0 +1,18 @@
+name: dombeck_lab_001933
+channels:
+  - conda-forge
+dependencies:
+  - python==3.12
+  - pip
+  - pip:
+    - dandi
+    - jupyter
+    - h5py
+    - remfile
+    - pynwb
+    - numpy
+    - pandas
+    - matplotlib
+    - ndx-fiber-photometry>=0.2.3
+    - ndx-ophys-devices>=0.3.1
+    - ndx-optogenetics>=0.4.0
