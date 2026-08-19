@@ -65,7 +65,9 @@ than silently changing a pinned version.
   rebuilds even when the build-hash check says the published image is current.
 - Rebuilds are skipped when a `hash-<...>` tag matching the current build
   inputs already exists on the registry. Changing a notebook, its pins, its
-  helpers, or the Dockerfile changes the hash and triggers a rebuild.
+  helpers, or the Dockerfile changes the hash and triggers a rebuild. Pins are
+  refreshed with `.github/scripts/lock_notebook.py` from the `requirements.in`
+  committed next to the notebook (see `docs/adding-notebooks.md`).
 - The base image is digest-pinned in the Dockerfile (`ARG BASE_IMAGE`). To
   bump it, update the digest, which changes every group's build hash, and
   dispatch a full rebuild. The `BASE_IMAGE` arg is also the knob for a future
