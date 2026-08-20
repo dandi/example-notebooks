@@ -1,0 +1,6 @@
+dandi>=0.74.0
+h5py
+numpy
+pynwb
+python-dateutil
+remfile
