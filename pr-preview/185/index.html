@@ -215,7 +215,6 @@
             font-size: 15.5px;
             line-height: 1.65;
             margin: 0 0 24px;
-            max-width: 70ch;
             font-weight: 400;
         }
 
@@ -329,6 +328,38 @@
         .notebooks a.colab-badge img {
             height: 20px;
             display: block;
+        }
+        .notebooks button.docker-badge {
+            flex-shrink: 0;
+            height: 20px;
+            padding: 0 8px;
+            border: none;
+            border-radius: 4px;
+            background: #1D63ED;
+            color: #fff;
+            font: 600 11px/20px "Roboto", sans-serif;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .notebooks button.docker-badge:hover { opacity: 1; }
+        .notebooks button.docker-badge.copied { background: #1a7f37; }
+        .notebooks a.docker-help-link {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 50%;
+            color: var(--ink-faint);
+            font: 600 11px/16px "Roboto", sans-serif;
+            text-align: center;
+            text-decoration: none;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .notebooks a.docker-help-link::before { display: none; }
+        .notebooks a.docker-help-link:hover {
+            color: var(--navy);
+            border-color: var(--navy);
         }
 
         /* Footer */
@@ -642,6 +673,7 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000004/RutishauserLab/000004_demo_analysis.ipynb" target="_blank" rel="noopener">RutishauserLab/000004_demo_analysis.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -663,6 +695,7 @@
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000005/DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Yu-Gutnisky-2016/notebooks/Yu-Gutnisky-2016-examples.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -686,6 +719,7 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000006/DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Economo-2018/notebooks/Economo-2018-examples.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -708,12 +742,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -737,12 +773,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -766,12 +804,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -780,12 +820,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -809,6 +851,7 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000013/DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Hires-Gutnisky-2015/notebooks/Hires-Gutnisky-2015-examples.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -831,12 +874,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -862,12 +907,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Create_manifest.ipynb" target="_blank" rel="noopener">AllenInstitute/Create_manifest.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000039/AllenInstitute/Contrast_analysis.ipynb" target="_blank" rel="noopener">AllenInstitute/Contrast_analysis.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -891,12 +938,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_coarse_labels.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -905,6 +954,7 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -912,12 +962,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Table_part_characteristics.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -941,12 +993,14 @@
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/validate_lev6.ipynb" target="_blank" rel="noopener">chunglab/demo/validate_lev6.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -956,6 +1010,15 @@
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000108-chunglab-demo:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -978,6 +1041,7 @@
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000129/MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb" target="_blank" rel="noopener">MathisLab/Schneider2023_CEBRA/230905_NeuroDataReHack_2023_CEBRA.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1003,6 +1067,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000363/MAP/demo/browse_map_ephys_data.ipynb" target="_blank" rel="noopener">MAP/demo/browse_map_ephys_data.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -1027,6 +1092,7 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -1035,6 +1101,15 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener">MICrONS/demo/000402_microns_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000402-microns-demo:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1059,6 +1134,7 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener">IBL/bwm_usage_notebook.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000409/IBL/bwm_usage_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1088,6 +1164,15 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1097,6 +1182,15 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1105,6 +1199,15 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener">AllenInstitute/reanalysis.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/AllenInstitute/reanalysis.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-alleninstitute:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1128,6 +1231,7 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -1136,6 +1240,7 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/read_avi.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1146,6 +1251,15 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure-s1:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1154,6 +1268,15 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1184,6 +1307,15 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000582/Sargolini2006/000582_Sargolini2006_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000582-sargolini2006:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1208,6 +1340,15 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000718/CaiLab/zaki_2024/000718_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000718-cailab-zaki-2024:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1231,6 +1372,15 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener">clandinin/simple_data_access/reading_data.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000727/clandinin/simple_data_access/reading_data.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000727-clandinin-simple-data-access:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1262,6 +1412,15 @@ The Visual Coding Ecephys (NeuroPixels) dataset can be found here: https://dandi
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000728/AllenInstitute/visual_coding_ophys_tutorial.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000728-alleninstitute:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1290,6 +1449,15 @@ The recordings for subject Gaia (post-MPTP) from 2016-2017 were also collected b
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener">TurnerLab/public_demo/000947_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000947/TurnerLab/public_demo/000947_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000947-turnerlab-public-demo:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1323,6 +1491,15 @@ as a key controller of the development of compulsive reward seeking.</p>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024-optogenetics-example-notebook:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1331,6 +1508,15 @@ as a key controller of the development of compulsive reward seeking.</p>
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener">lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024-fiber-photometry-example-notebook:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1355,6 +1541,15 @@ as a key controller of the development of compulsive reward seeking.</p>
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener">DombeckLab/001038_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001038/DombeckLab/001038_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001038-dombecklab:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1384,6 +1579,15 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001075/001075_paper_figure_1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001075:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1408,6 +1612,15 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001084/HoweLab/001084_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001084-howelab:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1431,6 +1644,7 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener">ReimerLab/public_demo/001170_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001170/ReimerLab/public_demo/001170_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1457,6 +1671,15 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001172/HigleyLab/001172_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001172-higleylab:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1482,6 +1705,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1490,6 +1722,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_2GH_oepsc_analysis.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_2GH_oepsc_analysis.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_2GH_oepsc_analysis.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1500,6 +1741,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1508,6 +1758,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1533,6 +1792,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/02_optogenetics_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1541,6 +1809,15 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb" target="_blank" rel="noopener">PaganLab/01_behavior_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1572,6 +1849,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1580,6 +1866,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1590,6 +1885,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1598,6 +1902,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_usage.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1623,6 +1936,7 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/processed_widefield.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
                                     </div>
                                 </li>
                                 
@@ -1632,6 +1946,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo-raw-widefield:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1640,6 +1963,7 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb" target="_blank" rel="noopener">IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1665,6 +1989,15 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001754/CatalystNeuro/001754_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
+                                        
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001754-catalystneuro:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        
                                     </div>
                                 </li>
                                 
@@ -1684,5 +2017,20 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
             <a href="https://github.com/dandi/example-notebooks" target="_blank" rel="noopener">github.com/dandi/example-notebooks</a>
         </div>
     </footer>
+    <script>
+        document.querySelectorAll("button.docker-badge").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                navigator.clipboard.writeText(btn.dataset.cmd).then(function () {
+                    var original = btn.textContent;
+                    btn.textContent = "copied!";
+                    btn.classList.add("copied");
+                    setTimeout(function () {
+                        btn.textContent = original;
+                        btn.classList.remove("copied");
+                    }, 1500);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
