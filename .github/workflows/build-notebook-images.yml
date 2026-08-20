@@ -7,6 +7,17 @@ name: Build notebook images
 # manifest on ghcr.io. Only verified images are ever published.
 
 on:
+  push:
+    branches: [ master ]
+    paths:
+      - '**.ipynb'
+      - '**/requirements.in'
+      - '.github/docker/**'
+      - '.github/scripts/build_notebook_image.py'
+      - '.github/scripts/run_notebook.py'
+      - '.github/notebook-test-exclusions.txt'
+      - '.github/notebook-image-inclusions.txt'
+      - '.github/workflows/build-notebook-images.yml'
   workflow_dispatch:
     inputs:
       filter:
@@ -32,6 +43,8 @@ jobs:
       groups: ${{ steps.groups.outputs.groups }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -42,9 +55,19 @@ jobs:
 
       - name: List image groups
         id: groups
+        # On push, build only the groups touched by the pushed commits (any
+        # image-tooling change selects every group); on dispatch, use the filter.
         run: |
-          python .github/scripts/build_notebook_image.py list-groups \
-            --filter '${{ github.event.inputs.filter }}' --names-only > groups.json
+          if [ '${{ github.event_name }}' = 'push' ]; then
+            { git diff --name-only '${{ github.event.before }}' '${{ github.sha }}' 2>/dev/null \
+                || git diff --name-only HEAD~1 HEAD; } > changed.txt
+            echo "Changed files:"; cat changed.txt
+            python .github/scripts/build_notebook_image.py list-groups \
+              --names-only --changed-only < changed.txt > groups.json
+          else
+            python .github/scripts/build_notebook_image.py list-groups \
+              --filter '${{ github.event.inputs.filter }}' --names-only > groups.json
+          fi
           echo "groups=$(cat groups.json)" >> "$GITHUB_OUTPUT"
           echo "Matched groups:"
           cat groups.json
@@ -160,7 +183,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Push verified per-arch image
-        if: steps.check.outputs.up_to_date == 'false' && inputs.push
+        if: steps.check.outputs.up_to_date == 'false' && (github.event_name == 'push' || inputs.push)
         run: |
           IMAGE='${{ steps.prepare.outputs.image }}'
           TAG='hash-${{ steps.prepare.outputs.build_hash_short }}-${{ matrix.runner.arch }}'
@@ -176,7 +199,7 @@ jobs:
     # always(): one group's failed build must not skip the merge of every
     # other group. The step below checks that this group's own per-arch
     # images exist before merging.
-    if: always() && needs.list.outputs.groups != '[]' && inputs.push && needs.build.result != 'cancelled'
+    if: always() && needs.list.outputs.groups != '[]' && (github.event_name == 'push' || inputs.push) && needs.build.result != 'cancelled'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
