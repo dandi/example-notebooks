@@ -48,6 +48,10 @@ RUN apt-get update \
 
 WORKDIR /work
 COPY --chown=jovyan:jovyan work/ /work/
+# WORKDIR created /work as root before the COPY; --chown only covers the
+# copied contents. The kernel must be able to write here (disk caches like
+# remfile.DiskCache("nwb-cache"), figure exports).
+RUN chown jovyan:jovyan /work
 
 USER jovyan
 ENV HOME=/home/jovyan
