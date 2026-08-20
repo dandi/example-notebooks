@@ -1,9 +1,10 @@
 name: Build notebook images
 
-# Builds a container image per notebook group (directory + identical pin set),
-# verifies every notebook in the group runs inside the candidate image using
-# the same harness as the test workflows, and pushes verified images to
-# ghcr.io. Only verified images are ever published.
+# Builds a container image per notebook group (directory + identical pin set)
+# for both amd64 and arm64 on native runners, verifies every notebook in the
+# group inside the candidate image using the same harness as the test
+# workflows, pushes per-arch images, and merges them into one multi-arch
+# manifest on ghcr.io. Only verified images are ever published.
 
 on:
   workflow_dispatch:
@@ -51,13 +52,16 @@ jobs:
   build:
     needs: list
     if: needs.list.outputs.groups != '[]'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 90
     strategy:
       fail-fast: false
       max-parallel: 6
       matrix:
         group: ${{ fromJSON(needs.list.outputs.groups) }}
+        runner:
+          - { os: ubuntu-latest, arch: amd64 }
+          - { os: ubuntu-24.04-arm, arch: arm64 }
     steps:
       - uses: actions/checkout@v4
 
@@ -83,11 +87,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Skip if an image with this build hash is already published
+      - name: Skip if this build hash is already published for this arch
         id: check
         run: |
           IMAGE='${{ steps.prepare.outputs.image }}'
-          TAG='hash-${{ steps.prepare.outputs.build_hash_short }}'
+          TAG='hash-${{ steps.prepare.outputs.build_hash_short }}-${{ matrix.runner.arch }}'
           if [ '${{ inputs.force }}' != 'true' ] \
               && docker manifest inspect "$IMAGE:$TAG" >/dev/null 2>&1; then
             echo "Image $IMAGE:$TAG already exists; skipping build and push."
@@ -100,7 +104,7 @@ jobs:
         if: steps.check.outputs.up_to_date == 'false'
         run: |
           docker build \
-            --platform linux/amd64 \
+            --platform 'linux/${{ matrix.runner.arch }}' \
             -f .github/docker/Dockerfile \
             --build-arg DEFAULT_NOTEBOOK='${{ steps.prepare.outputs.default_notebook }}' \
             --build-arg BUILD_HASH='${{ steps.prepare.outputs.build_hash }}' \
@@ -111,13 +115,15 @@ jobs:
 
       - name: Verify notebooks inside the candidate image
         if: steps.check.outputs.up_to_date == 'false'
+        # --user root so the harness's transient uv installs can write to
+        # /usr/local; the pushed image still defaults to the jovyan user.
         run: |
           mkdir -p "$RUNNER_TEMP/verify"
           echo '${{ steps.prepare.outputs.notebooks }}' \
             | python3 -c 'import json, sys; print("\n".join(json.load(sys.stdin)))' \
             | while IFS= read -r nb; do
                 echo "::group::verify $nb"
-                docker run --rm \
+                docker run --rm --user root \
                   -v "$PWD/.github/scripts/run_notebook.py:/ci/run_notebook.py:ro" \
                   -v "$RUNNER_TEMP/verify:/out" \
                   '${{ steps.prepare.outputs.image }}:candidate' \
@@ -129,23 +135,68 @@ jobs:
         if: always() && steps.check.outputs.up_to_date == 'false'
         uses: actions/upload-artifact@v4
         with:
-          name: verify-${{ matrix.group }}
+          name: verify-${{ matrix.group }}-${{ matrix.runner.arch }}
           path: ${{ runner.temp }}/verify/
           retention-days: 30
           if-no-files-found: ignore
 
-      - name: Push verified image
+      - name: Push verified per-arch image
         if: steps.check.outputs.up_to_date == 'false' && inputs.push
         run: |
           IMAGE='${{ steps.prepare.outputs.image }}'
-          for tag in latest \
-                     "sha-$(echo '${{ github.sha }}' | cut -c1-7)" \
-                     "$(date -u +%Y-%m-%d)" \
-                     'hash-${{ steps.prepare.outputs.build_hash_short }}'; do
-            docker tag "$IMAGE:candidate" "$IMAGE:$tag"
-            docker push "$IMAGE:$tag"
-          done
+          TAG='hash-${{ steps.prepare.outputs.build_hash_short }}-${{ matrix.runner.arch }}'
+          docker tag "$IMAGE:candidate" "$IMAGE:$TAG"
+          docker push "$IMAGE:$TAG"
 
       - name: Disk usage telemetry
         if: always()
         run: df -h
+
+  merge:
+    needs: [list, build]
+    if: needs.list.outputs.groups != '[]' && inputs.push
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.list.outputs.groups) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir nbformat
+
+      - name: Recompute image name and build hash
+        id: prepare
+        run: |
+          python .github/scripts/build_notebook_image.py prepare \
+            --name '${{ matrix.group }}' \
+            --context-dir "$RUNNER_TEMP/context" \
+            --image-prefix "ghcr.io/${{ github.repository }}"
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge per-arch images into a multi-arch manifest
+        run: |
+          IMAGE='${{ steps.prepare.outputs.image }}'
+          H='hash-${{ steps.prepare.outputs.build_hash_short }}'
+          if [ '${{ inputs.force }}' != 'true' ] \
+              && docker manifest inspect "$IMAGE:$H" >/dev/null 2>&1; then
+            echo "Manifest $IMAGE:$H already exists; skipping merge."
+            exit 0
+          fi
+          docker buildx imagetools create \
+            -t "$IMAGE:latest" \
+            -t "$IMAGE:sha-$(echo '${{ github.sha }}' | cut -c1-7)" \
+            -t "$IMAGE:$(date -u +%Y-%m-%d)" \
+            -t "$IMAGE:$H" \
+            "$IMAGE:$H-amd64" "$IMAGE:$H-arm64"
