@@ -1,0 +1,7 @@
+h5py
+nwbwidgets
+pynwb<3
+remfile
+requests
+hdmf<4
+zarr<3
