@@ -1,4 +1,4 @@
-# Example notebooks
+# DANDI Notebooks
 
 This repository contains example notebooks associated with datasets, conference tools, or more generally notebooks that illustrate the use of data on DANDI. This repository is cloned into the [DANDI JupyterHub environment](https://hub.dandiarchive.org). Please note that you will need to visit https://dandiarchive.org and sign in once to get access to the JupyterHub.
 
