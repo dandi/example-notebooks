@@ -1,6 +1,7 @@
 import fnmatch
 import json
 import os
+import shutil
 from typing import List, Dict, Any, Optional
 
 from jinja2 import Environment, FileSystemLoader
@@ -178,6 +179,10 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, 'index.html'), 'w') as f:
         f.write(output)
+
+    assets_dir = os.path.join(template_dir, 'assets')
+    if os.path.isdir(assets_dir):
+        shutil.copytree(assets_dir, output_dir, dirs_exist_ok=True)
 
 if __name__ == "__main__":
     dandisets = collect_metadata()
