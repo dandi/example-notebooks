@@ -145,8 +145,35 @@ def matches(group: Group, pattern: str) -> bool:
     )
 
 
+INFRA_PREFIXES = (
+    ".github/docker/",
+    ".github/scripts/build_notebook_image.py",
+    ".github/scripts/run_notebook.py",
+    ".github/workflows/build-notebook-images.yml",
+    ".github/notebook-test-exclusions.txt",
+    ".github/notebook-image-inclusions.txt",
+)
+
+
+def groups_for_changed_files(groups: list[Group], changed: list[str]) -> list[Group]:
+    """Groups affected by a set of changed repo paths.
+
+    A change to the image tooling affects every group; otherwise a group is
+    affected when any changed path lies inside its directory.
+    """
+    if any(p.startswith(INFRA_PREFIXES) for p in changed):
+        return groups
+    return [
+        g for g in groups
+        if any(p == g.directory or p.startswith(g.directory + "/") for p in changed)
+    ]
+
+
 def cmd_list_groups(args: argparse.Namespace) -> int:
     groups = [g for g in collect_groups() if matches(g, args.filter)]
+    if args.changed_only:
+        changed = [line.strip() for line in sys.stdin.read().splitlines() if line.strip()]
+        groups = groups_for_changed_files(groups, changed)
     if args.names_only:
         print(json.dumps([g.name for g in groups]))
     else:
@@ -234,6 +261,11 @@ def main() -> int:
     p_list = sub.add_parser("list-groups")
     p_list.add_argument("--filter", default="", help="regex on directory or notebook path")
     p_list.add_argument("--names-only", action="store_true")
+    p_list.add_argument(
+        "--changed-only", action="store_true",
+        help="read newline-separated changed repo paths from stdin and keep only "
+             "affected groups (any image-tooling change selects all groups)",
+    )
     p_list.set_defaults(func=cmd_list_groups)
 
     p_prep = sub.add_parser("prepare")

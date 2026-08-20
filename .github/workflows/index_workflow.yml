@@ -4,6 +4,16 @@ on:
   push:
     branches: [ master ]
   workflow_dispatch:
+  # Re-render after images publish so docker badges appear without waiting
+  # for the weekly refresh.
+  workflow_run:
+    workflows: ["Build notebook images"]
+    types: [completed]
+
+# Deploys push to the same gh-pages branch; never run two at once.
+concurrency:
+  group: index-deploy
+  cancel-in-progress: false
   schedule:
     - cron: '30 6 * * 1'  # weekly, after the notebook test sweep, to refresh docker badges
 

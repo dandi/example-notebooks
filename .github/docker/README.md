@@ -75,10 +75,13 @@ multi-arch manifest carrying the user-facing tags.
 
 ## Maintainer Notes
 
-- The workflow is currently `workflow_dispatch` only. The `filter` input is a
-  regex on the notebook directory or path (default: the `001550/PaganLab`
-  pilot); `push: false` gives a dry run (build + verify, no publish); `force`
-  rebuilds even when the build-hash check says the published image is current.
+- The workflow runs on every push to `master` that touches notebooks,
+  `requirements.in` files, or the image tooling, building only the affected
+  groups (a tooling change rebuilds all of them). It can also be dispatched by
+  hand: the `filter` input is a regex on the notebook directory or path;
+  `push: false` gives a dry run (build + verify, no publish); `force` rebuilds
+  even when the build-hash check says the published image is current. When a
+  run completes, the index workflow re-renders so new docker badges appear.
 - Rebuilds are skipped when a `hash-<...>` tag matching the current build
   inputs already exists on the registry. Changing a notebook, its pins, its
   helpers, or the Dockerfile changes the hash and triggers a rebuild. Pins are
