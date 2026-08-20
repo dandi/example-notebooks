@@ -124,6 +124,36 @@
             overflow-y: auto;
             padding-right: 8px;
         }
+        .search-box { margin-bottom: 22px; }
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: var(--ink);
+            background: var(--bg);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-box input:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(0, 67, 109, 0.12);
+        }
+        .search-count {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            color: var(--ink-faint);
+            margin-top: 8px;
+            min-height: 14px;
+        }
+        .no-results {
+            display: none;
+            padding: 48px 0;
+            color: var(--ink-soft);
+            font-size: 15.5px;
+        }
         .toc-heading {
             font-family: 'Roboto Mono', monospace;
             font-size: 11px;
@@ -421,6 +451,11 @@
         <div class="container">
             <div class="layout">
                 <aside class="toc">
+                    <div class="search-box">
+                        <input type="search" id="dandiset-search" placeholder="Filter by ID, title, or notebook&hellip;"
+                               aria-label="Filter dandisets and notebooks">
+                        <div class="search-count" id="search-count"></div>
+                    </div>
                     <h2 class="toc-heading">Contents</h2>
                     <ul>
                         {% for dandiset in dandisets %}
@@ -435,6 +470,11 @@
                 </aside>
 
                 <main class="datasets">
+                    <div class="no-results" id="no-results">
+                        No dandisets match your search. Try a dandiset ID
+                        (e.g. 000409), a word from a title or description, or
+                        part of a notebook filename.
+                    </div>
                     {% for dandiset in dandisets %}
                     <article id="dandiset-{{ dandiset.id }}" class="dandiset">
                         <div class="dandiset-id">DANDI:{{ dandiset.id }}</div>
@@ -481,6 +521,40 @@
         </div>
     </footer>
     <script>
+        (function () {
+            var input = document.getElementById("dandiset-search");
+            var countEl = document.getElementById("search-count");
+            var noResults = document.getElementById("no-results");
+            var articles = Array.from(document.querySelectorAll("article.dandiset"));
+            var tocLinks = {};
+            document.querySelectorAll("aside.toc a[href^='#dandiset-']").forEach(function (a) {
+                tocLinks[a.getAttribute("href").slice(1)] = a.closest("li");
+            });
+            var haystacks = articles.map(function (art) {
+                return art.textContent.toLowerCase().replace(/\s+/g, " ");
+            });
+
+            function applyFilter() {
+                var terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+                var shown = 0;
+                articles.forEach(function (art, i) {
+                    var match = terms.every(function (t) {
+                        return haystacks[i].indexOf(t) !== -1;
+                    });
+                    art.style.display = match ? "" : "none";
+                    var tocLi = tocLinks[art.id];
+                    if (tocLi) tocLi.style.display = match ? "" : "none";
+                    if (match) shown += 1;
+                });
+                countEl.textContent = terms.length
+                    ? "showing " + shown + " of " + articles.length + " dandisets"
+                    : "";
+                noResults.style.display = shown === 0 ? "block" : "none";
+            }
+
+            input.addEventListener("input", applyFilter);
+        })();
+
         document.querySelectorAll("button.docker-badge").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 navigator.clipboard.writeText(btn.dataset.cmd).then(function () {
