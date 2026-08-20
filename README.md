@@ -10,7 +10,7 @@ example-notebooks/
 └── <dandiset id>/
     └── <org or lab name>/
         └── <mnemonic for paper or analysis>/
-            ├── environment.yml
+            ├── requirements.in
             ├── README.md
             ├── <analysis 1>.ipynb
             ├── <analysis 2>.ipynb
@@ -22,15 +22,33 @@ For example, [000055/bruntonlab/peterson21](./000055/BruntonLab/peterson21)
 
 The `README.md` file should explain the goal of the submission, provide links to relevant scientific publications, and explain the purpose of each notebook file.
 
-The `environment.yml` file should define the dependencies of the environment required for the notebooks to be executed. `environment.yml` files are like `requirements.txt` files, but are designed to work with `conda`. To create this file, follow these steps:
+The `requirements.in` file lists the notebooks' **direct** Python dependencies,
+one per line — the packages the notebooks actually import (e.g. `dandi`,
+`pynwb`, `remfile`, `matplotlib`). Do not list transitive dependencies or
+export a full freeze of your environment; our tooling compiles the complete
+pinned set from this file. After adding it, run
 
-1. Create a new environment: `conda create -n <env-name> -python <python-version>`
-2. Switch into that environment: `conda activate <env-name>`
-3. Use `conda install <pkg>` and `pip install <pkg>` to install the necessary dependencies until the notebook(s) run through successfully.
-4. Confirm that all the notebooks can be run without error.
-5. Export the environment: `conda env export > environment.yml`.
+```bash
+python .github/scripts/lock_notebook.py <path/to/your-notebook>.ipynb
+```
 
-See [detailed instructions](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment) for creating a `environment.yml` file.
+which resolves the pins against Colab's runtime and writes the install cell
+and Colab badge into the notebook for you. If a notebook needs a specific
+version range (say it was written against an older matplotlib API), express
+that as a bound in `requirements.in` (e.g. `matplotlib<3.11`).
 
+> **Note:** notebooks are automatically tested in CI, made runnable in Google
+> Colab, and published as self-contained [container
+> images](.github/docker/README.md). Before opening a PR, see **[Adding a
+> notebook: CI, Colab, and the exclusion lists](docs/adding-notebooks.md)**
+> for how the CI test works, headless-execution gotchas, and the `.github`
+> exclusion lists. (Some older submissions carry an `environment.yml` instead
+> of `requirements.in`; new submissions should use `requirements.in`.)
 
 Feel free to reach out on the [DANDI helpdesk](https://github.com/dandi/helpdesk/issues/new/choose) with any questions.
+
+## Useful tools
+
+We use https://app.reviewnb.com/ to provide convenient review of notebook diffs in Pull Requests in GitHub web UI.
+
+To assist in reviewing diff's in notebooks locally we recommend to checkout [nbdime](https://nbdime.readthedocs.io) which provides comparable functionality and integrates well with your local git.

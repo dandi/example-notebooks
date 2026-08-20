@@ -1,0 +1,12 @@
+# Notebooks skipped by the CI test sweep (notebook-test-exclusions.txt) that
+# ARE built and verified as container images anyway.
+#
+# The plain CI runner and the container image are different environments: the
+# image ships system libraries (libgl1, libglib2.0-0, libxcb1, ...) that the
+# runner lacks, so some notebooks that cannot run in the CI sweep run fine
+# inside the image. Lines are fnmatch glob patterns, same as the exclusion
+# lists. A notebook listed here must still pass in-image verification before
+# its image is published.
+
+# OpenCV import needs libxcb/libgl, which the image ships (Colab does too).
+000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb

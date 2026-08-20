@@ -1,0 +1,82 @@
+name: Test changed notebooks
+
+on:
+  pull_request:
+    paths:
+      - '**.ipynb'
+      - '.github/notebook-test-exclusions.txt'
+      - '.github/scripts/run_notebook.py'
+      - '.github/scripts/list_notebooks.py'
+      - '.github/workflows/test-changed-notebooks.yml'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect:
+    name: Detect changed notebooks
+    runs-on: ubuntu-latest
+    outputs:
+      notebooks: ${{ steps.list.outputs.notebooks }}
+      any_changed: ${{ steps.list.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: List changed .ipynb files (after exclusions)
+        id: list
+        run: |
+          set -euo pipefail
+          changed=$(git diff --name-only --diff-filter=AM \
+            origin/${{ github.base_ref }}...HEAD || true)
+          notebooks=$(echo "$changed" | python .github/scripts/list_notebooks.py --changed-only)
+          echo "notebooks=$notebooks" >> "$GITHUB_OUTPUT"
+          count=$(echo "$notebooks" | python -c "import json,sys;print(len(json.load(sys.stdin)))")
+          echo "Detected $count Colab-testable notebooks changed in this PR:"
+          echo "$notebooks" | python -m json.tool
+          if [ "$count" -gt 0 ]; then
+            echo "any_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  test:
+    name: Test ${{ matrix.notebook }}
+    needs: detect
+    if: needs.detect.outputs.any_changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        notebook: ${{ fromJson(needs.detect.outputs.notebooks) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir uv nbformat
+
+      - name: Run notebook
+        run: |
+          python .github/scripts/run_notebook.py \
+            "${{ matrix.notebook }}" \
+            --output-dir "$RUNNER_TEMP/notebook-test" \
+            --timeout 3600
+
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-${{ strategy.job-index }}
+          path: ${{ runner.temp }}/notebook-test/
+          retention-days: 14

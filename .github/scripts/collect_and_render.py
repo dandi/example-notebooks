@@ -1,7 +1,68 @@
+import fnmatch
+import json
 import os
+import shutil
+import sys
 from typing import List, Dict, Any, Optional
+
+import requests
 from jinja2 import Environment, FileSystemLoader
 from dandi.dandiapi import DandiAPIClient
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_notebook_image import collect_groups  # noqa: E402
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+COLAB_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-colab-exclusions.txt")
+IMAGE_PREFIX = "ghcr.io/dandi/example-notebooks"
+
+
+def image_is_public(group_name: str) -> bool:
+    """True iff the group's image exists on GHCR and is anonymously pullable.
+
+    Container packages start private and must be flipped public by hand, so
+    the badge is derived from what an anonymous user can actually pull rather
+    than from what CI has pushed.
+    """
+    repo = f"dandi/example-notebooks/{group_name}"
+    try:
+        token = requests.get(
+            "https://ghcr.io/token", params={"scope": f"repository:{repo}:pull"},
+            timeout=10,
+        ).json().get("token")
+        if not token:
+            # No anonymous token grant: the package is private or does not exist.
+            return False
+        r = requests.get(
+            f"https://ghcr.io/v2/{repo}/manifests/latest",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.oci.image.index.v1+json, "
+                          "application/vnd.docker.distribution.manifest.list.v2+json",
+            },
+            timeout=10,
+        )
+        return r.status_code == 200
+    except Exception as e:
+        print(f"GHCR check failed for {group_name}: {e}")
+        return False
+
+
+def docker_images_by_notebook() -> Dict[str, str]:
+    """Map repo-relative notebook path -> public image ref (only public ones)."""
+    mapping: Dict[str, str] = {}
+    public: Dict[str, bool] = {}
+    for group in collect_groups():
+        if group.name not in public:
+            public[group.name] = image_is_public(group.name)
+        if not public[group.name]:
+            continue
+        for nb_name in group.notebooks:
+            mapping[os.path.join(group.directory, nb_name)] = (
+                f"{IMAGE_PREFIX}/{group.name}"
+            )
+    print(f"{sum(public.values())} of {len(public)} image groups are public")
+    return mapping
 
 
 def get_dandiset_metadata(dandiset_id: str) -> Optional[Dict[str, Any]]:
@@ -26,6 +87,48 @@ def get_dandiset_metadata(dandiset_id: str) -> Optional[Dict[str, Any]]:
         except Exception as e:
             print(f"Error fetching metadata for dandiset {dandiset_id}: {str(e)}")
             return None
+
+
+def load_exclusion_patterns(path: str) -> List[str]:
+    """Read gitignore-style glob patterns from an exclusion file."""
+    if not os.path.exists(path):
+        return []
+    with open(path) as f:
+        return [
+            line.strip()
+            for line in f
+            if line.strip() and not line.strip().startswith("#")
+        ]
+
+
+def is_excluded(rel_path: str, patterns: List[str]) -> bool:
+    """Match a repo-relative path against gitignore-style patterns."""
+    for pat in patterns:
+        if fnmatch.fnmatch(rel_path, pat):
+            return True
+        if pat.endswith("/**") and (
+            rel_path == pat[:-3] or rel_path.startswith(pat[:-2])
+        ):
+            return True
+    return False
+
+
+def notebook_has_colab_bootstrap(abs_path: str) -> bool:
+    """Return True iff the notebook starts with a Colab-bootstrap install cell."""
+    try:
+        with open(abs_path) as f:
+            nb = json.load(f)
+    except Exception:
+        return False
+    for cell in nb.get("cells", [])[:8]:
+        if cell.get("cell_type") != "code":
+            continue
+        source = cell.get("source", "")
+        if isinstance(source, list):
+            source = "".join(source)
+        if "uv pip install --system" in source:
+            return True
+    return False
 
 
 def find_notebooks(folder: str) -> List[str]:
@@ -55,22 +158,52 @@ def collect_metadata() -> List[Dict[str, Any]]:
     """
     Collect metadata and notebook information for all dandisets in the current directory.
 
-    Returns
-    -------
-    List[Dict[str, Any]]
-        A list of dictionaries, each containing information about a dandiset,
-        sorted by dandiset ID.
+    Each notebook is represented as a dict:
+        {"path": "<relative-to-dandiset-folder>",
+         "colab_eligible": bool,
+         "colab_url": "<full https URL>" or ""}
+
+    Notebooks are eligible for a Colab button iff (a) they begin with a
+    Colab-bootstrap install cell and (b) their repo-relative path is not
+    matched by any pattern in `.github/notebook-colab-exclusions.txt`.
+
+    Note: the colab-exclusions list is intentionally independent of the
+    CI test-exclusions list (`.github/notebook-test-exclusions.txt`). Some
+    notebooks fail headless CI but work fine when a user opens them in
+    Colab (eg notebooks that call `webbrowser.open()`, `input()`, or
+    depend on libxcb — Colab handles all of those). Conversely, some
+    notebooks pass headless CI but we still don't want to advertise them
+    as one-click-runnable for other reasons.
     """
+    colab_excl = load_exclusion_patterns(COLAB_EXCLUSIONS)
+    docker_images = docker_images_by_notebook()
+
     dandisets = []
     for folder in os.listdir('.'):
         if os.path.isdir(folder) and folder.isdigit():
             metadata = get_dandiset_metadata(folder)
             if metadata:
-                notebooks = find_notebooks(folder)
+                nb_paths = find_notebooks(folder)
+                notebooks = []
+                for rel in nb_paths:
+                    repo_rel = os.path.join(folder, rel)
+                    abs_path = os.path.join(REPO_ROOT, repo_rel)
+                    excluded = is_excluded(repo_rel, colab_excl)
+                    eligible = (not excluded) and notebook_has_colab_bootstrap(abs_path)
+                    notebooks.append({
+                        "path": rel,
+                        "colab_eligible": eligible,
+                        "colab_url": (
+                            f"https://colab.research.google.com/github/"
+                            f"dandi/example-notebooks/blob/master/{repo_rel}"
+                            if eligible else ""
+                        ),
+                        "docker_image": docker_images.get(repo_rel, ""),
+                    })
                 dandisets.append({
                     'id': folder,
                     'metadata': metadata,
-                    'notebooks': notebooks
+                    'notebooks': notebooks,
                 })
 
     dandisets.sort(key=lambda x: x['id'])
@@ -96,12 +229,27 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template('index.html')
 
-    output = template.render(dandisets=dandisets)
+    all_notebooks = [nb for ds in dandisets for nb in ds['notebooks']]
+    stats = {
+        'n_dandisets': len(dandisets),
+        'n_notebooks': len(all_notebooks),
+        'n_colab': sum(1 for nb in all_notebooks if nb['colab_eligible']),
+        'n_docker': sum(1 for nb in all_notebooks if nb['docker_image']),
+    }
+    output = template.render(dandisets=dandisets, stats=stats)
 
     output_dir = os.path.join(current_dir, '..', '..', 'output')
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, 'index.html'), 'w') as f:
         f.write(output)
+
+    help_template = env.get_template('docker-help.html')
+    with open(os.path.join(output_dir, 'docker-help.html'), 'w') as f:
+        f.write(help_template.render(example_image="001550-paganlab"))
+
+    assets_dir = os.path.join(template_dir, 'assets')
+    if os.path.isdir(assets_dir):
+        shutil.copytree(assets_dir, output_dir, dirs_exist_ok=True)
 
 if __name__ == "__main__":
     dandisets = collect_metadata()

@@ -1,0 +1,16 @@
+name: 001754_demo
+channels:
+    - conda-forge
+dependencies:
+    - python==3.11
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - matplotlib
+      - numpy
+      - pynwb
+      - remfile
+      - pynapple
+      - scipy
+      - h5py

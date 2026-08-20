@@ -1,0 +1,228 @@
+name: Build notebook images
+
+# Builds a container image per notebook group (directory + identical pin set)
+# for both amd64 and arm64 on native runners, verifies every notebook in the
+# group inside the candidate image using the same harness as the test
+# workflows, pushes per-arch images, and merges them into one multi-arch
+# manifest on ghcr.io. Only verified images are ever published.
+
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: "Regex; build only groups whose directory or notebook path matches"
+        default: "^001550/PaganLab"
+      force:
+        description: "Rebuild and push even if an image with this build hash exists"
+        type: boolean
+        default: false
+      push:
+        description: "Push to ghcr.io (uncheck for a dry-run build + verify)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    outputs:
+      groups: ${{ steps.groups.outputs.groups }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir nbformat
+
+      - name: List image groups
+        id: groups
+        run: |
+          python .github/scripts/build_notebook_image.py list-groups \
+            --filter '${{ github.event.inputs.filter }}' --names-only > groups.json
+          echo "groups=$(cat groups.json)" >> "$GITHUB_OUTPUT"
+          echo "Matched groups:"
+          cat groups.json
+
+  build:
+    needs: list
+    if: needs.list.outputs.groups != '[]'
+    runs-on: ${{ matrix.runner.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        group: ${{ fromJSON(needs.list.outputs.groups) }}
+        runner:
+          - { os: ubuntu-latest, arch: amd64 }
+          - { os: ubuntu-24.04-arm, arch: arm64 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir nbformat
+
+      - name: Prepare build context
+        id: prepare
+        run: |
+          python .github/scripts/build_notebook_image.py prepare \
+            --name '${{ matrix.group }}' \
+            --context-dir "$RUNNER_TEMP/context" \
+            --image-prefix "ghcr.io/${{ github.repository }}"
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip if this build hash is already published for this arch
+        id: check
+        run: |
+          IMAGE='${{ steps.prepare.outputs.image }}'
+          TAG='hash-${{ steps.prepare.outputs.build_hash_short }}-${{ matrix.runner.arch }}'
+          if [ '${{ inputs.force }}' != 'true' ] \
+              && docker manifest inspect "$IMAGE:$TAG" >/dev/null 2>&1; then
+            echo "Image $IMAGE:$TAG already exists; skipping build and push."
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build candidate image
+        if: steps.check.outputs.up_to_date == 'false'
+        run: |
+          docker build \
+            --platform 'linux/${{ matrix.runner.arch }}' \
+            -f .github/docker/Dockerfile \
+            --build-arg DEFAULT_NOTEBOOK='${{ steps.prepare.outputs.default_notebook }}' \
+            --build-arg BUILD_HASH='${{ steps.prepare.outputs.build_hash }}' \
+            --build-arg GIT_SHA='${{ github.sha }}' \
+            --build-arg NOTEBOOKS='${{ steps.prepare.outputs.notebooks }}' \
+            -t '${{ steps.prepare.outputs.image }}:candidate' \
+            "$RUNNER_TEMP/context"
+
+      - name: Smoke-test the image as its runtime user
+        if: steps.check.outputs.up_to_date == 'false'
+        # Verification below runs --user root (the harness installs into the
+        # system Python), which cannot catch permission bugs that only bite
+        # the non-root jovyan user notebooks actually run as.
+        run: |
+          docker run --rm '${{ steps.prepare.outputs.image }}:candidate' sh -c '
+            set -e
+            [ "$(id -un)" = jovyan ]
+            touch /work/.smoke && rm /work/.smoke
+            mkdir /work/.smoke-dir && rmdir /work/.smoke-dir
+            python -c "import ipykernel"
+            python -c "import importlib.util, sys; sys.exit(0) if importlib.util.find_spec(\"pynwb\") is None else __import__(\"pynwb\")"
+            jupyter-lab --version
+          '
+
+      - name: Verify notebooks inside the candidate image
+        if: steps.check.outputs.up_to_date == 'false'
+        # --user root so the harness's transient uv installs can write to
+        # /usr/local; the pushed image still defaults to the jovyan user.
+        run: |
+          mkdir -p "$RUNNER_TEMP/verify"
+          echo '${{ steps.prepare.outputs.notebooks }}' \
+            | python3 -c 'import json, sys; print("\n".join(json.load(sys.stdin)))' \
+            | while IFS= read -r nb; do
+                echo "::group::verify $nb"
+                docker run --rm --user root \
+                  -v "$PWD/.github/scripts/run_notebook.py:/ci/run_notebook.py:ro" \
+                  -v "$RUNNER_TEMP/verify:/out" \
+                  '${{ steps.prepare.outputs.image }}:candidate' \
+                  python /ci/run_notebook.py "/work/$nb" --output-dir /out --timeout 3600
+                echo "::endgroup::"
+              done
+
+      - name: Upload verification results
+        if: always() && steps.check.outputs.up_to_date == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-${{ matrix.group }}-${{ matrix.runner.arch }}
+          path: ${{ runner.temp }}/verify/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Push verified per-arch image
+        if: steps.check.outputs.up_to_date == 'false' && inputs.push
+        run: |
+          IMAGE='${{ steps.prepare.outputs.image }}'
+          TAG='hash-${{ steps.prepare.outputs.build_hash_short }}-${{ matrix.runner.arch }}'
+          docker tag "$IMAGE:candidate" "$IMAGE:$TAG"
+          docker push "$IMAGE:$TAG"
+
+      - name: Disk usage telemetry
+        if: always()
+        run: df -h
+
+  merge:
+    needs: [list, build]
+    # always(): one group's failed build must not skip the merge of every
+    # other group. The step below checks that this group's own per-arch
+    # images exist before merging.
+    if: always() && needs.list.outputs.groups != '[]' && inputs.push && needs.build.result != 'cancelled'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.list.outputs.groups) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install runner dependencies
+        run: pip install --no-cache-dir nbformat
+
+      - name: Recompute image name and build hash
+        id: prepare
+        run: |
+          python .github/scripts/build_notebook_image.py prepare \
+            --name '${{ matrix.group }}' \
+            --context-dir "$RUNNER_TEMP/context" \
+            --image-prefix "ghcr.io/${{ github.repository }}"
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge per-arch images into a multi-arch manifest
+        run: |
+          IMAGE='${{ steps.prepare.outputs.image }}'
+          H='hash-${{ steps.prepare.outputs.build_hash_short }}'
+          if [ '${{ inputs.force }}' != 'true' ] \
+              && docker manifest inspect "$IMAGE:$H" >/dev/null 2>&1; then
+            echo "Manifest $IMAGE:$H already exists; skipping merge."
+            exit 0
+          fi
+          for arch in amd64 arm64; do
+            if ! docker manifest inspect "$IMAGE:$H-$arch" >/dev/null 2>&1; then
+              echo "Per-arch image $IMAGE:$H-$arch not found (its build failed" \
+                   "or was not pushed); skipping merge for this group."
+              exit 0
+            fi
+          done
+          docker buildx imagetools create \
+            -t "$IMAGE:latest" \
+            -t "$IMAGE:sha-$(echo '${{ github.sha }}' | cut -c1-7)" \
+            -t "$IMAGE:$(date -u +%Y-%m-%d)" \
+            -t "$IMAGE:$H" \
+            "$IMAGE:$H-amd64" "$IMAGE:$H-arm64"
