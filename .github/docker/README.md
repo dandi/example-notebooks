@@ -98,3 +98,8 @@ multi-arch manifest carrying the user-facing tags.
 - The `hash-<12 hex>-amd64` / `-arm64` tags are the per-arch build artifacts
   the merge step assembles into the multi-arch `hash-<12 hex>` manifest; they
   also serve as the per-arch skip markers.
+- Image eligibility follows `.github/notebook-test-exclusions.txt`, except
+  that notebooks listed in `.github/notebook-image-inclusions.txt` are built
+  anyway: the image ships system libraries (libgl1, libglib2.0-0, libxcb1)
+  that the slim CI runner lacks, so some CI-excluded notebooks run fine in
+  the image. They still must pass in-image verification to publish.

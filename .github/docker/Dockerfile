@@ -16,8 +16,12 @@
 ARG BASE_IMAGE=python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
 FROM ${BASE_IMAGE}
 
+# libgl1/libglib2.0-0/libxcb1 are runtime needs of opencv-python and similar
+# GUI-linked wheels; Colab ships them, the slim base does not, and without
+# them notebooks that import cv2 can only run on Colab.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl git ca-certificates \
+    && apt-get install -y --no-install-recommends \
+        curl git ca-certificates libgl1 libglib2.0-0 libxcb1 \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --create-home --uid 1000 --shell /bin/bash jovyan
 
@@ -78,5 +82,9 @@ LABEL org.opencontainers.image.source="https://github.com/dandi/example-notebook
       org.dandiarchive.build-hash="${BUILD_HASH}"
 
 EXPOSE 8888
+# custom_display_url: without it Jupyter also prints a URL built from the
+# container's internal hostname, which does not resolve on the host and
+# misleads users into clicking a dead link.
 CMD jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser \
+    --ServerApp.custom_display_url="http://127.0.0.1:8888" \
     --ServerApp.default_url="/lab/tree/${DEFAULT_NOTEBOOK}"

@@ -46,6 +46,22 @@ from run_notebook import find_install_cell  # noqa: E402
 
 DOCKERFILE = REPO_ROOT / ".github" / "docker" / "Dockerfile"
 DEFAULT_IMAGE_PREFIX = "ghcr.io/dandi/example-notebooks"
+IMAGE_INCLUSIONS = REPO_ROOT / ".github" / "notebook-image-inclusions.txt"
+
+
+def load_image_inclusions() -> list[str]:
+    """Patterns for notebooks that are CI-test-excluded but image-runnable.
+
+    The container image ships system libraries the slim CI runner lacks, so
+    the image pipeline rescues these from the shared test-exclusion list.
+    """
+    if not IMAGE_INCLUSIONS.exists():
+        return []
+    return [
+        line.strip()
+        for line in IMAGE_INCLUSIONS.read_text().splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
 
 
 def slug(s: str) -> str:
@@ -79,12 +95,13 @@ class Group:
 
 def collect_groups() -> list[Group]:
     exclusions = load_exclusions()
+    inclusions = load_image_inclusions()
     groups: dict[tuple[str, str], Group] = {}
     for path in sorted(REPO_ROOT.rglob("*.ipynb")):
         if ".ipynb_checkpoints" in path.parts:
             continue
         rel = str(path.relative_to(REPO_ROOT))
-        if is_excluded(rel, exclusions):
+        if is_excluded(rel, exclusions) and not is_excluded(rel, inclusions):
             continue
         nb = nbformat.read(path, as_version=4)
         try:
