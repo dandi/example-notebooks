@@ -8,5 +8,3 @@ The notebook streams data directly from the DANDI Archive, so nothing needs to b
 
 - **Google Colab**: open the notebook with the "Open in Colab" badge at the top and run the install cell, which sets up the exact tested package versions.
 - **Locally**: in a Python 3.12 environment, install the direct dependencies with `pip install -r requirements.in` and start Jupyter with `jupyter lab 001528_demo.ipynb`. Running the pinned install cell at the top of the notebook instead reproduces the exact tested versions.
-
-Dandiset 001528 is currently embargoed. Running the notebook requires a DANDI API key for an account with access to the dandiset; the notebook calls `dandi_authenticate()`, which prompts for the key. Once the dandiset is public, no key is needed.
