@@ -16,8 +16,12 @@
 ARG BASE_IMAGE=python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
 FROM ${BASE_IMAGE}
 
+# libgl1/libglib2.0-0/libxcb1 are runtime needs of opencv-python and similar
+# GUI-linked wheels; Colab ships them, the slim base does not, and without
+# them notebooks that import cv2 can only run on Colab.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl git ca-certificates \
+    && apt-get install -y --no-install-recommends \
+        curl git ca-certificates libgl1 libglib2.0-0 libxcb1 \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --create-home --uid 1000 --shell /bin/bash jovyan
 
