@@ -345,6 +345,23 @@
         }
         .notebooks button.docker-badge:hover { opacity: 1; }
         .notebooks button.docker-badge.copied { background: #1a7f37; }
+        .notebooks a.docker-help-link {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 50%;
+            color: var(--ink-faint);
+            font: 600 11px/16px "Roboto", sans-serif;
+            text-align: center;
+            text-decoration: none;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .notebooks a.docker-help-link::before { display: none; }
+        .notebooks a.docker-help-link:hover {
+            color: var(--navy);
+            border-color: var(--navy);
+        }
 
         /* Footer */
         footer.site {
@@ -1000,6 +1017,9 @@
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000108-chunglab-demo:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1088,6 +1108,9 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000402-microns-demo:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1147,6 +1170,9 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1162,6 +1188,9 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1177,6 +1206,9 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-alleninstitute:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1225,6 +1257,9 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure-s1:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1240,6 +1275,9 @@ All sessions included an awake and an isoflurane epoch, but not all sessions inc
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1275,6 +1313,9 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000582-sargolini2006:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1305,6 +1346,9 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000718-cailab-zaki-2024:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1335,6 +1379,9 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000727-clandinin-simple-data-access:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1371,6 +1418,9 @@ The Visual Coding Ecephys (NeuroPixels) dataset can be found here: https://dandi
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000728-alleninstitute:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1406,6 +1456,9 @@ The recordings for subject Gaia (post-MPTP) from 2016-2017 were also collected b
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000947-turnerlab-public-demo:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1444,6 +1497,9 @@ as a key controller of the development of compulsive reward seeking.</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024-optogenetics-example-notebook:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1459,6 +1515,9 @@ as a key controller of the development of compulsive reward seeking.</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024-fiber-photometry-example-notebook:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1489,6 +1548,9 @@ as a key controller of the development of compulsive reward seeking.</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001038-dombecklab:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1523,6 +1585,9 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001075:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1553,6 +1618,9 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001084-howelab:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1609,6 +1677,9 @@ Read the paper at: https://www.nature.com/articles/s41586-023-06683-4</p>
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001172-higleylab:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1640,6 +1711,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1655,6 +1729,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1670,6 +1747,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1685,6 +1765,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001538-catalyst-neuro-zhai-2025:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1715,6 +1798,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1730,6 +1816,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1766,6 +1855,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1781,6 +1873,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1796,6 +1891,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1811,6 +1909,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1851,6 +1952,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo-raw-widefield:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
@@ -1891,6 +1995,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001754-catalystneuro:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         
                                     </div>
                                 </li>
