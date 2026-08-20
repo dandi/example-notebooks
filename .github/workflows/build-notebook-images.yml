@@ -113,6 +113,21 @@ jobs:
             -t '${{ steps.prepare.outputs.image }}:candidate' \
             "$RUNNER_TEMP/context"
 
+      - name: Smoke-test the image as its runtime user
+        if: steps.check.outputs.up_to_date == 'false'
+        # Verification below runs --user root (the harness installs into the
+        # system Python), which cannot catch permission bugs that only bite
+        # the non-root jovyan user notebooks actually run as.
+        run: |
+          docker run --rm '${{ steps.prepare.outputs.image }}:candidate' sh -c '
+            set -e
+            [ "$(id -un)" = jovyan ]
+            touch /work/.smoke && rm /work/.smoke
+            mkdir /work/.smoke-dir && rmdir /work/.smoke-dir
+            python -c "import ipykernel"
+            jupyter-lab --version
+          '
+
       - name: Verify notebooks inside the candidate image
         if: steps.check.outputs.up_to_date == 'false'
         # --user root so the harness's transient uv installs can write to

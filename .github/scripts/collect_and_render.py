@@ -2,13 +2,67 @@ import fnmatch
 import json
 import os
 import shutil
+import sys
 from typing import List, Dict, Any, Optional
 
+import requests
 from jinja2 import Environment, FileSystemLoader
 from dandi.dandiapi import DandiAPIClient
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_notebook_image import collect_groups  # noqa: E402
+
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 COLAB_EXCLUSIONS = os.path.join(REPO_ROOT, ".github", "notebook-colab-exclusions.txt")
+IMAGE_PREFIX = "ghcr.io/dandi/example-notebooks"
+
+
+def image_is_public(group_name: str) -> bool:
+    """True iff the group's image exists on GHCR and is anonymously pullable.
+
+    Container packages start private and must be flipped public by hand, so
+    the badge is derived from what an anonymous user can actually pull rather
+    than from what CI has pushed.
+    """
+    repo = f"dandi/example-notebooks/{group_name}"
+    try:
+        token = requests.get(
+            "https://ghcr.io/token", params={"scope": f"repository:{repo}:pull"},
+            timeout=10,
+        ).json().get("token")
+        if not token:
+            # No anonymous token grant: the package is private or does not exist.
+            return False
+        r = requests.get(
+            f"https://ghcr.io/v2/{repo}/manifests/latest",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.oci.image.index.v1+json, "
+                          "application/vnd.docker.distribution.manifest.list.v2+json",
+            },
+            timeout=10,
+        )
+        return r.status_code == 200
+    except Exception as e:
+        print(f"GHCR check failed for {group_name}: {e}")
+        return False
+
+
+def docker_images_by_notebook() -> Dict[str, str]:
+    """Map repo-relative notebook path -> public image ref (only public ones)."""
+    mapping: Dict[str, str] = {}
+    public: Dict[str, bool] = {}
+    for group in collect_groups():
+        if group.name not in public:
+            public[group.name] = image_is_public(group.name)
+        if not public[group.name]:
+            continue
+        for nb_name in group.notebooks:
+            mapping[os.path.join(group.directory, nb_name)] = (
+                f"{IMAGE_PREFIX}/{group.name}"
+            )
+    print(f"{sum(public.values())} of {len(public)} image groups are public")
+    return mapping
 
 
 def get_dandiset_metadata(dandiset_id: str) -> Optional[Dict[str, Any]]:
@@ -122,6 +176,7 @@ def collect_metadata() -> List[Dict[str, Any]]:
     as one-click-runnable for other reasons.
     """
     colab_excl = load_exclusion_patterns(COLAB_EXCLUSIONS)
+    docker_images = docker_images_by_notebook()
 
     dandisets = []
     for folder in os.listdir('.'):
@@ -143,6 +198,7 @@ def collect_metadata() -> List[Dict[str, Any]]:
                             f"dandi/example-notebooks/blob/master/{repo_rel}"
                             if eligible else ""
                         ),
+                        "docker_image": docker_images.get(repo_rel, ""),
                     })
                 dandisets.append({
                     'id': folder,
@@ -179,6 +235,10 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, 'index.html'), 'w') as f:
         f.write(output)
+
+    help_template = env.get_template('docker-help.html')
+    with open(os.path.join(output_dir, 'docker-help.html'), 'w') as f:
+        f.write(help_template.render(example_image="001550-paganlab"))
 
     assets_dir = os.path.join(template_dir, 'assets')
     if os.path.isdir(assets_dir):

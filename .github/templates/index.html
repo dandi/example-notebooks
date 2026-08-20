@@ -230,7 +230,6 @@
             font-size: 15.5px;
             line-height: 1.65;
             margin: 0 0 24px;
-            max-width: 70ch;
             font-weight: 400;
         }
 
@@ -345,6 +344,38 @@
             height: 20px;
             display: block;
         }
+        .notebooks button.docker-badge {
+            flex-shrink: 0;
+            height: 20px;
+            padding: 0 8px;
+            border: none;
+            border-radius: 4px;
+            background: #1D63ED;
+            color: #fff;
+            font: 600 11px/20px "Roboto", sans-serif;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .notebooks button.docker-badge:hover { opacity: 1; }
+        .notebooks button.docker-badge.copied { background: #1a7f37; }
+        .notebooks a.docker-help-link {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 50%;
+            color: var(--ink-faint);
+            font: 600 11px/16px "Roboto", sans-serif;
+            text-align: center;
+            text-decoration: none;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .notebooks a.docker-help-link::before { display: none; }
+        .notebooks a.docker-help-link:hover {
+            color: var(--navy);
+            border-color: var(--navy);
+        }
 
         /* Footer */
         footer.site {
@@ -438,6 +469,15 @@
                                         {% if notebook.colab_eligible %}
                                         <a class="colab-badge" href="{{ notebook.colab_url }}" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         {% endif %}
+                                        {% if notebook.docker_image %}
+                                        <button class="docker-badge" type="button"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 {{ notebook.docker_image }}:latest"
+                                                title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
+                                                aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
+                                        {% endif %}
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -457,5 +497,20 @@
             <a href="https://github.com/dandi/example-notebooks" target="_blank" rel="noopener">github.com/dandi/example-notebooks</a>
         </div>
     </footer>
+    <script>
+        document.querySelectorAll("button.docker-badge").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                navigator.clipboard.writeText(btn.dataset.cmd).then(function () {
+                    var original = btn.textContent;
+                    btn.textContent = "copied!";
+                    btn.classList.add("copied");
+                    setTimeout(function () {
+                        btn.textContent = original;
+                        btn.classList.remove("copied");
+                    }, 1500);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
