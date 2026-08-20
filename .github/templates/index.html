@@ -345,6 +345,23 @@
         }
         .notebooks button.docker-badge:hover { opacity: 1; }
         .notebooks button.docker-badge.copied { background: #1a7f37; }
+        .notebooks a.docker-help-link {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 50%;
+            color: var(--ink-faint);
+            font: 600 11px/16px "Roboto", sans-serif;
+            text-align: center;
+            text-decoration: none;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .notebooks a.docker-help-link::before { display: none; }
+        .notebooks a.docker-help-link:hover {
+            color: var(--navy);
+            border-color: var(--navy);
+        }
 
         /* Footer */
         footer.site {
@@ -440,6 +457,9 @@
                                                 data-cmd="docker run --rm -p 127.0.0.1:8888:8888 {{ notebook.docker_image }}:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
+                                        <a class="docker-help-link" href="docker-help.html"
+                                           title="What is this? How to run this notebook with Docker"
+                                           aria-label="Help: running notebooks with Docker">?</a>
                                         {% endif %}
                                     </div>
                                 </li>

@@ -235,6 +235,10 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     with open(os.path.join(output_dir, 'index.html'), 'w') as f:
         f.write(output)
 
+    help_template = env.get_template('docker-help.html')
+    with open(os.path.join(output_dir, 'docker-help.html'), 'w') as f:
+        f.write(help_template.render(example_image="001550-paganlab"))
+
 if __name__ == "__main__":
     dandisets = collect_metadata()
     render_webpage(dandisets)
