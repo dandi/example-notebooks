@@ -82,5 +82,9 @@ LABEL org.opencontainers.image.source="https://github.com/dandi/example-notebook
       org.dandiarchive.build-hash="${BUILD_HASH}"
 
 EXPOSE 8888
+# custom_display_url: without it Jupyter also prints a URL built from the
+# container's internal hostname, which does not resolve on the host and
+# misleads users into clicking a dead link.
 CMD jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser \
+    --ServerApp.custom_display_url="http://127.0.0.1:8888" \
     --ServerApp.default_url="/lab/tree/${DEFAULT_NOTEBOOK}"
