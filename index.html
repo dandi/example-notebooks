@@ -122,6 +122,63 @@
             margin: 0;
         }
 
+        /* Overview band */
+        section.overview {
+            background: var(--bg-soft);
+            border-bottom: 1px solid var(--rule);
+            padding: 28px 0;
+        }
+        .overview-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+        }
+        .stats {
+            display: flex;
+            gap: 44px;
+            flex-shrink: 0;
+        }
+        .stat-n {
+            font-family: 'Roboto Slab', Georgia, serif;
+            font-weight: 600;
+            font-size: 30px;
+            line-height: 1.1;
+            color: var(--navy);
+        }
+        .stat-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-top: 4px;
+        }
+        .run-options {
+            max-width: 60ch;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--ink-soft);
+        }
+        .run-options p { margin: 0 0 8px; }
+        .run-options p:last-child { margin-bottom: 0; }
+        .run-options a { color: var(--navy); }
+        .colab-inline { height: 18px; vertical-align: text-bottom; }
+        .docker-inline {
+            display: inline-block;
+            padding: 0 8px;
+            border-radius: 4px;
+            background: #1D63ED;
+            color: #fff;
+            font: 600 11px/18px 'Roboto', sans-serif;
+            vertical-align: text-bottom;
+        }
+        @media (max-width: 900px) {
+            .overview-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .stats { gap: 32px; }
+        }
+
         /* Main layout */
         .main-wrap { padding: 64px 0 0; }
 
@@ -440,6 +497,26 @@
             <img class="hero-logo" src="dandi-logo.svg" alt="DANDI logo">
         </div>
     </header>
+
+    <section class="overview">
+        <div class="container overview-row">
+            <div class="stats" aria-label="Page statistics">
+                <div class="stat"><div class="stat-n">33</div><div class="stat-label">dandisets</div></div>
+                <div class="stat"><div class="stat-n">62</div><div class="stat-label">notebooks</div></div>
+                <div class="stat"><div class="stat-n">35</div><div class="stat-label">Colab-ready</div></div>
+                <div class="stat"><div class="stat-n">30</div><div class="stat-label">container images</div></div>
+            </div>
+            <div class="run-options">
+                <p><img class="colab-inline" src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab badge"> runs
+                   a notebook in your browser with one click; an install cell at the top
+                   sets up the exact pinned environment on Google Colab.</p>
+                <p><span class="docker-inline">docker</span> copies a command that runs the
+                   notebook on your own machine in a verified container with everything
+                   preinstalled &mdash; see
+                   <a href="docker-help.html">Running Notebooks with Docker</a>.</p>
+            </div>
+        </div>
+    </section>
 
     <div class="main-wrap">
         <div class="container">
