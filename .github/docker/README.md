@@ -11,11 +11,17 @@ remains runnable long after the hosted environments have moved on.
 ## Running a Notebook Image
 
 ```
-docker run --rm -p 8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest
+docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest
 ```
 
 Then open the `http://127.0.0.1:8888/lab?token=...` URL printed in the
-terminal. JupyterLab opens on the notebook with its dependencies already
+terminal. If you already have a Jupyter server running on port 8888 (common),
+Docker will refuse to start with an "address already in use" error; pick
+another host port, e.g. `-p 127.0.0.1:8890:8888`, and open
+`http://127.0.0.1:8890/lab?token=...` instead. The explicit `127.0.0.1:` in
+the port mapping matters: it keeps the server off your network interfaces,
+and it makes a port collision fail loudly instead of silently routing your
+browser to the other Jupyter server. JupyterLab opens on the notebook with its dependencies already
 installed; the install cell at the top is a no-op and can be skipped. The
 notebooks stream data from the DANDI Archive, so network access is still
 required at run time.
@@ -73,6 +79,7 @@ than silently changing a pinned version.
   dispatch a full rebuild. The `BASE_IMAGE` arg is also the knob for a future
   variant based on the official Colab runtime image.
 - Images run as root (`python:3.12-slim` has no unprivileged user) and keep
-  Jupyter's token auth enabled. The published port binding in the docs is
-  loopback-only via `-p 8888:8888` on a local machine; advise users not to
-  bind on public interfaces.
+  Jupyter's token auth enabled. The documented port mapping binds the host
+  side to `127.0.0.1` explicitly; a bare `-p 8888:8888` would bind all
+  interfaces, and on macOS it also loses silently to any local Jupyter server
+  already listening on `127.0.0.1:8888`.
