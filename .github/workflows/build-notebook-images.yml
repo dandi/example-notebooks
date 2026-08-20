@@ -125,6 +125,7 @@ jobs:
             touch /work/.smoke && rm /work/.smoke
             mkdir /work/.smoke-dir && rmdir /work/.smoke-dir
             python -c "import ipykernel"
+            python -c "import importlib.util, sys; sys.exit(0) if importlib.util.find_spec(\"pynwb\") is None else __import__(\"pynwb\")"
             jupyter-lab --version
           '
 
