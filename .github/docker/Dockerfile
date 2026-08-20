@@ -50,6 +50,16 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
+# pynwb rewrites its core-typemap cache inside site-packages at first import
+# when the wheel's shipped cache mismatches the installed hdmf; do it at
+# build time as root so the jovyan kernel never needs write access there.
+RUN python - <<'PYEOF'
+try:
+    import pynwb  # noqa: F401
+except ImportError:
+    pass
+PYEOF
+
 WORKDIR /work
 COPY --chown=jovyan:jovyan work/ /work/
 # WORKDIR created /work as root before the COPY; --chown only covers the
