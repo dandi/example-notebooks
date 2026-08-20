@@ -229,7 +229,14 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template('index.html')
 
-    output = template.render(dandisets=dandisets)
+    all_notebooks = [nb for ds in dandisets for nb in ds['notebooks']]
+    stats = {
+        'n_dandisets': len(dandisets),
+        'n_notebooks': len(all_notebooks),
+        'n_colab': sum(1 for nb in all_notebooks if nb['colab_eligible']),
+        'n_docker': sum(1 for nb in all_notebooks if nb['docker_image']),
+    }
+    output = template.render(dandisets=dandisets, stats=stats)
 
     output_dir = os.path.join(current_dir, '..', '..', 'output')
     os.makedirs(output_dir, exist_ok=True)
