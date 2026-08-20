@@ -154,7 +154,10 @@ jobs:
 
   merge:
     needs: [list, build]
-    if: needs.list.outputs.groups != '[]' && inputs.push
+    # always(): one group's failed build must not skip the merge of every
+    # other group. The step below checks that this group's own per-arch
+    # images exist before merging.
+    if: always() && needs.list.outputs.groups != '[]' && inputs.push && needs.build.result != 'cancelled'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -194,6 +197,13 @@ jobs:
             echo "Manifest $IMAGE:$H already exists; skipping merge."
             exit 0
           fi
+          for arch in amd64 arm64; do
+            if ! docker manifest inspect "$IMAGE:$H-$arch" >/dev/null 2>&1; then
+              echo "Per-arch image $IMAGE:$H-$arch not found (its build failed" \
+                   "or was not pushed); skipping merge for this group."
+              exit 0
+            fi
+          done
           docker buildx imagetools create \
             -t "$IMAGE:latest" \
             -t "$IMAGE:sha-$(echo '${{ github.sha }}' | cut -c1-7)" \
