@@ -133,13 +133,16 @@ jobs:
         if: steps.check.outputs.up_to_date == 'false'
         # --user root so the harness's transient uv installs can write to
         # /usr/local; the pushed image still defaults to the jovyan user.
+        # --memory 7g mirrors a typical laptop Docker Desktop VM (runners have
+        # 16 GB), so notebooks that only fit on the runner fail here instead
+        # of OOM-killing a user's kernel.
         run: |
           mkdir -p "$RUNNER_TEMP/verify"
           echo '${{ steps.prepare.outputs.notebooks }}' \
             | python3 -c 'import json, sys; print("\n".join(json.load(sys.stdin)))' \
             | while IFS= read -r nb; do
                 echo "::group::verify $nb"
-                docker run --rm --user root \
+                docker run --rm --user root --memory 7g \
                   -v "$PWD/.github/scripts/run_notebook.py:/ci/run_notebook.py:ro" \
                   -v "$RUNNER_TEMP/verify:/out" \
                   '${{ steps.prepare.outputs.image }}:candidate' \
