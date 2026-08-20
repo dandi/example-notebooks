@@ -1,6 +1,7 @@
 import fnmatch
 import json
 import os
+import shutil
 import sys
 from typing import List, Dict, Any, Optional
 
@@ -238,6 +239,10 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     help_template = env.get_template('docker-help.html')
     with open(os.path.join(output_dir, 'docker-help.html'), 'w') as f:
         f.write(help_template.render(example_image="001550-paganlab"))
+
+    assets_dir = os.path.join(template_dir, 'assets')
+    if os.path.isdir(assets_dir):
+        shutil.copytree(assets_dir, output_dir, dirs_exist_ok=True)
 
 if __name__ == "__main__":
     dandisets = collect_metadata()

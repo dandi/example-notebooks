@@ -79,6 +79,21 @@
             pointer-events: none;
         }
         header.site .container { position: relative; z-index: 1; }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+        }
+        .hero-text { min-width: 0; }
+        .hero-logo {
+            flex-shrink: 0;
+            width: clamp(200px, 24vw, 340px);
+            height: auto;
+        }
+        @media (max-width: 720px) {
+            .hero-logo { display: none; }
+        }
         .eyebrow {
             font-family: 'Roboto Mono', monospace;
             font-size: 12px;
@@ -409,10 +424,13 @@
 </head>
 <body>
     <header class="site">
-        <div class="container">
-            <div class="eyebrow">Example Notebooks Index</div>
-            <h1 class="site-title">DANDI Datasets</h1>
-            <p class="site-lede">A curated index of example Jupyter notebooks for datasets hosted on the DANDI Archive — reference workflows for exploring open neurophysiology data across labs, species, and modalities.</p>
+        <div class="container hero">
+            <div class="hero-text">
+                <div class="eyebrow">DANDI Archive</div>
+                <h1 class="site-title">Example Notebooks</h1>
+                <p class="site-lede">A curated index of example Jupyter notebooks for datasets hosted on the DANDI Archive — reference workflows for exploring open neurophysiology data across labs, species, and modalities.</p>
+            </div>
+            <img class="hero-logo" src="dandi-logo.svg" alt="DANDI logo">
         </div>
     </header>
 
