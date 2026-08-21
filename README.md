@@ -39,7 +39,9 @@ that as a bound in `requirements.in` (e.g. `matplotlib<3.11`).
 
 > **Note:** notebooks are automatically tested in CI, made runnable in Google
 > Colab, and published as self-contained [container
-> images](.github/docker/README.md). Before opening a PR, see **[Adding a
+> images](.github/docker/README.md). The site also publishes a machine-readable
+> index at <https://notebooks.dandiarchive.org/notebooks.json> (per dandiset:
+> notebook paths with GitHub, Colab, and docker links) for other sites to embed. Before opening a PR, see **[Adding a
 > notebook: CI, Colab, and the exclusion lists](docs/adding-notebooks.md)**
 > for how the CI test works, headless-execution gotchas, and the `.github`
 > exclusion lists. (Some older submissions carry an `environment.yml` instead
