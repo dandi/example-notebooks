@@ -1,3 +1,4 @@
+import datetime
 import fnmatch
 import json
 import os
@@ -211,6 +212,42 @@ def collect_metadata() -> List[Dict[str, Any]]:
     return dandisets
 
 
+SITE_URL = "https://notebooks.dandiarchive.org"
+
+
+def machine_readable_index(dandisets: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """A stable JSON view of the index for other sites (e.g. dandiset landing
+    pages) to consume. Keys are additive; existing ones should not change."""
+    out: Dict[str, Any] = {}
+    for ds in dandisets:
+        notebooks = []
+        for nb in ds["notebooks"]:
+            repo_rel = f"{ds['id']}/{nb['path']}"
+            entry = {
+                "path": repo_rel,
+                "github_url": f"https://github.com/dandi/example-notebooks/blob/master/{repo_rel}",
+                "colab_url": nb["colab_url"] or None,
+                "docker_image": nb["docker_image"] or None,
+                "docker_command": (
+                    f"docker run --rm -p 127.0.0.1:8888:8888 {nb['docker_image']}:latest"
+                    if nb["docker_image"] else None
+                ),
+            }
+            notebooks.append(entry)
+        out[ds["id"]] = {
+            "index_url": f"{SITE_URL}/#dandiset-{ds['id']}",
+            "notebooks": notebooks,
+        }
+    return {
+        "schema_version": 1,
+        "generated": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "source": "https://github.com/dandi/example-notebooks",
+        "index_url": f"{SITE_URL}/",
+        "docker_help_url": f"{SITE_URL}/docker-help.html",
+        "dandisets": out,
+    }
+
+
 def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     """
     Render the webpage using the collected dandiset information.
@@ -247,6 +284,9 @@ def render_webpage(dandisets: List[Dict[str, Any]]) -> None:
     help_template = env.get_template('docker-help.html')
     with open(os.path.join(output_dir, 'docker-help.html'), 'w') as f:
         f.write(help_template.render(example_image="001550-paganlab"))
+
+    with open(os.path.join(output_dir, 'notebooks.json'), 'w') as f:
+        json.dump(machine_readable_index(dandisets), f, indent=2)
 
     assets_dir = os.path.join(template_dir, 'assets')
     if os.path.isdir(assets_dir):
