@@ -206,7 +206,8 @@ def collect_metadata() -> List[Dict[str, Any]]:
                     'notebooks': notebooks,
                 })
 
-    dandisets.sort(key=lambda x: x['id'])
+    # newest dandisets first
+    dandisets.sort(key=lambda x: x['id'], reverse=True)
     return dandisets
 
 
