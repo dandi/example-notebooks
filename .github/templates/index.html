@@ -290,6 +290,7 @@
 
         .dandiset p.description {
             color: var(--ink-soft);
+            overflow-wrap: anywhere;
             font-size: 15.5px;
             line-height: 1.65;
             margin: 0 0 24px;
@@ -379,7 +380,7 @@
             align-items: center;
             gap: 10px;
             transition: color 0.2s;
-            word-break: break-all;
+            overflow-wrap: anywhere;
             flex: 1;
             min-width: 0;
         }
@@ -483,6 +484,21 @@
             .container { padding: 0 22px; }
             .dandiset h2 { font-size: 23px; }
             .dandiset { padding: 36px 0 40px; }
+            /* The full table of contents would push the content a screen or
+               more down on a phone; keep the search box as the navigation. */
+            .toc-heading, .toc ul { display: none; }
+            aside.toc { padding-bottom: 8px; }
+            .dandiset-head { flex-wrap: wrap; gap: 10px; }
+            .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
+            .stat-n { font-size: 26px; }
+            .notebooks {
+                margin-top: 24px;
+                padding: 14px 16px;
+            }
+            .notebooks li { padding: 12px 0; }
+            .notebooks .nb-row { gap: 10px 12px; }
+            /* Filename on its own line, badges together on the next. */
+            .notebooks a.nb-link { flex: 1 1 100%; }
         }
     </style>
 </head>
