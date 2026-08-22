@@ -14,7 +14,7 @@ on:
 
 # Deploys push to the same gh-pages branch; never run two at once.
 concurrency:
-  group: index-deploy
+  group: gh-pages-deploy
   cancel-in-progress: false
 
 jobs:

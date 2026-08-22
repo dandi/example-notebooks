@@ -15,6 +15,11 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    # Every gh-pages deploy across workflows shares this group so pushes to
+    # the branch never race.
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
 
@@ -61,6 +66,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: false
     steps:
       - name: Checkout gh-pages
         uses: actions/checkout@v4

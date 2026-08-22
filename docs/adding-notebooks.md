@@ -52,6 +52,14 @@ on an `ubuntu-latest` runner with Python 3.12. That script:
 > imports something the install cell doesn't pin, CI fails (even if it "works on
 > Colab," where that package happens to be preinstalled).
 
+For pull requests, CI also executes each changed notebook through a real
+Jupyter kernel and publishes the executed copy, outputs included, to the PR's
+preview site, linking it from a comment on the PR so reviewers can read the
+rendered results without running anything. The executed copies live only in
+the preview and are removed when the PR closes; nothing is committed to the
+branch. (PRs from forks get the executed notebooks as workflow artifacts
+instead, since fork workflows cannot deploy the preview.)
+
 `test-changed-notebooks.yml` only tests notebooks **changed in the PR**. A
 notebook already on `master` that would fail today is not re-run until it is
 touched again (or until the weekly sweep catches it). Don't assume "it's on

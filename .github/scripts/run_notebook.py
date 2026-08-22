@@ -69,11 +69,54 @@ def run(cmd, **kw):
     return subprocess.run(cmd, capture_output=True, text=True, **kw)
 
 
+ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def execute_with_kernel(tmp_nb: Path, executed_path: Path, nb_dir: Path,
+                        timeout: int, log_path: Path, finalize) -> int:
+    """Run the notebook through a real kernel via nbconvert, keeping outputs.
+
+    --allow-errors keeps going past a failing cell so the executed notebook
+    shows reviewers exactly where and how it failed; the error outputs are
+    then scanned to decide pass/fail.
+    """
+    executed_path.parent.mkdir(parents=True, exist_ok=True)
+    cmd = ["jupyter", "nbconvert", "--to", "notebook", "--execute", "--allow-errors",
+           f"--ExecutePreprocessor.timeout={timeout}",
+           "--ExecutePreprocessor.kernel_name=python3",
+           "--output", str(executed_path.resolve()), str(tmp_nb.resolve())]
+    print(f"\n=== executing notebook through the kernel ===\n  {' '.join(cmd)}", flush=True)
+    r = run(cmd, cwd=str(nb_dir))
+    with log_path.open("a") as f:
+        f.write(f"\n=== nbconvert rc={r.returncode} ===\n{r.stderr[-4000:]}\n")
+    if r.returncode != 0 or not executed_path.exists():
+        return finalize("execute", False, error=r.stderr[-3000:])
+
+    executed = nbformat.read(str(executed_path), as_version=4)
+    for i, cell in enumerate(executed.cells):
+        if cell.cell_type != "code":
+            continue
+        for out in cell.get("outputs", []):
+            if out.get("output_type") == "error":
+                tb = ANSI_RE.sub("", "\n".join(out.get("traceback", [])))
+                print(tb, flush=True)
+                return finalize("execute", False,
+                                error=f"cell {i}: {out.get('ename')}: {out.get('evalue')}\n{tb}",
+                                executed_notebook=str(executed_path))
+    return finalize("done", True, executed_notebook=str(executed_path))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("notebook")
     parser.add_argument("--output-dir", default="/tmp/notebook-test")
     parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument(
+        "--executed-output",
+        help="Execute through the real Jupyter kernel (nbconvert) instead of the "
+             "ipython script path and write the executed notebook, with outputs, "
+             "to this path. Used by the PR workflow to publish a reviewable copy.",
+    )
     args = parser.parse_args()
 
     nb_path = Path(args.notebook)
@@ -109,10 +152,10 @@ def main() -> int:
 
     log_path.write_text("")
 
-    r = run(
-        ["uv", "pip", "install", "--system",
-         "ipython", "nbconvert", "nbformat", *pins]
-    )
+    harness_deps = ["ipython", "nbconvert", "nbformat"]
+    if args.executed_output:
+        harness_deps.append("ipykernel")
+    r = run(["uv", "pip", "install", "--system", *harness_deps, *pins])
     with log_path.open("a") as f:
         f.write(f"=== install rc={r.returncode} ===\n")
         f.write(f"--- stdout ---\n{r.stdout[-2000:]}\n")
@@ -141,6 +184,10 @@ def main() -> int:
     )
     tmp_nb = out_dir / f"{slug}.toexec.ipynb"
     nbformat.write(nb_for_exec, str(tmp_nb))
+
+    if args.executed_output:
+        return execute_with_kernel(tmp_nb, Path(args.executed_output), nb_dir,
+                                   args.timeout, log_path, finalize)
 
     r = run(["jupyter", "nbconvert", "--to", "script", "--stdout", str(tmp_nb)])
     if r.returncode != 0:
