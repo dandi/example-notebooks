@@ -67,11 +67,38 @@ jobs:
         run: pip install --no-cache-dir uv nbformat
 
       - name: Run notebook
+        id: run
+        # Executes through the real kernel and keeps the executed notebook so
+        # reviewers can see the outputs.
         run: |
+          slug=$(python -c "import sys; sys.path.insert(0, '.github/scripts'); from run_notebook import slugify; print(slugify(sys.argv[1]))" "${{ matrix.notebook }}")
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
           python .github/scripts/run_notebook.py \
             "${{ matrix.notebook }}" \
             --output-dir "$RUNNER_TEMP/notebook-test" \
-            --timeout 3600
+            --timeout 3600 \
+            --executed-output "$RUNNER_TEMP/executed/$slug.ipynb"
+
+      - name: Render executed notebook to HTML
+        if: always() && steps.run.outputs.slug != ''
+        run: |
+          slug='${{ steps.run.outputs.slug }}'
+          if [ -f "$RUNNER_TEMP/executed/$slug.ipynb" ]; then
+            jupyter nbconvert --to html "$RUNNER_TEMP/executed/$slug.ipynb" \
+              --output "$slug.html" --output-dir "$RUNNER_TEMP/executed"
+            if [ '${{ job.status }}' = 'success' ]; then status=pass; else status=fail; fi
+            printf '%s\t%s\t%s\n' "$slug" "${{ matrix.notebook }}" "$status" \
+              > "$RUNNER_TEMP/executed/$slug.status.tsv"
+          fi
+
+      - name: Upload executed notebook
+        if: always() && steps.run.outputs.slug != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: executed-${{ steps.run.outputs.slug }}
+          path: ${{ runner.temp }}/executed/
+          retention-days: 14
+          if-no-files-found: ignore
 
       - name: Upload artifacts on failure
         if: failure()
@@ -80,3 +107,66 @@ jobs:
           name: failure-${{ strategy.job-index }}
           path: ${{ runner.temp }}/notebook-test/
           retention-days: 14
+
+  publish-executed:
+    name: Publish executed notebooks to the PR preview
+    needs: [detect, test]
+    # Fork PRs only get a read-only token, so they keep the artifacts but
+    # cannot deploy to gh-pages; same-repo PRs get clickable previews.
+    if: always() && needs.detect.outputs.any_changed == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: false
+    steps:
+      - name: Download executed notebooks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: executed-*
+          path: executed
+          merge-multiple: true
+
+      - name: Assemble preview files and comment
+        id: assemble
+        run: |
+          mkdir -p publish
+          cp executed/*.html publish/ 2>/dev/null || true
+          base="https://notebooks.dandiarchive.org/pr-preview/${{ github.event.pull_request.number }}/notebooks"
+          {
+            echo "## Executed notebooks"
+            echo
+            echo "CI executed the notebooks changed in this PR through a Jupyter kernel. Review the outputs here (each link is the notebook with its outputs, as a reader would see it):"
+            echo
+            for f in executed/*.status.tsv; do
+              [ -f "$f" ] || continue
+              IFS=$'\t' read -r slug notebook status < "$f"
+              if [ "$status" = pass ]; then mark="✅"; else mark="❌"; fi
+              echo "- $mark [\`$notebook\`]($base/$slug.html)"
+            done
+            echo
+            echo "_Last updated: commit \`${{ github.event.pull_request.head.sha }}\`. The executed copies live only in the preview and are removed when the PR closes; nothing is committed to the branch._"
+          } > comment.md
+          cat comment.md
+          if ls publish/*.html >/dev/null 2>&1; then echo "has_files=true" >> "$GITHUB_OUTPUT"; else echo "has_files=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Deploy executed notebooks to gh-pages
+        if: steps.assemble.outputs.has_files == 'true'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./publish
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}/notebooks
+          keep_files: true
+          commit_message: "Deploy executed notebooks for PR #${{ github.event.pull_request.number }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Comment PR with executed notebook links
+        if: steps.assemble.outputs.has_files == 'true'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: executed-notebooks
+          path: comment.md
