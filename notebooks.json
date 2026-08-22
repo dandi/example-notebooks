@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated": "2026-08-22T23:21:27+00:00",
+  "generated": "2026-08-22T23:23:25+00:00",
   "source": "https://github.com/dandi/example-notebooks",
   "index_url": "https://notebooks.dandiarchive.org/",
   "docker_help_url": "https://notebooks.dandiarchive.org/docker-help.html",
@@ -38,6 +38,18 @@
           "path": "001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
+          "docker_image": null,
+          "docker_command": null
+        }
+      ]
+    },
+    "001687": {
+      "index_url": "https://notebooks.dandiarchive.org/#dandiset-001687",
+      "notebooks": [
+        {
+          "path": "001687/wanglab/figure2-distance-tuning/figure2_distance_tuning.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001687/wanglab/figure2-distance-tuning/figure2_distance_tuning.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001687/wanglab/figure2-distance-tuning/figure2_distance_tuning.ipynb",
           "docker_image": null,
           "docker_command": null
         }
