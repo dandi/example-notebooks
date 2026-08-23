@@ -8,3 +8,4 @@ pynwb
 remfile
 pynwb<4
 hdmf<5
+pynapple<0.8

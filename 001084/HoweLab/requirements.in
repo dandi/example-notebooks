@@ -7,3 +7,5 @@ pynwb
 remfile
 pynwb<4
 hdmf<5
+pynwb<3.1
+# override: click<8.2

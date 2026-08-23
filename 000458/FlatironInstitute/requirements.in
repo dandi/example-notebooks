@@ -6,3 +6,4 @@ lindi
 pynwb
 pynwb<4
 hdmf<5
+numcodecs<0.16

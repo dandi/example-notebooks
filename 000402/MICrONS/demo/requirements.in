@@ -6,8 +6,6 @@ ndx-grayscalevolume
 ndx-icephys-meta
 ndx-spectrum
 numpy
-nwbwidgets
 pynwb
-pynwb<3
-hdmf<4
-zarr<3
+pynwb<4
+hdmf<5

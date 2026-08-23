@@ -150,10 +150,20 @@ Conventions:
 
 [`.github/colab-preinstalled.txt`](../.github/colab-preinstalled.txt) is a
 pip-freeze of the current Colab Python 3.13 runtime (numpy 2.1.3, etc.). Using
-it as a constraint keeps your pins aligned with Colab. When a notebook's needs
-are genuinely incompatible with a Colab version, the resolver falls back to a
-non-Colab version for that package — the user will then get a restart prompt,
-which is the correct trade-off.
+it as a constraint keeps your pins aligned with Colab. The constraint is hard:
+a package Colab preinstalls is pinned to Colab's version, and a requirement
+that conflicts with it fails to resolve. When a notebook genuinely needs a
+different version of one of those packages, declare an override in
+`requirements.in`:
+
+```
+# override: click<8.2
+```
+
+The override replaces Colab's pin for that package alone. Colab then downgrades
+it in the install cell and prompts for a runtime restart, which is the correct
+trade-off. Use overrides sparingly and only for the package that actually
+conflicts.
 
 > **nbformat gotcha:** cell `id` fields require `nbformat_minor >= 5`.
 > `lock_notebook.py` bumps this automatically when it prepends cells; only

@@ -154,7 +154,9 @@ def main() -> int:
 
     harness_deps = ["ipython", "nbconvert", "nbformat"]
     if args.executed_output:
-        harness_deps.append("ipykernel")
+        # Colab preinstalls ipywidgets; without it tqdm.auto raises inside a
+        # kernel ("IProgress not found") where the script path was fine.
+        harness_deps += ["ipykernel", "ipywidgets"]
     r = run(["uv", "pip", "install", "--system", *harness_deps, *pins])
     with log_path.open("a") as f:
         f.write(f"=== install rc={r.returncode} ===\n")
@@ -182,12 +184,20 @@ def main() -> int:
     nb_for_exec.cells[install_idx].source = (
         "# install cell skipped during CI (deps preinstalled into system Python)"
     )
+    if args.executed_output:
+        # nbconvert starts the kernel in the input notebook's own directory
+        # (not the process cwd), so the copy has to live beside the original
+        # for helper modules and relative data paths to resolve.
+        tmp_nb = nb_dir / f".{nb_path.stem}.toexec.ipynb"
+        nbformat.write(nb_for_exec, str(tmp_nb))
+        try:
+            return execute_with_kernel(tmp_nb, Path(args.executed_output), nb_dir,
+                                       args.timeout, log_path, finalize)
+        finally:
+            tmp_nb.unlink(missing_ok=True)
+
     tmp_nb = out_dir / f"{slug}.toexec.ipynb"
     nbformat.write(nb_for_exec, str(tmp_nb))
-
-    if args.executed_output:
-        return execute_with_kernel(tmp_nb, Path(args.executed_output), nb_dir,
-                                   args.timeout, log_path, finalize)
 
     r = run(["jupyter", "nbconvert", "--to", "script", "--stdout", str(tmp_nb)])
     if r.returncode != 0:
