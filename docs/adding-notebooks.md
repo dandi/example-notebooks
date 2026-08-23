@@ -54,8 +54,11 @@ on an `ubuntu-latest` runner with Python 3.13. That script:
 
 For pull requests, CI also executes each changed notebook through a real
 Jupyter kernel and publishes the executed copy, outputs included, to the PR's
-preview site, linking it from a comment on the PR so reviewers can read the
-rendered results without running anything. The executed copies live only in
+preview site, linking it from a checklist comment on the PR so reviewers can
+read the rendered results without running anything. The checklist lists every
+notebook under test from the start and each entry turns into a link as soon
+as that notebook finishes, so a large PR can be reviewed notebook by notebook
+while the rest are still running. The executed copies live only in
 the preview and are removed when the PR closes; nothing is committed to the
 branch. (PRs from forks get the executed notebooks as workflow artifacts
 instead, since fork workflows cannot deploy the preview.)
