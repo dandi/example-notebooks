@@ -12,3 +12,4 @@ scipy
 pynwb<4
 hdmf<5
 pynapple<0.11
+nemos<0.2.7
