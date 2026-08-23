@@ -1,0 +1,12 @@
+dandi
+h5py
+matplotlib
+ndx-fiber-photometry
+ndx-optogenetics
+ndx-ophys-devices
+numpy
+pandas
+pynwb
+remfile
+pynwb<4
+hdmf<5

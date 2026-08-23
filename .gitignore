@@ -5,3 +5,6 @@
 output/
 *.idea
 .vscode/settings.json
+
+# remfile disk caches written next to a notebook when it runs
+nwb-cache/
