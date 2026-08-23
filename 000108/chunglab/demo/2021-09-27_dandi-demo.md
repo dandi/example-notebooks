@@ -1,7 +1,6 @@
 ---
 jupyter:
   jupytext:
-    formats: ipynb,md
     text_representation:
       extension: .md
       format_name: markdown
@@ -313,6 +312,18 @@ def mosaic_shape(chunks, level):
                      lev["shape"][2] * lev["scale"][2]])
 
 
+def micrometer_extent(lo, image, scale):
+    """imshow extent for a y-x image, so a micrometer is the same length on both axes.
+
+    The voxels are not cubic (3.625 um along y against 2.564 um along x), so an
+    image drawn on its voxel grid is stretched by about 1.4 along x. Passing this
+    extent puts both axes in micrometers and lets the default aspect keep them
+    equal.
+    """
+    return [lo[2], lo[2] + image.shape[1] * scale[2],
+            lo[1] + image.shape[0] * scale[1], lo[1]]
+
+
 def read_mosaic(chunks, lo, hi, level=0, blend=True):
     """Read the box from `lo` to `hi` (z, y, x in micrometers), stitching every chunk in it."""
     lo, hi = np.asarray(lo, float), np.asarray(hi, float)
@@ -381,10 +392,11 @@ def photo_of(sample, subject=SUBJECT, dandiset=DANDISET):
 photo = photo_of(SAMPLE)
 
 fig, axes = plt.subplots(1, 2, figsize=(14, 7))
-axes[0].imshow(overview, cmap="cubehelix", vmax=np.percentile(overview, 99.5))
+axes[0].imshow(overview, cmap="cubehelix", vmax=np.percentile(overview, 99.5),
+               extent=micrometer_extent((z_um, 0, 0), overview, scale6))
 axes[0].set_title(f"sample-{SAMPLE} stain-YO, level {level}")
-axes[0].set_xlabel("x (the scan axis)")
-axes[0].set_ylabel("y (chunks tile along this axis)")
+axes[0].set_xlabel("x (the scan axis, um)")
+axes[0].set_ylabel("y (chunks tile along this axis, um)")
 if photo is not None:
     axes[1].imshow(photo[::-1, ::-1])
     axes[1].set_title("photograph of the slab")
@@ -420,15 +432,65 @@ print("region:", blended.shape, "voxels")
 fig, axes = plt.subplots(1, 2, figsize=(14, 7), sharex=True, sharey=True)
 for ax, img, title in ((axes[0], blended, "cosine blending"),
                        (axes[1], averaged, "plain average")):
-    ax.imshow(img, cmap="cubehelix", vmax=np.percentile(blended, 99.5))
+    ax.imshow(img, cmap="cubehelix", vmax=np.percentile(blended, 99.5),
+              extent=micrometer_extent(lo, img, scale))
     ax.set_title(title)
-    ax.set_xlabel("x")
-axes[0].set_ylabel("y")
+    ax.set_xlabel("x (um)")
+axes[0].set_ylabel("y (um)")
 plt.tight_layout()
 
 difference = np.abs(blended - averaged)
 print(f"the two differ by at most {difference.max():.0f} counts "
       f"({100 * difference.max() / max(blended.max(), 1):.1f}% of the peak)")
+```
+
+## The same comparison across the whole slab
+
+One seam at full resolution shows what blending does locally. Reading the whole slab both
+ways shows all eight boundaries at once. The profile below each image averages along the scan
+axis, which makes the steps easy to see: without blending the intensity jumps where one chunk
+gives way to the next, while the blended profile crosses the same boundaries smoothly. The
+slow undulation that survives in both is the illumination falloff within each chunk, which
+blending is not meant to correct.
+
+```python
+overview_averaged = read_mosaic(chunks_YO, (z_um, 0, 0),
+                                (z_um + scale6[0], slab[1], slab[2]),
+                                level=level, blend=False)[0]
+
+extent6 = micrometer_extent((z_um, 0, 0), overview, scale6)
+y_um = np.arange(overview.shape[0]) * scale6[1]
+boundaries = mosaic_offsets(chunks_YO, level)[1:]
+
+fig = plt.figure(figsize=(15, 9))
+grid = fig.add_gridspec(2, 2, height_ratios=[2.2, 1], hspace=0.3)
+for column, (image, title) in enumerate(((overview, "cosine blending"),
+                                         (overview_averaged, "plain average"))):
+    ax = fig.add_subplot(grid[0, column])
+    ax.imshow(image, cmap="cubehelix", vmax=np.percentile(overview, 99.5), extent=extent6)
+    ax.set_title(title)
+    ax.set_xlabel("x (um)")
+    ax.set_ylabel("y (um)")
+
+# Profiles averaged along the scan axis, over a few chunk boundaries. Tissue
+# structure dominates the overall shape, so the two are compared side by side:
+# the averaged profile steps where one chunk gives way to the next.
+window = (y_um > 19000) & (y_um < 42000)
+ax = fig.add_subplot(grid[1, :])
+ax.plot(y_um[window], overview[window].mean(axis=1), lw=1.2, label="cosine blending")
+ax.plot(y_um[window], overview_averaged[window].mean(axis=1), lw=1.2, label="plain average")
+for boundary in boundaries:
+    if window[np.argmin(np.abs(y_um - boundary))]:
+        ax.axvline(boundary, color="salmon", lw=0.8, ls="--", zorder=0)
+ax.set_xlabel("y (um), dashed lines mark where a chunk starts")
+ax.set_ylabel("mean over x")
+ax.legend(loc="upper right")
+
+difference = np.abs(overview - overview_averaged)
+print(f"the two overviews differ by at most {difference.max():.0f} counts "
+      f"({100 * difference.max() / max(overview.max(), 1):.1f}% of the peak), "
+      f"and differ at all only within {100 * (difference > 1).mean():.0f}% of the slab, "
+      "which is the overlapping margin")
 ```
 
 ## A caveat on the position metadata
