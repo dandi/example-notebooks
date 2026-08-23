@@ -1,0 +1,10 @@
+dandi
+h5py
+matplotlib
+ndx-anatomical-localization
+numpy
+pynwb
+remfile
+scikit-image
+pynwb<4
+hdmf<5

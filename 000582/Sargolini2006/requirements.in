@@ -1,0 +1,10 @@
+dandi
+fsspec
+h5py
+numpy
+plotly
+pynapple
+pynwb
+scipy
+pynwb<4
+hdmf<5

@@ -1,0 +1,11 @@
+colorcet
+dandi
+fsspec
+h5py
+matplotlib
+neuroconv
+numpy
+pandas
+pynwb
+pynwb<4
+hdmf<5

@@ -1,0 +1,13 @@
+dandi
+h5py
+jax
+matplotlib
+nemos
+numpy
+pandas
+pynapple
+pynwb
+remfile
+scipy
+pynwb<4
+hdmf<5

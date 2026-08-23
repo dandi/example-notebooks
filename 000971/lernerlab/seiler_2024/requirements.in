@@ -1,0 +1,9 @@
+aiohttp
+dandi
+fsspec
+h5py
+matplotlib
+numpy
+pynwb
+pynwb<4
+hdmf<5

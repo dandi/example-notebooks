@@ -56,7 +56,7 @@ RESTART = (
 )
 INSTALL_HEADER = (
     '#@title Installing requirements (click ▶ to run) { display-mode: "form" }\n'
-    "# Colab provides Python 3.12. We install with `uv --system` because Colab's\n"
+    "# Colab provides Python 3.13. We install with `uv --system` because Colab's\n"
     "# kernel runs outside a virtualenv. All versions (direct + transitive) are\n"
     "# pinned below so the notebook is reproducible regardless of resolver drift.\n"
     "!pip install -q uv\n"
@@ -80,7 +80,7 @@ def requirements_for(nb_path: Path) -> Path:
 def compile_pins(requirements: Path) -> list[str]:
     cmd = [
         "uv", "pip", "compile", str(requirements),
-        "--python-version", "3.12",
+        "--python-version", "3.13",
         "--python-platform", "linux",
         "--constraint", str(CONSTRAINT),
         "--no-header", "--no-annotate",

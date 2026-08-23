@@ -35,7 +35,7 @@ Two workflows execute notebooks:
 | [`test-all-notebooks-weekly.yml`](../.github/workflows/test-all-notebooks-weekly.yml) | Mondays 06:00 UTC + manual dispatch | Every testable notebook; opens an issue on failure |
 
 Both call [`.github/scripts/run_notebook.py`](../.github/scripts/run_notebook.py)
-on an `ubuntu-latest` runner with Python 3.12. That script:
+on an `ubuntu-latest` runner with Python 3.13. That script:
 
 1. Finds the **install cell** (the first code cell containing
    `!uv pip install --system`) and extracts the pinned package list from it.
@@ -84,7 +84,7 @@ Every testable notebook begins with four cells (the pattern established in
 3. **Install cell** (code) — the one CI keys off:
    ```python
    #@title Installing requirements (click ▶ to run) { display-mode: "form" }
-   # Colab provides Python 3.12. We install with `uv --system` because Colab's
+   # Colab provides Python 3.13. We install with `uv --system` because Colab's
    # kernel runs outside a virtualenv. All versions (direct + transitive) are
    # pinned below so the notebook is reproducible regardless of resolver drift.
    !pip install -q uv
@@ -105,7 +105,7 @@ Every testable notebook begins with four cells (the pattern established in
 Pinning **all** transitive deps (not just direct ones) makes the notebook
 reproducible forever — it can't break later when an upstream release changes a
 default. It's also what CI installs, so a green CI run means the exact pinned
-set works on Python 3.12 / linux.
+set works on Python 3.13 / linux.
 
 ## Generating the install cell
 
@@ -127,7 +127,7 @@ prepending them when absent, or refreshing the pin block in place (existing
 
 ```bash
 uv pip compile requirements.in \
-    --python-version 3.12 \
+    --python-version 3.13 \
     --python-platform linux \
     --constraint .github/colab-preinstalled.txt
 ```
@@ -149,7 +149,7 @@ Conventions:
   an upper bound in `requirements.in` (`matplotlib<3.11`) and re-run the script.
 
 [`.github/colab-preinstalled.txt`](../.github/colab-preinstalled.txt) is a
-pip-freeze of the current Colab Python 3.12 runtime (numpy 2.0.2, etc.). Using
+pip-freeze of the current Colab Python 3.13 runtime (numpy 2.1.3, etc.). Using
 it as a constraint keeps your pins aligned with Colab. When a notebook's needs
 are genuinely incompatible with a Colab version, the resolver falls back to a
 non-Colab version for that package — the user will then get a restart prompt,

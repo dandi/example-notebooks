@@ -1,0 +1,8 @@
+dandi
+fsspec
+h5py
+ipython
+lindi
+pynwb
+pynwb<4
+hdmf<5

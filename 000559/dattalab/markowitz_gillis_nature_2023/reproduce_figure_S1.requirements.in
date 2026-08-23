@@ -1,0 +1,14 @@
+cellpose
+dandi
+fsspec
+h5py
+matplotlib
+numpy
+pandas
+pynwb
+scikit-image
+scipy
+seaborn
+tqdm
+pynwb<4
+hdmf<5

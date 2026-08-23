@@ -13,7 +13,7 @@
 #
 # The server runs as the non-root user jovyan (uid 1000).
 
-ARG BASE_IMAGE=python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+ARG BASE_IMAGE=python:3.13-slim@sha256:ffb752e139c0a19692a43af8d8523b274222dd68eebad5d583b45c2201c6e30a
 FROM ${BASE_IMAGE}
 
 # libgl1/libglib2.0-0/libxcb1 are runtime needs of opencv-python and similar

@@ -1,7 +1,7 @@
 """Run one Colab-bootstrap notebook end-to-end in a fresh-ish env.
 
 Used by CI to verify that the install cell's pinned deps actually install on
-Python 3.12 / linux x86_64, that any colocated helper `.py` files fetched via
+Python 3.13 / linux x86_64, that any colocated helper `.py` files fetched via
 `!curl` resolve, and that the notebook executes without an unhandled exception.
 
 The Jupyter ZMQ kernel can be flaky in CI sandboxes, so we sidestep it: extract
