@@ -68,10 +68,6 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 # Multiple missing imports (Parallel from joblib and others beyond pandas).
 000039/AllenInstitute/Create_manifest.ipynb
 
-# Dandiset 000108 reorganized: microscopy/ → micr/, .SPIM.h5 → .SPIM.ome.zarr.
-# Notebook needs a wholesale rewrite for the current data layout.
-000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
-
 # Hardcoded path `../../dandiset/sub-...` to a file no Colab user has.
 000363/MAP/demo/browse_map_ephys_data.ipynb
 

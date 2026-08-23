@@ -1,6 +1,12 @@
 bokeh
 dandi
+fsspec
+aiohttp
 matplotlib
 numpy
 pandas
+pillow
+requests
+scikit-image
 seaborn
+zarr
