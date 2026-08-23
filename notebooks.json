@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated": "2026-08-23T01:13:46+00:00",
+  "generated": "2026-08-23T01:51:11+00:00",
   "source": "https://github.com/dandi/example-notebooks",
   "index_url": "https://notebooks.dandiarchive.org/",
   "docker_help_url": "https://notebooks.dandiarchive.org/docker-help.html",
@@ -31,8 +31,8 @@
           "path": "001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
-          "docker_image": null,
-          "docker_command": null
+          "docker_image": "ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo:latest"
         },
         {
           "path": "001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
@@ -219,15 +219,15 @@
           "path": "000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/optogenetics_example_notebook.ipynb",
-          "docker_image": null,
-          "docker_command": null
+          "docker_image": "ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024:latest"
         },
         {
           "path": "000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook.ipynb",
-          "docker_image": null,
-          "docker_command": null
+          "docker_image": "ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000971-lernerlab-seiler-2024:latest"
         }
       ]
     },
