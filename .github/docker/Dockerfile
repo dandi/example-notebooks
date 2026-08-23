@@ -39,12 +39,15 @@ ENV PATH="/opt/uv-bin:${PATH}" \
 
 # ipykernel and nbformat resolve jointly with the pins in one invocation so
 # any conflict fails the build instead of silently changing a pinned version.
+# ipywidgets is part of the kernel environment for the same reason it is on
+# Colab: tqdm (and anything else that renders widgets) routes to ipywidgets
+# inside Jupyter and raises "IProgress not found" without it.
 # gcc/libc6-dev cover pins with no wheel for the target arch (e.g. old psutil
 # on arm64) and are purged in the same layer to keep the image slim.
 COPY requirements.txt /tmp/requirements.txt
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc libc6-dev \
-    && uv pip install --system --no-cache -r /tmp/requirements.txt ipykernel nbformat \
+    && uv pip install --system --no-cache -r /tmp/requirements.txt ipykernel ipywidgets nbformat \
     && python -m ipykernel install --name python3 --display-name "Python 3 (pinned)" \
     && apt-get purge -y gcc libc6-dev \
     && apt-get autoremove -y \
