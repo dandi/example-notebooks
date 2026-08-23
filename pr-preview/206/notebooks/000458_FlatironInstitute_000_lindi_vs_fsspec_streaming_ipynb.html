@@ -7950,74 +7950,16 @@ a.anchor-link {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_2410/3852795654.py</span> in <span class="ansi-cyan-fg">&lt;cell line: 0&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">from</span> fsspec <span class="ansi-green-fg">import</span> filesystem
-<span class="ansi-green-intense-fg ansi-bold">     11</span> <span class="ansi-green-fg">from</span> h5py <span class="ansi-green-fg">import</span> File
-<span class="ansi-green-fg">---&gt; 12</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> lindi
-<span class="ansi-green-intense-fg ansi-bold">     13</span> 
-<span class="ansi-green-intense-fg ansi-bold">     14</span> 
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/lindi/__init__.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> <span class="ansi-blue-fg">.</span>LindiH5ZarrStore <span class="ansi-green-fg">import</span> LindiH5ZarrStore<span class="ansi-blue-fg">,</span> LindiH5ZarrStoreOpts
-<span class="ansi-green-intense-fg ansi-bold">      2</span> from .LindiH5pyFile import (
-<span class="ansi-green-intense-fg ansi-bold">      3</span>     LindiH5pyFile<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>     LindiH5pyGroup<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     LindiH5pyDataset<span class="ansi-blue-fg">,</span>
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/lindi/LindiH5ZarrStore/__init__.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> <span class="ansi-blue-fg">.</span>LindiH5ZarrStore <span class="ansi-green-fg">import</span> LindiH5ZarrStore
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> <span class="ansi-blue-fg">.</span>LindiH5ZarrStoreOpts <span class="ansi-green-fg">import</span> LindiH5ZarrStoreOpts
-<span class="ansi-green-intense-fg ansi-bold">      3</span> 
-<span class="ansi-green-intense-fg ansi-bold">      4</span> __all__ = [
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     <span class="ansi-blue-fg">"LindiH5ZarrStore"</span><span class="ansi-blue-fg">,</span>
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/lindi/LindiH5ZarrStore/LindiH5ZarrStore.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">from</span> typing <span class="ansi-green-fg">import</span> Tuple<span class="ansi-blue-fg">,</span> Union<span class="ansi-blue-fg">,</span> List<span class="ansi-blue-fg">,</span> IO<span class="ansi-blue-fg">,</span> Any<span class="ansi-blue-fg">,</span> Dict<span class="ansi-blue-fg">,</span> Callable
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">import</span> numpy <span class="ansi-green-fg">as</span> np
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> zarr
-<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>storage <span class="ansi-green-fg">import</span> Store<span class="ansi-blue-fg">,</span> MemoryStore
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">import</span> h5py
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/zarr/__init__.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># flake8: noqa</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>codecs <span class="ansi-green-fg">import</span> <span class="ansi-blue-fg">*</span>
-<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> from zarr.convenience import (
-</span><span class="ansi-green-intense-fg ansi-bold">      4</span>     consolidate_metadata<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     copy<span class="ansi-blue-fg">,</span>
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/zarr/convenience.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-green-fg">from</span> collections<span class="ansi-blue-fg">.</span>abc <span class="ansi-green-fg">import</span> Mapping<span class="ansi-blue-fg">,</span> MutableMapping
-<span class="ansi-green-intense-fg ansi-bold">      7</span> 
-<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>_storage<span class="ansi-blue-fg">.</span>store <span class="ansi-green-fg">import</span> data_root<span class="ansi-blue-fg">,</span> meta_root<span class="ansi-blue-fg">,</span> assert_zarr_v3_api_available
-<span class="ansi-green-intense-fg ansi-bold">      9</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>core <span class="ansi-green-fg">import</span> Array
-<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>creation <span class="ansi-green-fg">import</span> array <span class="ansi-green-fg">as</span> _create_array
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/zarr/_storage/store.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> <span class="ansi-green-fg">from</span> typing <span class="ansi-green-fg">import</span> Any<span class="ansi-blue-fg">,</span> Dict<span class="ansi-blue-fg">,</span> List<span class="ansi-blue-fg">,</span> Mapping<span class="ansi-blue-fg">,</span> Optional<span class="ansi-blue-fg">,</span> Sequence<span class="ansi-blue-fg">,</span> Tuple<span class="ansi-blue-fg">,</span> Union
-<span class="ansi-green-intense-fg ansi-bold">      9</span> 
-<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>meta <span class="ansi-green-fg">import</span> Metadata2<span class="ansi-blue-fg">,</span> Metadata3
-<span class="ansi-green-intense-fg ansi-bold">     11</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>util <span class="ansi-green-fg">import</span> normalize_storage_path
-<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>context <span class="ansi-green-fg">import</span> Context
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/zarr/meta.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> 
-<span class="ansi-green-intense-fg ansi-bold">      9</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>errors <span class="ansi-green-fg">import</span> MetadataError
-<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>util <span class="ansi-green-fg">import</span> json_dumps<span class="ansi-blue-fg">,</span> json_loads
-<span class="ansi-green-intense-fg ansi-bold">     11</span> 
-<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">from</span> typing <span class="ansi-green-fg">import</span> cast<span class="ansi-blue-fg">,</span> Union<span class="ansi-blue-fg">,</span> Any<span class="ansi-blue-fg">,</span> List<span class="ansi-blue-fg">,</span> Mapping <span class="ansi-green-fg">as</span> MappingType<span class="ansi-blue-fg">,</span> Optional<span class="ansi-blue-fg">,</span> TYPE_CHECKING
-
-<span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/zarr/util.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     32</span> <span class="ansi-green-fg">from</span> numcodecs<span class="ansi-blue-fg">.</span>ndarray_like <span class="ansi-green-fg">import</span> NDArrayLike
-<span class="ansi-green-intense-fg ansi-bold">     33</span> <span class="ansi-green-fg">from</span> numcodecs<span class="ansi-blue-fg">.</span>registry <span class="ansi-green-fg">import</span> codec_registry
-<span class="ansi-green-fg">---&gt; 34</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> numcodecs<span class="ansi-blue-fg">.</span>blosc <span class="ansi-green-fg">import</span> cbuffer_sizes<span class="ansi-blue-fg">,</span> cbuffer_metainfo
-<span class="ansi-green-intense-fg ansi-bold">     35</span> <span class="ansi-green-fg">from</span> zarr<span class="ansi-blue-fg">.</span>types <span class="ansi-green-fg">import</span> DIMENSION_SEPARATOR
-<span class="ansi-green-intense-fg ansi-bold">     36</span> 
-
-<span class="ansi-red-fg">ImportError</span>: cannot import name 'cbuffer_sizes' from 'numcodecs.blosc' (/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/numcodecs/blosc.cpython-313-x86_64-linux-gnu.so)</pre>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Elapsed time for lindi: 6.50 s
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Elapsed time for fsspec: 13.01 s
+</pre>
 </div>
 </div>
 </div>
