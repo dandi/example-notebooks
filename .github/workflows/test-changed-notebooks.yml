@@ -8,6 +8,7 @@ on:
       - '.github/scripts/run_notebook.py'
       - '.github/scripts/list_notebooks.py'
       - '.github/scripts/pr_preview.py'
+      - '.github/workflows/deploy-executed-notebooks.yml'
       - '.github/workflows/test-changed-notebooks.yml'
 
 permissions:
@@ -54,8 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      actions: write
     strategy:
       fail-fast: false
       matrix:
@@ -107,24 +108,25 @@ jobs:
           retention-days: 14
           if-no-files-found: ignore
 
-      # Fork PRs only get a read-only token, so they keep the artifacts but
-      # cannot deploy to gh-pages; same-repo PRs get clickable previews that
-      # appear as each notebook finishes.
-      - name: Publish to the PR preview and update the checklist
+      # Every write to gh-pages has to go through the gh-pages-deploy
+      # concurrency group or it races the site deploys, so the matrix job
+      # does not push itself: it dispatches the deploy workflow, which
+      # publishes everything the run has produced so far and refreshes the
+      # checklist. The dispatch resolves the workflow file on the default
+      # branch, so it is best-effort here; the finalize job below covers the
+      # end state regardless. Fork PRs only get a read-only token and keep
+      # the artifacts instead.
+      - name: Request a preview deploy and checklist update
         if: always() && steps.run.outputs.slug != '' && github.event.pull_request.head.repo.full_name == github.repository
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          slug='${{ steps.run.outputs.slug }}'
-          if [ -f "$RUNNER_TEMP/executed/$slug.html" ]; then
-            python .github/scripts/pr_preview.py deploy \
-              --pr ${{ github.event.pull_request.number }} --slug "$slug" \
-              --html "$RUNNER_TEMP/executed/$slug.html"
-          fi
-          echo '${{ needs.detect.outputs.notebooks }}' > "$RUNNER_TEMP/notebooks.json"
-          python .github/scripts/pr_preview.py comment \
-            --pr ${{ github.event.pull_request.number }} --run-id ${{ github.run_id }} \
-            --notebooks "$RUNNER_TEMP/notebooks.json" --head-sha ${{ github.event.pull_request.head.sha }}
+          gh workflow run deploy-executed-notebooks.yml --ref ${{ github.event.repository.default_branch }} \
+            -f pr=${{ github.event.pull_request.number }} \
+            -f run_id=${{ github.run_id }} \
+            -f head_sha=${{ github.event.pull_request.head.sha }} \
+            -f notebooks='${{ needs.detect.outputs.notebooks }}' \
+            || echo "::notice::deploy workflow not dispatchable (not on the default branch yet); the checklist is finalized after the matrix"
 
       - name: Upload artifacts on failure
         if: failure()
@@ -137,18 +139,50 @@ jobs:
   finalize-checklist:
     name: Finalize the executed-notebook checklist
     needs: [detect, test]
-    # Each matrix job rebuilds the checklist when it finishes; this last pass
-    # closes the window where two jobs finishing together read a stale
-    # artifact list.
+    # The dispatched deploys are best-effort and may be collapsed or
+    # unavailable; this pass publishes the complete set and writes the
+    # final checklist.
     if: always() && needs.detect.outputs.any_changed == 'true' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       pull-requests: write
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+
+      - name: Download executed notebooks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: executed-*
+          path: executed
+          merge-multiple: true
+
+      - name: Collect preview files
+        id: collect
+        run: |
+          mkdir -p publish
+          cp executed/*.html publish/ 2>/dev/null || true
+          if ls publish/*.html >/dev/null 2>&1; then echo "has_files=true" >> "$GITHUB_OUTPUT"; else echo "has_files=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Deploy executed notebooks to gh-pages
+        if: steps.collect.outputs.has_files == 'true'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./publish
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}/notebooks
+          keep_files: true
+          commit_message: "Deploy executed notebooks for PR #${{ github.event.pull_request.number }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
       - name: Rebuild the checklist from the run's artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

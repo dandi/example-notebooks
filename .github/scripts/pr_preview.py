@@ -1,34 +1,27 @@
 """Publish an executed notebook to the PR preview and refresh the PR checklist.
 
-Each matrix job in test-changed-notebooks.yml calls this as soon as its own
-notebook has run, so reviewers see results trickle in rather than waiting for
-the whole matrix. Two subcommands:
-
-    pr_preview.py deploy --pr N --slug S --html path/to/S.html
-        Commits the rendered HTML to gh-pages under pr-preview/N/notebooks/
-        as a single-file commit through the Contents API. Parallel jobs
-        therefore never race on a git push; a 409 from a concurrent commit is
-        retried.
+Called by deploy-executed-notebooks.yml (dispatched by each matrix job of
+test-changed-notebooks.yml as its notebook finishes) and by that workflow's
+finalize job:
 
     pr_preview.py comment --pr N --run-id R --notebooks notebooks.json
-        Rebuilds the sticky "Executed notebooks" comment from the artifacts
-        the run has uploaded so far. A job uploads `executed-<slug>-pass` or
-        `executed-<slug>-fail` before calling this, so the comment is a pure
-        function of run state: concurrent rebuilds can reorder but never lose
-        a result, and the final rebuild after the matrix completes is exact.
 
-Requires `gh` authenticated with contents:write and pull-requests:write.
+Rebuilds the sticky "Executed notebooks" comment from the artifacts the test
+run has uploaded so far. A job uploads `executed-<slug>-pass`, `-fail` or
+`-none` before the deploy is requested, so the comment is a pure function of
+run state: concurrent rebuilds can reorder but never lose a result, and the
+final rebuild after the matrix completes is exact.
+
+Requires `gh` authenticated with pull-requests:write and actions:read.
 """
 
 from __future__ import annotations
 
 import argparse
-import base64
 import json
 import os
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -47,31 +40,6 @@ def gh_api(*args: str, input_json: dict | None = None) -> subprocess.CompletedPr
         cmd += ["--input", "-"]
     return subprocess.run(cmd, capture_output=True, text=True,
                           input=json.dumps(input_json) if input_json is not None else None)
-
-
-def deploy(pr: int, slug: str, html: Path) -> int:
-    path = f"pr-preview/{pr}/notebooks/{slug}.html"
-    content = base64.b64encode(html.read_bytes()).decode()
-    for attempt in range(6):
-        existing = gh_api(f"repos/{REPO}/contents/{path}?ref=gh-pages", "-q", ".sha")
-        body = {
-            "message": f"Deploy executed {slug} for PR #{pr}",
-            "content": content,
-            "branch": "gh-pages",
-            "committer": {"name": "github-actions[bot]",
-                          "email": "github-actions[bot]@users.noreply.github.com"},
-        }
-        if existing.returncode == 0 and existing.stdout.strip():
-            body["sha"] = existing.stdout.strip()
-        r = gh_api("-X", "PUT", f"repos/{REPO}/contents/{path}", input_json=body)
-        if r.returncode == 0:
-            print(f"deployed {PREVIEW_BASE.format(pr=pr)}/{slug}.html")
-            return 0
-        # 409: another job committed to gh-pages in between, or the file's sha
-        # moved. 422 covers a stale sha on an existing file. Both are transient.
-        print(f"deploy attempt {attempt + 1} failed: {r.stderr.strip()[-300:]}", file=sys.stderr)
-        time.sleep(2 ** attempt)
-    return 1
 
 
 def run_artifacts(run_id: str) -> set[str]:
@@ -126,10 +94,6 @@ def upsert_comment(pr: int, body: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="cmd", required=True)
-    d = sub.add_parser("deploy")
-    d.add_argument("--pr", type=int, required=True)
-    d.add_argument("--slug", required=True)
-    d.add_argument("--html", type=Path, required=True)
     c = sub.add_parser("comment")
     c.add_argument("--pr", type=int, required=True)
     c.add_argument("--run-id", required=True)
@@ -137,8 +101,6 @@ def main() -> int:
     c.add_argument("--head-sha", default="")
     args = parser.parse_args()
 
-    if args.cmd == "deploy":
-        return deploy(args.pr, args.slug, args.html)
     notebooks = json.loads(args.notebooks.read_text())
     body, complete = build_comment(args.pr, args.run_id, notebooks, args.head_sha[:7])
     print(body)
