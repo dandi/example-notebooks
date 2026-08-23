@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated": "2026-08-23T00:23:11+00:00",
+  "generated": "2026-08-23T00:30:20+00:00",
   "source": "https://github.com/dandi/example-notebooks",
   "index_url": "https://notebooks.dandiarchive.org/",
   "docker_help_url": "https://notebooks.dandiarchive.org/docker-help.html",
@@ -23,7 +23,7 @@
         {
           "path": "001712/IBL-Widefield/public_demo/processed_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/processed_widefield.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/processed_widefield.ipynb",
+          "colab_url": null,
           "docker_image": null,
           "docker_command": null
         },
@@ -31,13 +31,13 @@
           "path": "001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
-          "docker_image": "ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo-raw-widefield",
-          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo-raw-widefield:latest"
+          "docker_image": null,
+          "docker_command": null
         },
         {
           "path": "001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
+          "colab_url": null,
           "docker_image": null,
           "docker_command": null
         }
