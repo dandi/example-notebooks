@@ -61,10 +61,6 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 # Works in Colab (which has libxcb preinstalled).
 000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb
 
-# Calls webbrowser.open(), which raises "could not locate runnable browser"
-# in headless CI. Works in Colab.
-001170/ReimerLab/public_demo/001170_demo.ipynb
-
 # =============================================================================
 # Pre-existing notebook content bugs — track + fix in dedicated PRs.
 # =============================================================================

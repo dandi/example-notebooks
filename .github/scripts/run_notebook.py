@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import os
 import re
 import subprocess
 import sys
@@ -227,8 +228,18 @@ def main() -> int:
     log_f = log_path.open("a")
     log_f.write(f"\n=== execute (streaming) ===\n")
     log_f.flush()
+    # Force both plotting libraries into a headless mode for this path. Outside
+    # a Jupyter kernel plotly resolves its default renderer to "browser", and
+    # fig.show() then calls webbrowser.open, which raises on a headless runner;
+    # matplotlib likewise picks a GUI backend when one is available, which opens
+    # windows when the harness is run on a developer's machine. A real kernel
+    # (Colab, or JupyterLab in the notebook image) selects inline rendering for
+    # both by itself, so neither setting applies to the kernel path above.
+    env = {**os.environ,
+           "PLOTLY_RENDERER": os.environ.get("PLOTLY_RENDERER", "json"),
+           "MPLBACKEND": os.environ.get("MPLBACKEND", "Agg")}
     proc = subprocess.Popen(
-        cmd, cwd=str(nb_dir),
+        cmd, cwd=str(nb_dir), env=env,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         text=True, bufsize=1,
     )
