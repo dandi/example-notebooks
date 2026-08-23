@@ -15,14 +15,6 @@ compacta (SNc) was achieved via Cre-dependent ChRmine expression and red-light
 investigate how pathogenic LRRK2 kinase activity affects dopamine synaptic function
 in a subtype-specific manner.
 
-> **Authentication required** — DANDI:001933 is currently embargoed.
-> A DANDI API key is required to stream data. Set it as an environment variable:
-> ```bash
-> export DANDI_API_KEY=your_key_here
-> ```
-> In Colab: add it via the Secrets panel (key icon on the left) under the name
-> `DANDI_API_KEY`.
-
 **Reference:** Chen, He et al. (in preparation)
 
 ---
