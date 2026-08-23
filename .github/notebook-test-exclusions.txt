@@ -93,6 +93,13 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 000055/BruntonLab/peterson21/Table_coarse_labels.ipynb
 000055/BruntonLab/peterson21/Table_part_characteristics.ipynb
 
+# The only session published in Dandiset 001712 (sub-FD-28) has no
+# lab_meta_data["atlas_registration"], which these two notebooks need for
+# their atlas-overlay sections. The notebooks are ahead of the data; remove
+# once the registered files are uploaded.
+001712/IBL-Widefield/public_demo/processed_widefield.ipynb
+001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb
+
 # =============================================================================
 # Long-running notebooks — exceed the CI per-notebook timeout.
 # =============================================================================

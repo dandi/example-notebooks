@@ -7,6 +7,8 @@ on:
       - '.github/notebook-test-exclusions.txt'
       - '.github/scripts/run_notebook.py'
       - '.github/scripts/list_notebooks.py'
+      - '.github/scripts/pr_preview.py'
+      - '.github/workflows/deploy-executed-notebooks.yml'
       - '.github/workflows/test-changed-notebooks.yml'
 
 permissions:
@@ -27,7 +29,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
 
       - name: List changed .ipynb files (after exclusions)
         id: list
@@ -52,6 +54,9 @@ jobs:
     if: needs.detect.outputs.any_changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: read
+      actions: write
     strategy:
       fail-fast: false
       matrix:
@@ -61,7 +66,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
 
       - name: Install runner dependencies
         run: pip install --no-cache-dir uv nbformat
@@ -80,25 +85,48 @@ jobs:
             --executed-output "$RUNNER_TEMP/executed/$slug.ipynb"
 
       - name: Render executed notebook to HTML
+        id: render
         if: always() && steps.run.outputs.slug != ''
         run: |
           slug='${{ steps.run.outputs.slug }}'
+          status=none
           if [ -f "$RUNNER_TEMP/executed/$slug.ipynb" ]; then
             jupyter nbconvert --to html "$RUNNER_TEMP/executed/$slug.ipynb" \
               --output "$slug.html" --output-dir "$RUNNER_TEMP/executed"
-            if [ '${{ job.status }}' = 'success' ]; then status=pass; else status=fail; fi
-            printf '%s\t%s\t%s\n' "$slug" "${{ matrix.notebook }}" "$status" \
-              > "$RUNNER_TEMP/executed/$slug.status.tsv"
+            if [ '${{ steps.run.outcome }}' = 'success' ]; then status=pass; else status=fail; fi
           fi
+          echo "status=$status" >> "$GITHUB_OUTPUT"
 
+      # The artifact name carries the result, so the PR comment can be rebuilt
+      # from the run's artifact list alone (see pr_preview.py).
       - name: Upload executed notebook
         if: always() && steps.run.outputs.slug != ''
         uses: actions/upload-artifact@v4
         with:
-          name: executed-${{ steps.run.outputs.slug }}
+          name: executed-${{ steps.run.outputs.slug }}-${{ steps.render.outputs.status }}
           path: ${{ runner.temp }}/executed/
           retention-days: 14
           if-no-files-found: ignore
+
+      # Every write to gh-pages has to go through the gh-pages-deploy
+      # concurrency group or it races the site deploys, so the matrix job
+      # does not push itself: it dispatches the deploy workflow, which
+      # publishes everything the run has produced so far and refreshes the
+      # checklist. The dispatch resolves the workflow file on the default
+      # branch, so it is best-effort here; the finalize job below covers the
+      # end state regardless. Fork PRs only get a read-only token and keep
+      # the artifacts instead.
+      - name: Request a preview deploy and checklist update
+        if: always() && steps.run.outputs.slug != '' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy-executed-notebooks.yml --ref ${{ github.event.repository.default_branch }} \
+            -f pr=${{ github.event.pull_request.number }} \
+            -f run_id=${{ github.run_id }} \
+            -f head_sha=${{ github.event.pull_request.head.sha }} \
+            -f notebooks='${{ needs.detect.outputs.notebooks }}' \
+            || echo "::notice::deploy workflow not dispatchable (not on the default branch yet); the checklist is finalized after the matrix"
 
       - name: Upload artifacts on failure
         if: failure()
@@ -108,11 +136,12 @@ jobs:
           path: ${{ runner.temp }}/notebook-test/
           retention-days: 14
 
-  publish-executed:
-    name: Publish executed notebooks to the PR preview
+  finalize-checklist:
+    name: Finalize the executed-notebook checklist
     needs: [detect, test]
-    # Fork PRs only get a read-only token, so they keep the artifacts but
-    # cannot deploy to gh-pages; same-repo PRs get clickable previews.
+    # The dispatched deploys are best-effort and may be collapsed or
+    # unavailable; this pass publishes the complete set and writes the
+    # final checklist.
     if: always() && needs.detect.outputs.any_changed == 'true' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
@@ -122,6 +151,12 @@ jobs:
       group: gh-pages-deploy
       cancel-in-progress: false
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
       - name: Download executed notebooks
         uses: actions/download-artifact@v4
         with:
@@ -129,31 +164,15 @@ jobs:
           path: executed
           merge-multiple: true
 
-      - name: Assemble preview files and comment
-        id: assemble
+      - name: Collect preview files
+        id: collect
         run: |
           mkdir -p publish
           cp executed/*.html publish/ 2>/dev/null || true
-          base="https://notebooks.dandiarchive.org/pr-preview/${{ github.event.pull_request.number }}/notebooks"
-          {
-            echo "## Executed notebooks"
-            echo
-            echo "CI executed the notebooks changed in this PR through a Jupyter kernel. Review the outputs here (each link is the notebook with its outputs, as a reader would see it):"
-            echo
-            for f in executed/*.status.tsv; do
-              [ -f "$f" ] || continue
-              IFS=$'\t' read -r slug notebook status < "$f"
-              if [ "$status" = pass ]; then mark="✅"; else mark="❌"; fi
-              echo "- $mark [\`$notebook\`]($base/$slug.html)"
-            done
-            echo
-            echo "_Last updated: commit \`${{ github.event.pull_request.head.sha }}\`. The executed copies live only in the preview and are removed when the PR closes; nothing is committed to the branch._"
-          } > comment.md
-          cat comment.md
           if ls publish/*.html >/dev/null 2>&1; then echo "has_files=true" >> "$GITHUB_OUTPUT"; else echo "has_files=false" >> "$GITHUB_OUTPUT"; fi
 
       - name: Deploy executed notebooks to gh-pages
-        if: steps.assemble.outputs.has_files == 'true'
+        if: steps.collect.outputs.has_files == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -164,9 +183,12 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Comment PR with executed notebook links
-        if: steps.assemble.outputs.has_files == 'true'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          header: executed-notebooks
-          path: comment.md
+      - name: Rebuild the checklist from the run's artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install --no-cache-dir nbformat
+          echo '${{ needs.detect.outputs.notebooks }}' > "$RUNNER_TEMP/notebooks.json"
+          python .github/scripts/pr_preview.py comment \
+            --pr ${{ github.event.pull_request.number }} --run-id ${{ github.run_id }} \
+            --notebooks "$RUNNER_TEMP/notebooks.json" --head-sha ${{ github.event.pull_request.head.sha }}

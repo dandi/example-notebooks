@@ -1,0 +1,12 @@
+dandi
+h5py
+matplotlib
+numpy
+pandas
+pynwb
+remfile
+scipy
+seaborn
+tqdm
+pynwb<4
+hdmf<5

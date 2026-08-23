@@ -1,0 +1,11 @@
+dandi
+fsspec
+h5py
+matplotlib
+ndx-grayscalevolume
+ndx-icephys-meta
+ndx-spectrum
+numpy
+pynwb
+pynwb<4
+hdmf<5

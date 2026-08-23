@@ -35,7 +35,7 @@ Two workflows execute notebooks:
 | [`test-all-notebooks-weekly.yml`](../.github/workflows/test-all-notebooks-weekly.yml) | Mondays 06:00 UTC + manual dispatch | Every testable notebook; opens an issue on failure |
 
 Both call [`.github/scripts/run_notebook.py`](../.github/scripts/run_notebook.py)
-on an `ubuntu-latest` runner with Python 3.12. That script:
+on an `ubuntu-latest` runner with Python 3.13. That script:
 
 1. Finds the **install cell** (the first code cell containing
    `!uv pip install --system`) and extracts the pinned package list from it.
@@ -54,8 +54,11 @@ on an `ubuntu-latest` runner with Python 3.12. That script:
 
 For pull requests, CI also executes each changed notebook through a real
 Jupyter kernel and publishes the executed copy, outputs included, to the PR's
-preview site, linking it from a comment on the PR so reviewers can read the
-rendered results without running anything. The executed copies live only in
+preview site, linking it from a checklist comment on the PR so reviewers can
+read the rendered results without running anything. The checklist lists every
+notebook under test from the start and each entry turns into a link as soon
+as that notebook finishes, so a large PR can be reviewed notebook by notebook
+while the rest are still running. The executed copies live only in
 the preview and are removed when the PR closes; nothing is committed to the
 branch. (PRs from forks get the executed notebooks as workflow artifacts
 instead, since fork workflows cannot deploy the preview.)
@@ -84,7 +87,7 @@ Every testable notebook begins with four cells (the pattern established in
 3. **Install cell** (code) — the one CI keys off:
    ```python
    #@title Installing requirements (click ▶ to run) { display-mode: "form" }
-   # Colab provides Python 3.12. We install with `uv --system` because Colab's
+   # Colab provides Python 3.13. We install with `uv --system` because Colab's
    # kernel runs outside a virtualenv. All versions (direct + transitive) are
    # pinned below so the notebook is reproducible regardless of resolver drift.
    !pip install -q uv
@@ -105,7 +108,7 @@ Every testable notebook begins with four cells (the pattern established in
 Pinning **all** transitive deps (not just direct ones) makes the notebook
 reproducible forever — it can't break later when an upstream release changes a
 default. It's also what CI installs, so a green CI run means the exact pinned
-set works on Python 3.12 / linux.
+set works on Python 3.13 / linux.
 
 ## Generating the install cell
 
@@ -127,7 +130,7 @@ prepending them when absent, or refreshing the pin block in place (existing
 
 ```bash
 uv pip compile requirements.in \
-    --python-version 3.12 \
+    --python-version 3.13 \
     --python-platform linux \
     --constraint .github/colab-preinstalled.txt
 ```
@@ -149,11 +152,21 @@ Conventions:
   an upper bound in `requirements.in` (`matplotlib<3.11`) and re-run the script.
 
 [`.github/colab-preinstalled.txt`](../.github/colab-preinstalled.txt) is a
-pip-freeze of the current Colab Python 3.12 runtime (numpy 2.0.2, etc.). Using
-it as a constraint keeps your pins aligned with Colab. When a notebook's needs
-are genuinely incompatible with a Colab version, the resolver falls back to a
-non-Colab version for that package — the user will then get a restart prompt,
-which is the correct trade-off.
+pip-freeze of the current Colab Python 3.13 runtime (numpy 2.1.3, etc.). Using
+it as a constraint keeps your pins aligned with Colab. The constraint is hard:
+a package Colab preinstalls is pinned to Colab's version, and a requirement
+that conflicts with it fails to resolve. When a notebook genuinely needs a
+different version of one of those packages, declare an override in
+`requirements.in`:
+
+```
+# override: click<8.2
+```
+
+The override replaces Colab's pin for that package alone. Colab then downgrades
+it in the install cell and prompts for a runtime restart, which is the correct
+trade-off. Use overrides sparingly and only for the package that actually
+conflicts.
 
 > **nbformat gotcha:** cell `id` fields require `nbformat_minor >= 5`.
 > `lock_notebook.py` bumps this automatically when it prepends cells; only

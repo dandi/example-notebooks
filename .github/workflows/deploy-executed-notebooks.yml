@@ -1,0 +1,76 @@
+name: Deploy executed notebooks to a PR preview
+
+# Dispatched by each matrix job of test-changed-notebooks.yml as soon as its
+# notebook finishes. Runs under the same concurrency group as every other
+# gh-pages deploy, so the pushes are serialized instead of racing. Each run
+# deploys every executed notebook the test run has produced so far and
+# rebuilds the PR checklist, so GitHub collapsing queued dispatches into one
+# pending run loses nothing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number
+        required: true
+      run_id:
+        description: Run id of the test-changed-notebooks run holding the artifacts
+        required: true
+      head_sha:
+        description: Head commit of the PR
+        required: true
+      notebooks:
+        description: JSON list of the notebooks under test, in checklist order
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy PR #${{ inputs.pr }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Download the executed notebooks produced so far
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install --no-cache-dir nbformat
+          mkdir -p executed publish
+          gh run download ${{ inputs.run_id }} --pattern 'executed-*' --dir executed || true
+          find executed -name '*.html' -exec cp {} publish/ \;
+          ls publish
+          if ls publish/*.html >/dev/null 2>&1; then echo "has_files=true" >> "$GITHUB_ENV"; else echo "has_files=false" >> "$GITHUB_ENV"; fi
+
+      - name: Deploy to gh-pages
+        if: env.has_files == 'true'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./publish
+          destination_dir: pr-preview/${{ inputs.pr }}/notebooks
+          keep_files: true
+          commit_message: "Deploy executed notebooks for PR #${{ inputs.pr }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Update the PR checklist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          printf '%s' '${{ inputs.notebooks }}' > "$RUNNER_TEMP/notebooks.json"
+          python .github/scripts/pr_preview.py comment \
+            --pr ${{ inputs.pr }} --run-id ${{ inputs.run_id }} \
+            --notebooks "$RUNNER_TEMP/notebooks.json" --head-sha ${{ inputs.head_sha }}

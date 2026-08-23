@@ -23,7 +23,9 @@ Assumes `uv` is on PATH and `nbformat` is importable.
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
+import tempfile
 import sys
 from pathlib import Path
 
@@ -56,7 +58,7 @@ RESTART = (
 )
 INSTALL_HEADER = (
     '#@title Installing requirements (click ▶ to run) { display-mode: "form" }\n'
-    "# Colab provides Python 3.12. We install with `uv --system` because Colab's\n"
+    "# Colab provides Python 3.13. We install with `uv --system` because Colab's\n"
     "# kernel runs outside a virtualenv. All versions (direct + transitive) are\n"
     "# pinned below so the notebook is reproducible regardless of resolver drift.\n"
     "!pip install -q uv\n"
@@ -77,15 +79,52 @@ def requirements_for(nb_path: Path) -> Path:
     )
 
 
+OVERRIDE_PREFIX = "# override:"
+
+
+def overrides_in(requirements: Path) -> list[str]:
+    """Constraint overrides declared as `# override: <spec>` lines.
+
+    Colab's preinstalled versions are applied as constraints so installs stay
+    fast and compatible with the runtime. Occasionally a notebook's verified
+    stack needs an older version of one of those packages (e.g. the dandi
+    release that still reads a file needs click<8.2); an override line replaces
+    the Colab pin for that package alone, at the cost of Colab downgrading
+    it in the install cell.
+    """
+    return [
+        line[len(OVERRIDE_PREFIX):].strip()
+        for line in requirements.read_text().splitlines()
+        if line.strip().startswith(OVERRIDE_PREFIX) and line[len(OVERRIDE_PREFIX):].strip()
+    ]
+
+
 def compile_pins(requirements: Path) -> list[str]:
+    overrides = overrides_in(requirements)
+    constraint = CONSTRAINT
+    if overrides:
+        # Replace the Colab pin for each overridden package with the override.
+        overridden = {re.split(r"[<>=!~\s\[]", spec, 1)[0].lower().replace("_", "-")
+                      for spec in overrides}
+        kept = [line for line in CONSTRAINT.read_text().splitlines()
+                if line.strip() and not line.startswith("#")
+                and re.split(r"[<>=!~\s\[]", line.strip(), 1)[0].lower().replace("_", "-")
+                not in overridden]
+        with tempfile.NamedTemporaryFile("w", suffix=".constraints.txt", delete=False) as f:
+            f.write("\n".join(kept + overrides) + "\n")
+            constraint = Path(f.name)
     cmd = [
         "uv", "pip", "compile", str(requirements),
-        "--python-version", "3.12",
+        "--python-version", "3.13",
         "--python-platform", "linux",
-        "--constraint", str(CONSTRAINT),
+        "--constraint", str(constraint),
         "--no-header", "--no-annotate",
     ]
-    r = subprocess.run(cmd, capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    finally:
+        if constraint is not CONSTRAINT:
+            constraint.unlink(missing_ok=True)
     if r.returncode != 0:
         raise RuntimeError(f"uv pip compile failed for {requirements}:\n{r.stderr}")
     pins = [
