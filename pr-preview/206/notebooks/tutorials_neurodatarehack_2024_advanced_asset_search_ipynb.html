@@ -3,7 +3,34 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>tutorials_neurodatarehack_2024_advanced_asset_search_ipynb</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>tutorials_neurodatarehack_2024_advanced_asset_search_ipynb</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script>
+(function() {
+  function addWidgetsRenderer() {
+    var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
+    var scriptElement = document.createElement('script');
+    
+    var widgetRendererSrc = 'https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js';
+    
+    var widgetState;
+
+    // Fallback for older version:
+    try {
+      widgetState = mimeElement && JSON.parse(mimeElement.innerHTML);
+
+      if (widgetState && (widgetState.version_major < 2 || !widgetState.version_major)) {
+        
+        var widgetRendererSrc = 'https://unpkg.com/@jupyter-js-widgets@*/dist/embed.js';
+        
+      }
+    } catch(e) {}
+
+    scriptElement.src = widgetRendererSrc;
+    document.body.appendChild(scriptElement);
+  }
+
+  document.addEventListener('DOMContentLoaded', addWidgetsRenderer);
+}());
+</script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7921,37 +7948,20 @@ a.anchor-link {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[4]</span><span class="ansi-green-fg">, line 3</span>
-<span class="ansi-green-fg">      1</span> nwb_dandisets = []
-<span class="ansi-green-fg">      2</span> 
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> dandiset <span class="ansi-bold" style="color: rgb(0,135,0)">in</span> tqdm(dandisets):
-<span class="ansi-green-fg">      4</span>     raw_metadata = dandiset.get_raw_metadata()
-<span class="ansi-green-fg">      5</span> 
-<span class="ansi-green-fg">      6</span>     if any(
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:234</span>, in <span class="ansi-cyan-fg">tqdm_notebook.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">    232</span> unit_scale = <span class="ansi-green-fg">1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span class="ansi-green-fg">1</span>
-<span class="ansi-green-fg">    233</span> total = <span style="color: rgb(0,135,0)">self</span>.total * unit_scale <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.total <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.total
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">234</span> <span style="color: rgb(0,135,0)">self</span>.container = <span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">status_printer</span><span class="ansi-black-fg ansi-yellow-bg">(</span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">fp</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">total</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">desc</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">ncols</span><span class="ansi-black-fg ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    235</span> <span style="color: rgb(0,135,0)">self</span>.container.pbar = proxy(<span style="color: rgb(0,135,0)">self</span>)
-<span class="ansi-green-fg">    236</span> <span style="color: rgb(0,135,0)">self</span>.displayed = <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:108</span>, in <span class="ansi-cyan-fg">tqdm_notebook.status_printer</span><span class="ansi-blue-fg">(_, total, desc, ncols)</span>
-<span class="ansi-green-fg">     99</span> <span style="color: rgb(95,135,135)"># Fallback to text bar if there's no total</span>
-<span class="ansi-green-fg">    100</span> <span style="color: rgb(95,135,135)"># DEPRECATED: replaced with an 'info' style bar</span>
-<span class="ansi-green-fg">    101</span> <span style="color: rgb(95,135,135)"># if not total:</span>
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">    105</span> 
-<span class="ansi-green-fg">    106</span> <span style="color: rgb(95,135,135)"># Prepare IPython progress bar</span>
-<span class="ansi-green-fg">    107</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> IProgress <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:  <span style="color: rgb(95,135,135)"># #187 #451 #558 #872</span>
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">108</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(WARN_NOIPYW)
-<span class="ansi-green-fg">    109</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> total:
-<span class="ansi-green-fg">    110</span>     pbar = IProgress(<span style="color: rgb(0,135,0)">min</span>=<span class="ansi-green-fg">0</span>, <span style="color: rgb(0,135,0)">max</span>=total)
-
-<span class="ansi-red-fg">ImportError</span>: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html</pre>
+<div class="jupyter-widgets jp-OutputArea-output" id="f527aea8-7e36-450a-a8e1-75b7e783b3d0" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('f527aea8-7e36-450a-a8e1-75b7e783b3d0');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "0b730ccb41a3498b9a1264c08ae3d271", "version_major": 2, "version_minor": 0}
+</script>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>There are currently 555 NWB datasets on DANDI!
+</pre>
 </div>
 </div>
 </div>
@@ -8034,39 +8044,20 @@ a.anchor-link {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[5]</span><span class="ansi-green-fg">, line 33</span>
-<span class="ansi-green-fg">     29</span> all_subject_ages_in_days = []
-<span class="ansi-green-fg">     30</span> 
-<span class="ansi-green-fg">     31</span> dandiset = client.get_dandiset(<span class="ansi-yellow-fg">"000398"</span>)
-<span class="ansi-green-fg">     32</span> assets = list(dandiset.get_assets())
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">33</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> asset <span class="ansi-bold" style="color: rgb(0,135,0)">in</span> tqdm(assets):
-<span class="ansi-green-fg">     34</span>     raw_metadata = asset.get_raw_metadata()
-<span class="ansi-green-fg">     35</span>     subjects = raw_metadata[<span class="ansi-yellow-fg">"wasAttributedTo"</span>]
-<span class="ansi-green-fg">     36</span> 
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:234</span>, in <span class="ansi-cyan-fg">tqdm_notebook.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">    232</span> unit_scale = <span class="ansi-green-fg">1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span class="ansi-green-fg">1</span>
-<span class="ansi-green-fg">    233</span> total = <span style="color: rgb(0,135,0)">self</span>.total * unit_scale <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.total <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.total
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">234</span> <span style="color: rgb(0,135,0)">self</span>.container = <span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">status_printer</span><span class="ansi-black-fg ansi-yellow-bg">(</span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">fp</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">total</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">desc</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">ncols</span><span class="ansi-black-fg ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    235</span> <span style="color: rgb(0,135,0)">self</span>.container.pbar = proxy(<span style="color: rgb(0,135,0)">self</span>)
-<span class="ansi-green-fg">    236</span> <span style="color: rgb(0,135,0)">self</span>.displayed = <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:108</span>, in <span class="ansi-cyan-fg">tqdm_notebook.status_printer</span><span class="ansi-blue-fg">(_, total, desc, ncols)</span>
-<span class="ansi-green-fg">     99</span> <span style="color: rgb(95,135,135)"># Fallback to text bar if there's no total</span>
-<span class="ansi-green-fg">    100</span> <span style="color: rgb(95,135,135)"># DEPRECATED: replaced with an 'info' style bar</span>
-<span class="ansi-green-fg">    101</span> <span style="color: rgb(95,135,135)"># if not total:</span>
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">    105</span> 
-<span class="ansi-green-fg">    106</span> <span style="color: rgb(95,135,135)"># Prepare IPython progress bar</span>
-<span class="ansi-green-fg">    107</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> IProgress <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:  <span style="color: rgb(95,135,135)"># #187 #451 #558 #872</span>
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">108</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(WARN_NOIPYW)
-<span class="ansi-green-fg">    109</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> total:
-<span class="ansi-green-fg">    110</span>     pbar = IProgress(<span style="color: rgb(0,135,0)">min</span>=<span class="ansi-green-fg">0</span>, <span style="color: rgb(0,135,0)">max</span>=total)
-
-<span class="ansi-red-fg">ImportError</span>: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html</pre>
+<div class="jupyter-widgets jp-OutputArea-output" id="28d8273c-7cc3-45e7-afa8-1e84bd1d7d3f" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('28d8273c-7cc3-45e7-afa8-1e84bd1d7d3f');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "ac649a4a642445219d1f2b288cf5f1b2", "version_major": 2, "version_minor": 0}
+</script>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>The average age of the subjects in dandiset #398 is: 170.74276620370375 days
+</pre>
 </div>
 </div>
 </div>
@@ -8119,7 +8110,7 @@ Requirement already satisfied: certifi&gt;=2017.4.17 in /opt/hostedtoolcache/Pyt
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e23e50af-678f-4517-b0dc-ba10ba85d529">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e23e50af-678f-4517-b0dc-ba10ba85d529">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8135,25 +8126,6 @@ Requirement already satisfied: certifi&gt;=2017.4.17 in /opt/hostedtoolcache/Pyt
 <span class="kn">import</span><span class="w"> </span><span class="nn">remfile</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Exception ignored in: &lt;function tqdm.__del__ at 0x7f7668134720&gt;
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/std.py", line 1148, in __del__
-    self.close()
-  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py", line 277, in close
-    self.disp(bar_style='danger', check_delay=False)
-AttributeError: 'tqdm_notebook' object has no attribute 'disp'
-</pre>
 </div>
 </div>
 </div>
@@ -8189,38 +8161,13 @@ AttributeError: 'tqdm_notebook' object has no attribute 'disp'
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[8]</span><span class="ansi-green-fg">, line 4</span>
-<span class="ansi-green-fg">      1</span> s3_urls = get_s3_urls_and_dandi_paths(dandiset_id=<span class="ansi-yellow-fg">"000059"</span>)
-<span class="ansi-green-fg">      2</span> 
-<span class="ansi-green-fg">      3</span> num_units_per_asset = dict()
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">4</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> s3_url <span class="ansi-bold" style="color: rgb(0,135,0)">in</span> tqdm(s3_urls):
-<span class="ansi-green-fg">      5</span> 
-<span class="ansi-green-fg">      6</span>     rem_file = remfile.File(s3_url)
-<span class="ansi-green-fg">      7</span>     h5py_file = h5py.File(rem_file, <span class="ansi-yellow-fg">"r"</span>)
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:234</span>, in <span class="ansi-cyan-fg">tqdm_notebook.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">    232</span> unit_scale = <span class="ansi-green-fg">1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.unit_scale <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span class="ansi-green-fg">1</span>
-<span class="ansi-green-fg">    233</span> total = <span style="color: rgb(0,135,0)">self</span>.total * unit_scale <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.total <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span style="color: rgb(0,135,0)">self</span>.total
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">234</span> <span style="color: rgb(0,135,0)">self</span>.container = <span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">status_printer</span><span class="ansi-black-fg ansi-yellow-bg">(</span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">fp</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">total</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">desc</span><span class="ansi-black-fg ansi-yellow-bg">,</span><span class="ansi-black-fg ansi-yellow-bg"> </span><span class="ansi-black-fg ansi-yellow-bg">self</span><span class="ansi-black-fg ansi-yellow-bg">.</span><span class="ansi-black-fg ansi-yellow-bg">ncols</span><span class="ansi-black-fg ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    235</span> <span style="color: rgb(0,135,0)">self</span>.container.pbar = proxy(<span style="color: rgb(0,135,0)">self</span>)
-<span class="ansi-green-fg">    236</span> <span style="color: rgb(0,135,0)">self</span>.displayed = <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/tqdm/notebook.py:108</span>, in <span class="ansi-cyan-fg">tqdm_notebook.status_printer</span><span class="ansi-blue-fg">(_, total, desc, ncols)</span>
-<span class="ansi-green-fg">     99</span> <span style="color: rgb(95,135,135)"># Fallback to text bar if there's no total</span>
-<span class="ansi-green-fg">    100</span> <span style="color: rgb(95,135,135)"># DEPRECATED: replaced with an 'info' style bar</span>
-<span class="ansi-green-fg">    101</span> <span style="color: rgb(95,135,135)"># if not total:</span>
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">    105</span> 
-<span class="ansi-green-fg">    106</span> <span style="color: rgb(95,135,135)"># Prepare IPython progress bar</span>
-<span class="ansi-green-fg">    107</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> IProgress <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:  <span style="color: rgb(95,135,135)"># #187 #451 #558 #872</span>
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">108</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(WARN_NOIPYW)
-<span class="ansi-green-fg">    109</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> total:
-<span class="ansi-green-fg">    110</span>     pbar = IProgress(<span style="color: rgb(0,135,0)">min</span>=<span class="ansi-green-fg">0</span>, <span style="color: rgb(0,135,0)">max</span>=total)
-
-<span class="ansi-red-fg">ImportError</span>: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html</pre>
+<div class="jupyter-widgets jp-OutputArea-output" id="5646b5f9-5da4-4a5b-8b09-88eb7f15cade" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('5646b5f9-5da4-4a5b-8b09-88eb7f15cade');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "eeba00e745924728a916919849f38ec1", "version_major": 2, "version_minor": 0}
+</script>
 </div>
 </div>
 </div>
@@ -8246,7 +8193,30 @@ AttributeError: 'tqdm_notebook' object has no attribute 'disp'
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>{}</pre>
+<pre>{'https://dandiarchive.s3.amazonaws.com/blobs/093/2c2/0932c245-ac35-4dfd-be76-20ae328f43a4': 395,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/dac/f24/dacf2486-4b1c-4b7f-b3a6-43453670e436': 381,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/fd9/600/fd9600d5-3623-48fb-b84b-796b7e00b9cf': 365,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/f4f/37e/f4f37e2f-5b44-4ab9-a8a0-9fbdc218b357': 344,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/235/5bd/2355bdc4-394a-4a9e-bbd7-fbfcc4d9ec7b': 361,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/a19/13b/a1913b51-ab11-42af-a5ca-7b346d59ef37': 915,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/927/c68/927c68bb-82c2-4cdb-bde8-af836d0d1664': 1114,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/8ea/05c/8ea05cea-0159-4b78-9058-30de1348e7c7': 468,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/824/ef1/824ef138-56b9-4abc-bb3f-233d623c9f3e': 928,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/cd1/1ae/cd11ae52-a90d-48cc-bc16-c90113fd094b': 1024,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/45e/204/45e20453-213b-4dd2-ab89-fcaa92b2f891': 1730,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/fa7/9ee/fa79ee85-df07-403b-8c30-89bd2f2d7684': 854,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/9f8/0d9/9f80d963-413e-4c17-a18b-30aff27e0e56': 1827,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/f2f/f6b/f2ff6b52-63da-46a8-ac45-c70e792835a9': 855,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/503/121/50312181-7b3f-4456-bf12-3aa891b9ab31': 1384,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/4d4/da2/4d4da28c-15c9-4cd7-8aea-f09771f70c98': 1191,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/075/b32/075b32be-1c44-4e2f-8a91-3eeb182af587': 1509,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/85b/a21/85ba21dd-bafb-4523-a697-6b6342346e29': 1183,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/70f/91c/70f91c46-5ed4-4577-9fec-8d616ddd1364': 1664,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/dd2/649/dd264957-d469-4a1c-b303-ebb3a6a06be3': 1344,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/626/ac4/626ac469-e53b-4c83-a5db-8baf977dd62c': 584,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/af4/1b2/af41b25a-510c-4bad-abe3-d3fb6aec76b0': 476,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/4c4/f6f/4c4f6ff5-199b-4f5a-b241-4e5d6cf8a5ad': 409,
+ 'https://dandiarchive.s3.amazonaws.com/blobs/d6e/dc0/d6edc032-a51e-4890-a621-06e168fa788f': 1014}</pre>
 </div>
 </div>
 </div>
@@ -8272,7 +8242,7 @@ AttributeError: 'tqdm_notebook' object has no attribute 'disp'
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Dandiset #59 has a total of 0 identified spiking units!
+<pre>Dandiset #59 has a total of 22319 identified spiking units!
 </pre>
 </div>
 </div>
@@ -8453,4 +8423,7 @@ AttributeError: 'tqdm_notebook' object has no attribute 'disp'
 </div>
 </main>
 </body>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"05212cf34aed43c385de082a4c3d5bb5": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_ac3330c15477491880908c1f23dee3e8", "placeholder": "\u200b", "style": "IPY_MODEL_6a3e3ec9a64e4d159c8307cfb4e4dca4", "tabbable": null, "tooltip": null, "value": "100%"}}, "07049de95d9d4a539989001186767cc8": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "0b730ccb41a3498b9a1264c08ae3d271": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_6093d79c2c584247acb10d897e27b33e", "IPY_MODEL_757f8e1a342e43708ed78c4c8784e682", "IPY_MODEL_dadb8fdcd52744e3aa55a6686376903c"], "layout": "IPY_MODEL_62e0c108938141c3997a6bb09a20120b", "tabbable": null, "tooltip": null}}, "0b9f5bc62c2f43e0bcc455d80de1f7e1": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_e68de9bf70c64d5098b8f843efed85a5", "placeholder": "\u200b", "style": "IPY_MODEL_6643052f483847888bacbb8b38b48c77", "tabbable": null, "tooltip": null, "value": "100%"}}, "182269e230994d9589b0fe86377a1725": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "23719896922d479298c60b7b76139f72": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "23c00055718b409bbdfaec0880025bcf": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_28997fe0e3e042b9bbb498b43c6d7157", "max": 42.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_23719896922d479298c60b7b76139f72", "tabbable": null, "tooltip": null, "value": 42.0}}, "24bf0e445c8a4026854ba60882148e5a": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "28997fe0e3e042b9bbb498b43c6d7157": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3b38221f0d324402a817b8cf5e473328": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "542d894ed9eb47b6a2f0b01fb5b2ecab": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "5844a32c43b64ec68dcc58b743ef2207": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6093d79c2c584247acb10d897e27b33e": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_182269e230994d9589b0fe86377a1725", "placeholder": "\u200b", "style": "IPY_MODEL_ae9993b66efc4d3ba820cd519443356c", "tabbable": null, "tooltip": null, "value": "100%"}}, "62e0c108938141c3997a6bb09a20120b": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6643052f483847888bacbb8b38b48c77": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "6a3e3ec9a64e4d159c8307cfb4e4dca4": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "757f8e1a342e43708ed78c4c8784e682": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_24bf0e445c8a4026854ba60882148e5a", "max": 894.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_07049de95d9d4a539989001186767cc8", "tabbable": null, "tooltip": null, "value": 894.0}}, "79e64f3020624c98bab5329dc7c2e94f": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_f9c3ce6237da45e8aec4a9cf1aa06e5e", "placeholder": "\u200b", "style": "IPY_MODEL_fd33eaf53c304bde88fcccb97762ae9c", "tabbable": null, "tooltip": null, "value": "\u200742\/42\u2007[00:03&lt;00:00,\u200713.41it\/s]"}}, "8fd21ba1de524f82834f754f393ce24a": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "908a93c2e20e44e385b1b025ee0760e9": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "958d1f1a966c4c68abf40d080b749d49": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "ac3330c15477491880908c1f23dee3e8": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "ac649a4a642445219d1f2b288cf5f1b2": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_0b9f5bc62c2f43e0bcc455d80de1f7e1", "IPY_MODEL_23c00055718b409bbdfaec0880025bcf", "IPY_MODEL_79e64f3020624c98bab5329dc7c2e94f"], "layout": "IPY_MODEL_f4ba4416e8fa4ec0a11563c09f09a9c9", "tabbable": null, "tooltip": null}}, "acc247cfa3a64a63a414f592fe9f8744": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_908a93c2e20e44e385b1b025ee0760e9", "placeholder": "\u200b", "style": "IPY_MODEL_542d894ed9eb47b6a2f0b01fb5b2ecab", "tabbable": null, "tooltip": null, "value": "\u2007100\/100\u2007[02:56&lt;00:00,\u2007\u20071.58s\/it]"}}, "ae9993b66efc4d3ba820cd519443356c": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "d228657b487e477bbc05239327d53623": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_f47428cffd3742f6beab6cc6650ada24", "max": 100.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_958d1f1a966c4c68abf40d080b749d49", "tabbable": null, "tooltip": null, "value": 100.0}}, "dadb8fdcd52744e3aa55a6686376903c": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_5844a32c43b64ec68dcc58b743ef2207", "placeholder": "\u200b", "style": "IPY_MODEL_3b38221f0d324402a817b8cf5e473328", "tabbable": null, "tooltip": null, "value": "\u2007894\/894\u2007[01:03&lt;00:00,\u200714.19it\/s]"}}, "e68de9bf70c64d5098b8f843efed85a5": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "eeba00e745924728a916919849f38ec1": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_05212cf34aed43c385de082a4c3d5bb5", "IPY_MODEL_d228657b487e477bbc05239327d53623", "IPY_MODEL_acc247cfa3a64a63a414f592fe9f8744"], "layout": "IPY_MODEL_8fd21ba1de524f82834f754f393ce24a", "tabbable": null, "tooltip": null}}, "f47428cffd3742f6beab6cc6650ada24": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f4ba4416e8fa4ec0a11563c09f09a9c9": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f9c3ce6237da45e8aec4a9cf1aa06e5e": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "fd33eaf53c304bde88fcccb97762ae9c": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}}, "version_major": 2, "version_minor": 0}
+</script>
 </html>
