@@ -70,11 +70,6 @@ tutorials/cosyne_2023/advanced_asset_search.ipynb
 # that aren't imported.
 000039/AllenInstitute/Create_manifest.ipynb
 
-# Dandiset 000108's data layout was reorganized after this notebook was
-# written: microscopy/ → micr/, .SPIM.h5 → .SPIM.ome.zarr, and the path
-# pattern changed. Needs a wholesale rewrite, not an API-shape patch.
-000108/chunglab/demo/2021-09-27_dandi-demo.ipynb
-
 # Hardcoded path `../../dandiset/sub-...` to a file no contributor has
 # locally; needs a switch to streaming-from-DANDI.
 000363/MAP/demo/browse_map_ephys_data.ipynb
