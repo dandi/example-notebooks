@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated": "2026-08-24T06:51:08+00:00",
+  "generated": "2026-08-24T13:36:51+00:00",
   "source": "https://github.com/dandi/example-notebooks",
   "index_url": "https://notebooks.dandiarchive.org/",
   "docker_help_url": "https://notebooks.dandiarchive.org/docker-help.html",
@@ -423,9 +423,9 @@
         {
           "path": "000108/chunglab/demo/2021-09-27_dandi-demo.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb",
-          "colab_url": null,
-          "docker_image": null,
-          "docker_command": null
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb",
+          "docker_image": "ghcr.io/dandi/example-notebooks/000108-chunglab-demo",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000108-chunglab-demo:latest"
         },
         {
           "path": "000108/chunglab/demo/validate_lev6.ipynb",
