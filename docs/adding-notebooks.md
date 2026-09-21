@@ -236,7 +236,23 @@ other. Add a notebook to whichever applies, always with a one-line reason.
 [`.github/colab-preinstalled.txt`](../.github/colab-preinstalled.txt) — **not**
 an exclusion list. It's a snapshot of Colab's preinstalled package versions,
 used as the `uv pip compile --constraint` when generating install-cell pins (see
-[above](#generating-the-install-cell)). Refresh it when Colab bumps its runtime.
+[above](#generating-the-install-cell)). Colab rebuilds its image every week or
+two, and once the snapshot is stale the install cells downgrade Colab's newer
+packages back to the old pins. The
+[`refresh-colab-snapshot`](../.github/workflows/refresh-colab-snapshot.yml)
+workflow checks weekly and opens a PR when the snapshot has drifted. To do the
+same by hand:
+
+```
+python .github/scripts/refresh_colab_snapshot.py --relock
+```
+
+This rewrites the snapshot from
+[googlecolab/backend-info](https://github.com/googlecolab/backend-info) and
+re-locks every CI-tested notebook. A re-lock keeps each package at its current
+pin unless the snapshot or `requirements.in` forces a change, so packages Colab
+does not ship (dandi, pynwb, ...) stay at the versions the notebook was tested
+with. Pass `--upgrade` to `lock_notebook.py` to float those as well.
 
 ### `notebook-test-exclusions.txt` → "skip in CI"
 [`.github/notebook-test-exclusions.txt`](../.github/notebook-test-exclusions.txt)
