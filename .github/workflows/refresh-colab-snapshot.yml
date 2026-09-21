@@ -1,0 +1,80 @@
+name: Refresh Colab snapshot (weekly)
+
+# Colab rebuilds its runtime image every week or two. When its preinstalled
+# versions move past `.github/colab-preinstalled.txt`, the notebooks' install
+# cells start downgrading packages on Colab. This job compares the snapshot with
+# googlecolab/backend-info and, when they differ, opens (or updates) one PR that
+# refreshes the snapshot and re-locks the notebooks against it.
+
+on:
+  schedule:
+    # Mondays at 05:00 UTC, an hour before the weekly notebook test run
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-colab-snapshot
+  cancel-in-progress: false
+
+env:
+  BRANCH: bot/refresh-colab-snapshot
+
+jobs:
+  refresh:
+    name: Refresh snapshot and re-lock
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # A PAT lets the PR trigger "Test changed notebooks"; PRs opened with
+          # the default GITHUB_TOKEN do not trigger other workflows.
+          token: ${{ secrets.COLAB_REFRESH_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install tooling
+        run: pip install --no-cache-dir uv nbformat
+
+      - name: Refresh snapshot and re-lock notebooks
+        id: refresh
+        run: python .github/scripts/refresh_colab_snapshot.py --relock | tee refresh.log
+
+      - name: Open or update the PR
+        if: steps.refresh.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.COLAB_REFRESH_TOKEN || github.token }}
+        run: |
+          set -euo pipefail
+          {
+            echo "Colab's preinstalled package versions have moved past \`.github/colab-preinstalled.txt\`, so the notebooks' install cells were downgrading those packages on Colab. This refreshes the snapshot from [googlecolab/backend-info](https://github.com/googlecolab/backend-info) and re-locks every CI-tested notebook against it. Packages that Colab does not ship keep their current pins."
+            echo
+            echo "<details><summary>Snapshot changes</summary>"
+            echo
+            echo '```'
+            grep -E '^  \S+: ' refresh.log || true
+            echo '```'
+            echo
+            echo "</details>"
+          } > pr-body.md
+          rm -f refresh.log
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add -A -- .github/colab-preinstalled.txt '*.ipynb'
+          git commit -m "Refresh the Colab snapshot and re-lock notebooks"
+          git push --force origin "$BRANCH"
+
+          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            gh pr edit "$BRANCH" --body-file pr-body.md
+          else
+            gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" \
+              --title "Refresh the Colab snapshot and re-lock notebooks" \
+              --body-file pr-body.md
+          fi

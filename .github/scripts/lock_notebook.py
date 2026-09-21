@@ -14,8 +14,12 @@ is used. One `requirements.in` shared by all notebooks in a directory keeps
 their pin sets identical, so they are tested against one environment and are
 published together in one container image (see ../docker/README.md).
 
+Re-locking keeps each package at its currently pinned version unless the Colab
+snapshot or the requirements file forces a change; pass `--upgrade` to resolve
+everything to the newest allowed versions instead.
+
 Usage:
-    python .github/scripts/lock_notebook.py <notebook.ipynb> [...]
+    python .github/scripts/lock_notebook.py [--upgrade] <notebook.ipynb> [...]
 
 Assumes `uv` is on PATH and `nbformat` is importable.
 """
@@ -99,7 +103,15 @@ def overrides_in(requirements: Path) -> list[str]:
     ]
 
 
-def compile_pins(requirements: Path) -> list[str]:
+def compile_pins(requirements: Path, existing: list[str] | None = None) -> list[str]:
+    """Resolve `requirements` to a full pin set under the Colab constraints.
+
+    `existing` is the notebook's current pin set. It is handed to uv as the
+    previous lock, so packages keep their current version unless a constraint
+    or requirement forces a change. A refresh of the Colab snapshot then moves
+    only what Colab moved, and packages Colab does not ship (dandi, pynwb, ...)
+    stay where they were tested. Pass None to resolve everything afresh.
+    """
     overrides = overrides_in(requirements)
     constraint = CONSTRAINT
     if overrides:
@@ -120,11 +132,20 @@ def compile_pins(requirements: Path) -> list[str]:
         "--constraint", str(constraint),
         "--no-header", "--no-annotate",
     ]
+    previous = None
+    if existing:
+        # uv reads an existing --output-file as preferences for the new lock.
+        with tempfile.NamedTemporaryFile("w", suffix=".lock.txt", delete=False) as f:
+            f.write("\n".join(existing) + "\n")
+            previous = Path(f.name)
+        cmd += ["--output-file", str(previous)]
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, stdin=subprocess.DEVNULL)
     finally:
         if constraint is not CONSTRAINT:
             constraint.unlink(missing_ok=True)
+        if previous is not None:
+            previous.unlink(missing_ok=True)
     if r.returncode != 0:
         raise RuntimeError(f"uv pip compile failed for {requirements}:\n{r.stderr}")
     pins = [
@@ -145,15 +166,17 @@ def install_cell_source(pins: list[str], helpers: list[str]) -> str:
     return "\n".join(lines)
 
 
-def lock(nb_path: Path) -> None:
+def lock(nb_path: Path, upgrade: bool = False) -> None:
     requirements = requirements_for(nb_path)
-    pins = compile_pins(requirements)
     nb = nbformat.read(nb_path, as_version=4)
 
     try:
-        _, helpers, install_idx = find_install_cell(nb)
+        existing, helpers, install_idx = find_install_cell(nb)
     except RuntimeError:
-        helpers, install_idx = [], None
+        existing, helpers, install_idx = [], [], None
+    # Only `name==version` entries are usable as preferences (not git pins).
+    existing = [p for p in existing if re.fullmatch(r"[A-Za-z0-9._\[\],-]+==\S+", p)]
+    pins = compile_pins(requirements, None if upgrade else existing)
 
     if install_idx is not None:
         nb.cells[install_idx].source = install_cell_source(pins, helpers)
@@ -182,11 +205,14 @@ def lock(nb_path: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("notebooks", nargs="+", type=Path)
+    parser.add_argument("--upgrade", action="store_true",
+                        help="Ignore the notebook's current pins and resolve every "
+                             "package to the newest version the constraints allow")
     args = parser.parse_args()
     failures = 0
     for nb_path in args.notebooks:
         try:
-            lock(nb_path)
+            lock(nb_path, upgrade=args.upgrade)
         except Exception as e:
             print(f"error: {nb_path}: {e}", file=sys.stderr)
             failures += 1
