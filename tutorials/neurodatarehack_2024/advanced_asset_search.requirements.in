@@ -1,5 +1,6 @@
 dandi
 h5py
+ipywidgets
 isodate
 numpy
 nwbinspector
