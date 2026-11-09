@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated": "2026-11-02T06:47:21+00:00",
+  "generated": "2026-11-09T06:50:50+00:00",
   "source": "https://github.com/dandi/example-notebooks",
   "index_url": "https://notebooks.dandiarchive.org/",
   "docker_help_url": "https://notebooks.dandiarchive.org/docker-help.html",
@@ -33,13 +33,6 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-001712",
       "notebooks": [
         {
-          "path": "001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
-          "colab_url": null,
-          "docker_image": null,
-          "docker_command": null
-        },
-        {
           "path": "001712/IBL-Widefield/public_demo/processed_widefield.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/processed_widefield.ipynb",
           "colab_url": null,
@@ -52,6 +45,13 @@
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/raw_widefield.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001712-ibl-widefield-public-demo:latest"
+        },
+        {
+          "path": "001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001712/IBL-Widefield/public_demo/anatomical_localization_widefield.ipynb",
+          "colab_url": null,
+          "docker_image": null,
+          "docker_command": null
         }
       ]
     },
@@ -71,23 +71,16 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-001636",
       "notebooks": [
         {
-          "path": "001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
-          "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
-          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
-        },
-        {
-          "path": "001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
-          "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
-          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
-        },
-        {
           "path": "001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb",
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/antidromic_detection_tutorial.ipynb",
+          "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+        },
+        {
+          "path": "001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_usage.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
         },
@@ -97,6 +90,13 @@
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
+        },
+        {
+          "path": "001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb",
+          "docker_image": "ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001636-turnerlab-motor-cortex:latest"
         }
       ]
     },
@@ -104,16 +104,16 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-001550",
       "notebooks": [
         {
-          "path": "001550/PaganLab/02_optogenetics_demo.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001550/PaganLab/02_optogenetics_demo.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/02_optogenetics_demo.ipynb",
+          "path": "001550/PaganLab/01_behavior_demo.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/001550-paganlab",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
         },
         {
-          "path": "001550/PaganLab/01_behavior_demo.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/01_behavior_demo.ipynb",
+          "path": "001550/PaganLab/02_optogenetics_demo.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/001550/PaganLab/02_optogenetics_demo.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001550/PaganLab/02_optogenetics_demo.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/001550-paganlab",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/001550-paganlab:latest"
         }
@@ -314,6 +314,13 @@
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure-s1:latest"
         },
         {
+          "path": "000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
+          "docker_image": "ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-read-avi",
+          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-read-avi:latest"
+        },
+        {
           "path": "000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb",
           "colab_url": null,
@@ -326,13 +333,6 @@
           "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d:latest"
-        },
-        {
-          "path": "000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/read_avi.ipynb",
-          "docker_image": "ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-read-avi",
-          "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-read-avi:latest"
         }
       ]
     },
@@ -340,16 +340,16 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-000458",
       "notebooks": [
         {
-          "path": "000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
+          "path": "000458/FlatironInstitute/001_summarize_contents.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/000458-flatironinstitute",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
         },
         {
-          "path": "000458/FlatironInstitute/001_summarize_contents.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb",
-          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/001_summarize_contents.ipynb",
+          "path": "000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
+          "colab_url": "https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000458/FlatironInstitute/000_lindi_vs_fsspec_streaming.ipynb",
           "docker_image": "ghcr.io/dandi/example-notebooks/000458-flatironinstitute",
           "docker_command": "docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000458-flatironinstitute:latest"
         },
@@ -447,22 +447,15 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-000055",
       "notebooks": [
         {
-          "path": "000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb",
-          "colab_url": null,
-          "docker_image": null,
-          "docker_command": null
-        },
-        {
-          "path": "000055/BruntonLab/peterson21/Table_coarse_labels.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb",
-          "colab_url": null,
-          "docker_image": null,
-          "docker_command": null
-        },
-        {
           "path": "000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb",
           "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb",
+          "colab_url": null,
+          "docker_image": null,
+          "docker_command": null
+        },
+        {
+          "path": "000055/BruntonLab/peterson21/Table_part_characteristics.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
@@ -475,8 +468,15 @@
           "docker_command": null
         },
         {
-          "path": "000055/BruntonLab/peterson21/Table_part_characteristics.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_part_characteristics.ipynb",
+          "path": "000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb",
+          "colab_url": null,
+          "docker_image": null,
+          "docker_command": null
+        },
+        {
+          "path": "000055/BruntonLab/peterson21/Table_coarse_labels.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Table_coarse_labels.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
@@ -506,15 +506,15 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-000015",
       "notebooks": [
         {
-          "path": "000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb",
+          "path": "000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
         },
         {
-          "path": "000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb",
+          "path": "000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
@@ -537,15 +537,8 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-000010",
       "notebooks": [
         {
-          "path": "000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb",
-          "colab_url": null,
-          "docker_image": null,
-          "docker_command": null
-        },
-        {
-          "path": "000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb",
+          "path": "000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
@@ -558,8 +551,15 @@
           "docker_command": null
         },
         {
-          "path": "000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb",
+          "path": "000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb",
+          "colab_url": null,
+          "docker_image": null,
+          "docker_command": null
+        },
+        {
+          "path": "000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
@@ -570,15 +570,15 @@
       "index_url": "https://notebooks.dandiarchive.org/#dandiset-000009",
       "notebooks": [
         {
-          "path": "000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb",
+          "path": "000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
         },
         {
-          "path": "000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb",
-          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb",
+          "path": "000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb",
+          "github_url": "https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb",
           "colab_url": null,
           "docker_image": null,
           "docker_command": null
