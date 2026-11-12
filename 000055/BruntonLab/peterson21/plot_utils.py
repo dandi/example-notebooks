@@ -140,7 +140,7 @@ def clabel_table_create(
     Labels to include in the table are specified by common_acts."""
     with DandiAPIClient() as client:
         paths = []
-        for file in client.get_dandiset("000055", "draft").get_assets_with_path_prefix(""):
+        for file in client.get_dandiset("000055", "0.220127.0436").get_assets_with_path_prefix(""):
             paths.append(file.path)
     paths = natsort.natsorted(paths)
 
@@ -149,7 +149,7 @@ def clabel_table_create(
         fids = [val for val in paths if "sub-" + str(part_ind + 1).zfill(2) in val]
         for fid in fids:
             with DandiAPIClient() as client:
-                asset = client.get_dandiset("000055", "draft").get_asset_by_path(fid)
+                asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fid)
                 s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
             with NWBHDF5IO(s3_path, mode="r", driver="ros3") as io:
                 nwb = io.read()
@@ -208,7 +208,7 @@ def load_data_characteristics(nparts=12):
     and number of recording days for each participant."""
     with DandiAPIClient() as client:
         paths = []
-        for file in client.get_dandiset("000055", "draft").get_assets_with_path_prefix(""):
+        for file in client.get_dandiset("000055", "0.220127.0436").get_assets_with_path_prefix(""):
             paths.append(file.path)
     paths = natsort.natsorted(paths)
 
@@ -220,7 +220,7 @@ def load_data_characteristics(nparts=12):
         rec_days.append(len(fids))
         for fid in fids[:1]:
             with DandiAPIClient() as client:
-                asset = client.get_dandiset("000055", "draft").get_asset_by_path(fid)
+                asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fid)
                 s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
             with NWBHDF5IO(s3_path, mode="r", driver="ros3") as io:
                 nwb = io.read()
@@ -280,7 +280,7 @@ def plot_ecog_descript(
     electrodes side by side."""
     with DandiAPIClient() as client:
         paths = []
-        for file in client.get_dandiset("000055", "draft").get_assets_with_path_prefix(""):
+        for file in client.get_dandiset("000055", "0.220127.0436").get_assets_with_path_prefix(""):
             paths.append(file.path)
     paths = natsort.natsorted(paths)
 
@@ -303,7 +303,7 @@ def plot_ecog_descript(
         # Load NWB data file
         fids = [val for val in paths if "sub-" + str(part_ind + 1).zfill(2) in val]
         with DandiAPIClient() as client:
-            asset = client.get_dandiset("000055", "draft").get_asset_by_path(fids[0])
+            asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fids[0])
             s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
         with NWBHDF5IO(s3_path, mode="r", driver="ros3") as io:
             nwb = io.read()
@@ -872,7 +872,7 @@ def _get_wrist_trajs(
     """Load in wrist trajectories around move onset events."""
     with DandiAPIClient() as client:
         paths = []
-        for file in client.get_dandiset("000055", "draft").get_assets_with_path_prefix(""):
+        for file in client.get_dandiset("000055", "0.220127.0436").get_assets_with_path_prefix(""):
             paths.append(file.path)
     paths = natsort.natsorted(paths)
 
@@ -881,7 +881,7 @@ def _get_wrist_trajs(
         fids = [val for val in paths if "sub-" + str(pat + 1).zfill(2) in val]
         for i, fid in enumerate(fids):
             with DandiAPIClient() as client:
-                asset = client.get_dandiset("000055", "draft").get_asset_by_path(fid)
+                asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fid)
                 s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
             with NWBHDF5IO(
                 s3_path, mode="r", driver="ros3"
