@@ -53,7 +53,7 @@ CAVE_COREG_TABLE = "apl_functional_coreg_forward_v5"
 def get_microns_nwb_file(session_no:int, scan_no:int):
     file_path = f"sub-17797/sub-17797_ses-{session_no}-scan-{scan_no}_behavior+image+ophys.nwb"
     with DandiAPIClient() as client:
-        asset = client.get_dandiset(DANDISET_ID, 'draft').get_asset_by_path(file_path)
+        asset = client.get_dandiset(DANDISET_ID, "0.230307.2132").get_asset_by_path(file_path)
         s3_url = asset.get_content_url(follow_redirects=1, strip_query=True)
 
     # First, create a virtual filesystem based on the http protocol
