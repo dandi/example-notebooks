@@ -8,5 +8,5 @@ remfile
 scipy
 seaborn
 tqdm
-pynwb<4
-hdmf<5
+# The files of version 0.261124.1858 were written with pynwb 4.2
+pynwb>=4.2
