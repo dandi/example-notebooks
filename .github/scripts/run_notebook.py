@@ -3,6 +3,8 @@
 Used by CI to verify that the install cell's pinned deps actually install on
 Python 3.13 / linux x86_64, that any colocated helper `.py` files fetched via
 `!curl` resolve, and that the notebook executes without an unhandled exception.
+Helpers fetched from this repo's master branch are copied from the checkout
+instead, so a PR is tested against its own helpers.
 
 The Jupyter ZMQ kernel can be flaky in CI sandboxes, so we sidestep it: extract
 the pinned deps from the install cell, install them with `uv pip install
@@ -27,12 +29,18 @@ import copy
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
 from pathlib import Path
 
 import nbformat
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+LOCAL_HELPER_URL = re.compile(
+    r"https://raw\.githubusercontent\.com/dandi/example-notebooks/master/(\S+)"
+)
 
 
 def slugify(path: str) -> str:
@@ -170,9 +178,21 @@ def main() -> int:
     for h in helpers:
         cmd_str = h.lstrip("!").strip()
         m = re.search(r"-o\s+(\S+)", cmd_str)
+        target = None
         if m:
             target = nb_dir / m.group(1)
             target.parent.mkdir(parents=True, exist_ok=True)
+        # Colab fetches helpers from this repo's master branch. In CI, use
+        # the checked-out copy instead, so a PR that changes a helper and its
+        # callers together is tested against its own version of the helper.
+        local = LOCAL_HELPER_URL.search(cmd_str)
+        if target is not None and local and (REPO_ROOT / local.group(1)).is_file():
+            source = REPO_ROOT / local.group(1)
+            if source.resolve() != target.resolve():
+                shutil.copyfile(source, target)
+            with log_path.open("a") as f:
+                f.write(f"\n=== helper from checkout: {local.group(1)} ===\n")
+            continue
         r = run(["bash", "-c", cmd_str], cwd=str(nb_dir))
         with log_path.open("a") as f:
             f.write(f"\n=== helper rc={r.returncode}: {cmd_str[:120]} ===\n")

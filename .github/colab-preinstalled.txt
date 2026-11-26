@@ -1,6 +1,6 @@
 # Google Colab's preinstalled package versions (Python 3.13 runtime).
 # Source: https://github.com/googlecolab/backend-info (pip-freeze.txt)
-# Last refreshed: 2026-11-23
+# Last refreshed: 2026-11-26
 #
 # This file is used as a uv-pip-compile --constraint when resolving each
 # notebook's install-cell lock. Matching Colab's versions means the notebook
