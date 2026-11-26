@@ -7890,11 +7890,12 @@ doi:<a href="https://doi.org/10.1038/s41586-024-08433-6">10.1038/s41586-024-0843
 <span class="kn">from</span><span class="w"> </span><span class="nn">pynwb</span><span class="w"> </span><span class="kn">import</span> <span class="n">NWBHDF5IO</span>
 
 <span class="n">DANDISET_ID</span> <span class="o">=</span> <span class="s2">"001550"</span>
+<span class="n">DANDISET_VERSION</span> <span class="o">=</span> <span class="s2">"0.260916.0811"</span>
 <span class="n">ASSET_PATH</span>  <span class="o">=</span> <span class="s2">"sub-P131/sub-P131_ses-TaskSwitch6-190815a.nwb"</span>
 
 <span class="c1"># Resolve the S3 streaming URL from the DANDI archive</span>
 <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="s2">"draft"</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">ASSET_PATH</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">ASSET_PATH</span><span class="p">)</span>
     <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Streaming: </span><span class="si">{</span><span class="n">s3_url</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
@@ -7917,7 +7918,7 @@ doi:<a href="https://doi.org/10.1038/s41586-024-08433-6">10.1038/s41586-024-0843
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Streaming: https://dandiarchive.s3.amazonaws.com/blobs/885/b3a/885b3a44-3134-454f-bef3-b026...
+<pre>Streaming: https://dandiarchive.s3.amazonaws.com/blobs/f2e/f37/f2ef3776-711a-42ee-af13-6e15...
 </pre>
 </div>
 </div>
@@ -8118,7 +8119,7 @@ The Cerebro wireless system (Karpova Lab) delivered the light bilaterally.</p>
 
 Excitation source: Cerebro  (manufacturer: Karpova Lab)
   Power:      25 mW
-  Wavelength: 450 nm  (from epochs table)
+  Wavelength: 473 nm  (from epochs table)
 
 Optogenetic sites (2 implant locations):
   Site 0: Optical fiber implanted in the left hemisphere FOF (+2 mm AP, -1.3 mm ML from bregma).

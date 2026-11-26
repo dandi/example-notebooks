@@ -7897,10 +7897,11 @@ a.anchor-link {
 
 <span class="c1"># Stream NWB file from DANDI</span>
 <span class="n">dandiset_id</span> <span class="o">=</span> <span class="s2">"001636"</span>
+<span class="n">dandiset_version</span> <span class="o">=</span> <span class="s2">"0.260518.1819"</span>  <span class="c1"># published version; "draft" changes without notice</span>
 <span class="n">session_id</span> <span class="o">=</span> <span class="s2">"Venus++v2703++PreMPTP++Depth19880um++19990607"</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">DandiAPIClient</span><span class="p">()</span>
-<span class="n">dandiset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">)</span>
+<span class="n">dandiset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="n">dandiset_version</span><span class="p">)</span>
 <span class="n">assets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dandiset</span><span class="o">.</span><span class="n">get_assets</span><span class="p">())</span>
 <span class="n">asset</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">assets</span> <span class="k">if</span> <span class="n">session_id</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Streaming: </span><span class="si">{</span><span class="n">asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>

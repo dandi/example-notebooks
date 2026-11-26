@@ -7883,7 +7883,7 @@ a.anchor-link {
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">'''Stream NWB file from DANDI archive.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -7905,7 +7905,7 @@ a.anchor-link {
 <span class="sd">    The io object must be closed after use.</span>
 <span class="sd">    '''</span>
     <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
         <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1"># remfile is tuned for HDF5 access patterns (many small scattered reads);</span>
     <span class="c1"># a generic HTTP file object over-fetches and makes opening large files</span>
@@ -7940,8 +7940,9 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">DANDISET_ID</span> <span class="o">=</span> <span class="s2">"000458"</span>
+<span class="n">DANDISET_VERSION</span> <span class="o">=</span> <span class="s2">"0.230317.0039"</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"sub-586468/sub-586468_ses-20210819_behavior+ecephys.nwb"</span>
-<span class="n">nwbfile</span><span class="p">,</span> <span class="n">io</span> <span class="o">=</span> <span class="n">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+<span class="n">nwbfile</span><span class="p">,</span> <span class="n">io</span> <span class="o">=</span> <span class="n">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span>
 <span class="c1"># print() summarizes the file from metadata alone; the rich display() repr</span>
 <span class="c1"># pulls preview slices of every dataset over the network (minutes on a 22 GB file)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">nwbfile</span><span class="p">)</span>
@@ -7957,7 +7958,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>root pynwb.file.NWBFile at 0x123915303738000
+<pre>root pynwb.file.NWBFile at 0x129184441065088
 Fields:
   acquisition: {
     ElectricalSeriesEEG &lt;class 'pynwb.ecephys.ElectricalSeries'&gt;,
@@ -7998,7 +7999,7 @@ Fields:
   session_id: 20210819
   session_start_time: 2021-08-19 11:36:39.948000-07:00
   stimulus_notes: single pulse electrical stimuli targeted to SSp (superficial and deep layers)
-  subject: subject pynwb.file.Subject at 0x123915303735312
+  subject: subject pynwb.file.Subject at 0x129184441062400
 Fields:
   age: P114D
   description: mouse586468

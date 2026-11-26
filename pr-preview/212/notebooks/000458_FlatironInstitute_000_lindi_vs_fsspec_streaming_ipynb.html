@@ -7889,7 +7889,7 @@ a.anchor-link {
 <span class="sd">    The io object must be closed after use.</span>
 <span class="sd">    '''</span>
     <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
         <span class="n">asset_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">file</span> <span class="o">=</span> <span class="n">lindi</span><span class="o">.</span><span class="n">LindiH5pyFile</span><span class="o">.</span><span class="n">from_hdf5_file</span><span class="p">(</span><span class="n">asset_url</span><span class="p">)</span>
     <span class="n">io</span> <span class="o">=</span> <span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -7919,7 +7919,7 @@ a.anchor-link {
 <span class="sd">    The io object must be closed after use.</span>
 <span class="sd">    '''</span>
     <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
         <span class="n">asset_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">filesystem</span><span class="p">(</span><span class="s2">"http"</span><span class="p">)</span>
     <span class="n">file_system</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">asset_url</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span>
@@ -7930,6 +7930,7 @@ a.anchor-link {
 
 
 <span class="n">DANDISET_ID</span> <span class="o">=</span> <span class="s2">"000458"</span>
+<span class="n">DANDISET_VERSION</span> <span class="o">=</span> <span class="s2">"0.230317.0039"</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"sub-586468/sub-586468_ses-20210819_behavior+ecephys.nwb"</span>
 
 <span class="n">timer</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -7951,14 +7952,14 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Elapsed time for lindi: 5.76 s
+<pre>Elapsed time for lindi: 3.06 s
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Elapsed time for fsspec: 37.06 s
+<pre>Elapsed time for fsspec: 12.88 s
 </pre>
 </div>
 </div>
