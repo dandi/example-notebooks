@@ -7948,7 +7948,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=utilities_cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=644be545">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7956,54 +7956,32 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Session ID helpers for the per-mouse-day dandiset format.</span>
-<span class="c1"># DANDI asset paths look like:</span>
-<span class="c1">#   sub-Subject&lt;date&gt;&lt;cat&gt;&lt;animal&gt;/sub-..._ses-&lt;cellType&gt;++&lt;state&gt;++&lt;pharm&gt;++&lt;geno&gt;++&lt;date&gt;_&lt;modality&gt;.nwb</span>
-<span class="c1"># The 5-token session_id encodes the experimental cohort (no figure number).</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># DANDI asset paths have the form sub-&lt;subject_id&gt;/sub-&lt;subject_id&gt;_ses-&lt;session_id&gt;_&lt;modalities&gt;.nwb, and the</span>
+<span class="c1"># session ID has five parts: &lt;cell type&gt;++&lt;state&gt;++&lt;pharmacology&gt;++&lt;genotype&gt;++&lt;date&gt;.</span>
+
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_session_id</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">asset_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s1">'_ses-'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fname</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">''</span>
-    <span class="k">return</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'_ses-'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""The session ID of a DANDI asset path, between '_ses-' and the modalities suffix."""</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">asset_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">".nwb"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_ses-"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">parse_session_id</span><span class="p">(</span><span class="n">ses</span><span class="p">):</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">ses</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'++'</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{}</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">'cell_type'</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">'state'</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">'pharm'</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">'genotype'</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">'date'</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]}</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_modality</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">asset_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'.nwb'</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">''</span>
-    <span class="k">return</span> <span class="n">fname</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="s1">'.nwb'</span><span class="p">)]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_modalities</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The modalities suffix of a DANDI asset path, empty when the file has none."""</span>
+    <span class="n">after_session</span> <span class="o">=</span> <span class="n">asset_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">".nwb"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_ses-"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">after_session</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">"_"</span> <span class="ow">in</span> <span class="n">after_session</span> <span class="k">else</span> <span class="s2">""</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">is_f1_dspn_somatic</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Figure 1 dSPN somatic excitability: per-mouse-day icephys files for dSPN cell type."""</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="n">parse_session_id</span><span class="p">(</span><span class="n">get_session_id</span><span class="p">(</span><span class="n">asset_path</span><span class="p">))</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="n">get_modality</span><span class="p">(</span><span class="n">asset_path</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'icephys'</span><span class="p">,</span> <span class="s1">'icephys+ophys'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="s1">'cell_type'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'dSPN'</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_condition_label</span><span class="p">(</span><span class="n">condition_subfolder</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Pretty condition label from the IRT condition_subfolder column."""</span>
-    <span class="k">return</span> <span class="n">condition_subfolder</span>  <span class="c1"># The condition column is already human-readable</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_session_id</span><span class="p">(</span><span class="n">session_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The five parts of a session ID."""</span>
+    <span class="n">cell_type</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">pharmacology</span><span class="p">,</span> <span class="n">genotype</span><span class="p">,</span> <span class="n">date</span> <span class="o">=</span> <span class="n">session_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"++"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"cell_type"</span><span class="p">:</span> <span class="n">cell_type</span><span class="p">,</span> <span class="s2">"state"</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s2">"pharmacology"</span><span class="p">:</span> <span class="n">pharmacology</span><span class="p">,</span> <span class="s2">"genotype"</span><span class="p">:</span> <span class="n">genotype</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">:</span> <span class="n">date</span><span class="p">}</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Utility functions defined for new dandiset format.'</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_dspn_patch_clamp</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""dSPN patch-clamp files: one mouse and recording day each, from Figure 1 (current clamp) and Figure 2 (Sr2+-oEPSC)."""</span>
+    <span class="k">return</span> <span class="n">get_modalities</span><span class="p">(</span><span class="n">asset_path</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"icephys"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">get_session_id</span><span class="p">(</span><span class="n">asset_path</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"dSPN++"</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Utility functions defined for new dandiset format.
-</pre>
 </div>
 </div>
 </div>
@@ -8100,11 +8078,11 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Load-DANDI-Dataset">Load DANDI Dataset<a class="anchor-link" href="#Load-DANDI-Dataset">¶</a></h3><p>Connect to DANDI and filter for Figure 1 somatic excitability experiments across all three experimental conditions.</p>
+<h3 id="Load-DANDI-Dataset">Load DANDI Dataset<a class="anchor-link" href="#Load-DANDI-Dataset">¶</a></h3><p>Connect to DANDI and list the dSPN patch-clamp files. Each holds the cells recorded from one mouse on one day; the Figure 1 files are those with current-clamp recordings (the others are the Sr2+-oEPSC recordings of Figure 2).</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=data_loading_cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d9050f08">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8112,28 +8090,16 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">dandiset</span> <span class="o">=</span> <span class="n">DandiAPIClient</span><span class="p">()</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="s2">"001538"</span><span class="p">,</span> <span class="s2">"0.261124.1858"</span><span class="p">)</span>
+<span class="n">assets</span> <span class="o">=</span> <span class="p">{</span><span class="n">asset</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">dandiset</span><span class="o">.</span><span class="n">get_assets</span><span class="p">()</span> <span class="k">if</span> <span class="n">asset</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".nwb"</span><span class="p">)}</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span><span class="si">}</span><span class="s2"> NWB files"</span><span class="p">)</span>
 
-<span class="n">dandiset_id</span> <span class="o">=</span> <span class="s2">"001538"</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">DandiAPIClient</span><span class="p">()</span>
-<span class="n">dandiset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="s2">"0.260527.1302"</span><span class="p">)</span>
-<span class="n">assets_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dandiset</span><span class="o">.</span><span class="n">get_assets</span><span class="p">())</span>
 
-<span class="c1"># Filter for F1 dSPN somatic excitability: per-mouse-day icephys files with dSPN cell type</span>
-<span class="n">f1_somexc_assets</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">assets_list</span> <span class="k">if</span> <span class="n">is_f1_dspn_somatic</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">path</span><span class="p">)]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">f1_somexc_assets</span><span class="p">)</span><span class="si">}</span><span class="s1"> F1 dSPN per-mouse-day files'</span><span class="p">)</span>
-
-<span class="c1"># Breakdown by condition (state + pharm)</span>
-<span class="n">cohort</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">f1_somexc_assets</span><span class="p">:</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">parse_session_id</span><span class="p">(</span><span class="n">get_session_id</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
-    <span class="n">cohort</span><span class="p">[(</span><span class="n">f</span><span class="p">[</span><span class="s1">'state'</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s1">'pharm'</span><span class="p">])]</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cohort</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-    <span class="n">state</span><span class="p">,</span> <span class="n">pharm</span> <span class="o">=</span> <span class="n">k</span>
-    <span class="n">pretty</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'OffState'</span><span class="p">:</span> <span class="s1">'LID off-state'</span><span class="p">,</span> <span class="s1">'OnState'</span><span class="p">:</span> <span class="s1">'LID on-state'</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">pharm</span> <span class="o">!=</span> <span class="s1">'none'</span><span class="p">:</span>
-        <span class="n">pretty</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">' with </span><span class="si">{</span><span class="n">pharm</span><span class="si">}</span><span class="s1">'</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">pretty</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> mouse-days'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">open_nwbfile</span><span class="p">(</span><span class="n">asset_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Stream one NWB file from DANDI without downloading it."""</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">assets</span><span class="p">[</span><span class="n">asset_path</span><span class="p">]</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">io</span> <span class="o">=</span> <span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">remfile</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="s2">"r"</span><span class="p">),</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -8146,10 +8112,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Found 18 F1 dSPN per-mouse-day files
-  LID off-state: 8 mouse-days
-  LID on-state with D1RaSch: 5 mouse-days
-  LID on-state: 5 mouse-days
+<pre>391 NWB files
 </pre>
 </div>
 </div>
@@ -8172,7 +8135,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=data_processing_cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5e1c5f1d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8180,46 +8143,41 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Per-cell spike counting using Pattern B slicing.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Per-cell spike counting.</span>
 <span class="c1"># Each per-mouse-day file has MULTIPLE cells; we group by (subject, cell_id) and</span>
-<span class="c1"># compute AP counts per current step using index_start + count from the IRT.</span>
+<span class="c1"># compute AP counts per current step from each sweep's slice of the cell's series.</span>
 
 <span class="n">all_recording_data</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c1"># one row per (cell, current_step) sweep observation</span>
 <span class="n">cell_statistics</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># per-cell aggregates (for rheobase)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">f1_somexc_assets</span><span class="p">)</span><span class="si">}</span><span class="s1"> per-mouse-day files...'</span><span class="p">)</span>
+<span class="n">dspn_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset_path</span> <span class="k">for</span> <span class="n">asset_path</span> <span class="ow">in</span> <span class="n">assets</span> <span class="k">if</span> <span class="n">is_dspn_patch_clamp</span><span class="p">(</span><span class="n">asset_path</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dspn_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> dSPN patch-clamp files...'</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">f1_somexc_assets</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">'Streaming files'</span><span class="p">)):</span>
-    <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">file_system</span> <span class="o">=</span> <span class="n">remfile</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">s3_url</span><span class="p">,</span> <span class="n">disk_cache</span><span class="o">=</span><span class="n">remfile</span><span class="o">.</span><span class="n">DiskCache</span><span class="p">(</span><span class="s2">"nwb-cache"</span><span class="p">))</span>
-    <span class="n">file</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_system</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'r'</span><span class="p">)</span>
-    <span class="n">io</span> <span class="o">=</span> <span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">nwbfile</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">asset_path</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">dspn_paths</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">'Streaming files'</span><span class="p">):</span>
+    <span class="n">nwbfile</span> <span class="o">=</span> <span class="n">open_nwbfile</span><span class="p">(</span><span class="n">asset_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'CurrentClampSeries'</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">nwbfile</span><span class="o">.</span><span class="n">acquisition</span><span class="p">):</span>
+        <span class="k">continue</span>  <span class="c1"># Sr2+-oEPSC recordings of Figure 2, in voltage clamp</span>
 
     <span class="n">subject_id</span> <span class="o">=</span> <span class="n">nwbfile</span><span class="o">.</span><span class="n">subject</span><span class="o">.</span><span class="n">subject_id</span>
     <span class="n">rec_df</span> <span class="o">=</span> <span class="n">nwbfile</span><span class="o">.</span><span class="n">intracellular_recordings</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
 
     <span class="c1"># Filter to somatic sweeps only (each file has both somatic + dendritic)</span>
-    <span class="n">soma_mask</span> <span class="o">=</span> <span class="n">rec_df</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'dendrite_type'</span><span class="p">)]</span> <span class="o">==</span> <span class="s1">'Soma'</span>
+    <span class="n">soma_mask</span> <span class="o">=</span> <span class="n">rec_df</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'site'</span><span class="p">)]</span> <span class="o">==</span> <span class="s1">'Soma'</span>
     <span class="n">soma_rows</span> <span class="o">=</span> <span class="n">rec_df</span><span class="p">[</span><span class="n">soma_mask</span><span class="p">]</span>
 
     <span class="c1"># Group by cell_id within this mouse-day</span>
     <span class="n">per_cell_data</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (cell_id, condition) -&gt; {step_pA: [ap_counts]}</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">soma_rows</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="n">cell_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'cell_id'</span><span class="p">)])</span>
-        <span class="n">condition</span> <span class="o">=</span> <span class="n">row</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'condition_subfolder'</span><span class="p">)]</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">row</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'condition'</span><span class="p">)]</span>
         <span class="n">current_pA</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[(</span><span class="s1">'intracellular_recordings'</span><span class="p">,</span> <span class="s1">'stimulus_current_pA'</span><span class="p">)])</span>
 
-        <span class="c1"># Pattern B slice into the consolidated CurrentClampSeries</span>
-        <span class="n">resp_ref</span> <span class="o">=</span> <span class="n">row</span><span class="p">[(</span><span class="s1">'responses'</span><span class="p">,</span> <span class="s1">'response'</span><span class="p">)]</span>
-        <span class="n">ts</span> <span class="o">=</span> <span class="n">resp_ref</span><span class="o">.</span><span class="n">timeseries</span>
-        <span class="n">index_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">resp_ref</span><span class="o">.</span><span class="n">idx_start</span><span class="p">)</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">resp_ref</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
-        <span class="n">voltage_v</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index_start</span><span class="p">:</span> <span class="n">index_start</span> <span class="o">+</span> <span class="n">count</span><span class="p">]</span>
-        <span class="n">voltage_mV</span> <span class="o">=</span> <span class="n">voltage_v</span> <span class="o">*</span> <span class="mf">1000.0</span>
-
-        <span class="n">rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
-        <span class="n">timestamps_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">/</span> <span class="n">rate</span>
+        <span class="c1"># This sweep's slice of the cell's CurrentClampSeries</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">row</span><span class="p">[(</span><span class="s1">'responses'</span><span class="p">,</span> <span class="s1">'response'</span><span class="p">)]</span>
+        <span class="n">voltage_mV</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="n">response</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">conversion</span> <span class="o">*</span> <span class="mf">1000.0</span>
+        <span class="c1"># From the sampling rate, so the 200-700 ms window falls on samples</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">timestamps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">response</span><span class="o">.</span><span class="n">timestamps</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">timestamps_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
 
         <span class="c1"># Count APs in the 200-700 ms step window</span>
         <span class="n">spike_count</span> <span class="o">=</span> <span class="n">count_action_potentials</span><span class="p">(</span><span class="n">voltage_mV</span><span class="p">,</span> <span class="n">timestamps_s</span><span class="p">,</span> <span class="n">threshold_mV</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
@@ -8267,128 +8225,170 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Processing 18 per-mouse-day files...
+<pre>Processing 25 dSPN patch-clamp files...
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:   0%|          | 0/18 [00:00&lt;?, ?it/s]</pre>
+<pre>Streaming files:   0%|          | 0/25 [00:00&lt;?, ?it/s]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:   6%|▌         | 1/18 [00:01&lt;00:31,  1.83s/it]</pre>
+<pre>Streaming files:   4%|▍         | 1/25 [00:03&lt;01:26,  3.60s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  11%|█         | 2/18 [00:04&lt;00:36,  2.29s/it]</pre>
+<pre>Streaming files:   8%|▊         | 2/25 [00:10&lt;02:01,  5.28s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  17%|█▋        | 3/18 [00:06&lt;00:33,  2.23s/it]</pre>
+<pre>Streaming files:  12%|█▏        | 3/25 [00:15&lt;02:02,  5.56s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  22%|██▏       | 4/18 [00:08&lt;00:29,  2.12s/it]</pre>
+<pre>Streaming files:  16%|█▌        | 4/25 [00:20&lt;01:46,  5.10s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  28%|██▊       | 5/18 [00:10&lt;00:28,  2.22s/it]</pre>
+<pre>Streaming files:  20%|██        | 5/25 [00:25&lt;01:46,  5.30s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  33%|███▎      | 6/18 [00:13&lt;00:28,  2.36s/it]</pre>
+<pre>Streaming files:  24%|██▍       | 6/25 [00:28&lt;01:22,  4.34s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  39%|███▉      | 7/18 [00:16&lt;00:29,  2.68s/it]</pre>
+<pre>Streaming files:  28%|██▊       | 7/25 [00:36&lt;01:37,  5.43s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  44%|████▍     | 8/18 [00:18&lt;00:22,  2.20s/it]</pre>
+<pre>Streaming files:  32%|███▏      | 8/25 [00:43&lt;01:41,  5.99s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  50%|█████     | 9/18 [00:20&lt;00:20,  2.31s/it]</pre>
+<pre>Streaming files:  36%|███▌      | 9/25 [00:49&lt;01:35,  5.97s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  56%|█████▌    | 10/18 [00:23&lt;00:19,  2.42s/it]</pre>
+<pre>Streaming files:  40%|████      | 10/25 [00:55&lt;01:31,  6.12s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  61%|██████    | 11/18 [00:26&lt;00:17,  2.53s/it]</pre>
+<pre>Streaming files:  44%|████▍     | 11/25 [01:03&lt;01:32,  6.62s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  67%|██████▋   | 12/18 [00:28&lt;00:15,  2.54s/it]</pre>
+<pre>Streaming files:  48%|████▊     | 12/25 [01:09&lt;01:25,  6.56s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  72%|███████▏  | 13/18 [00:31&lt;00:12,  2.54s/it]</pre>
+<pre>Streaming files:  52%|█████▏    | 13/25 [01:15&lt;01:16,  6.38s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  78%|███████▊  | 14/18 [00:33&lt;00:10,  2.59s/it]</pre>
+<pre>Streaming files:  56%|█████▌    | 14/25 [01:21&lt;01:08,  6.18s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  83%|████████▎ | 15/18 [00:37&lt;00:08,  2.84s/it]</pre>
+<pre>Streaming files:  60%|██████    | 15/25 [01:28&lt;01:04,  6.49s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  89%|████████▉ | 16/18 [00:39&lt;00:05,  2.71s/it]</pre>
+<pre>Streaming files:  64%|██████▍   | 16/25 [01:34&lt;00:54,  6.11s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files:  94%|█████████▍| 17/18 [00:42&lt;00:02,  2.69s/it]</pre>
+<pre>Streaming files:  68%|██████▊   | 17/25 [01:41&lt;00:51,  6.38s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files: 100%|██████████| 18/18 [00:44&lt;00:00,  2.65s/it]</pre>
+<pre>Streaming files:  72%|███████▏  | 18/25 [01:47&lt;00:45,  6.45s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Streaming files: 100%|██████████| 18/18 [00:44&lt;00:00,  2.50s/it]</pre>
+<pre>Streaming files:  76%|███████▌  | 19/25 [01:49&lt;00:31,  5.19s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files:  80%|████████  | 20/25 [01:52&lt;00:22,  4.43s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files:  84%|████████▍ | 21/25 [01:54&lt;00:15,  3.80s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files:  88%|████████▊ | 22/25 [01:57&lt;00:10,  3.39s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files:  92%|█████████▏| 23/25 [02:00&lt;00:06,  3.19s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files:  96%|█████████▌| 24/25 [02:02&lt;00:02,  2.99s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files: 100%|██████████| 25/25 [02:05&lt;00:00,  2.85s/it]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Streaming files: 100%|██████████| 25/25 [02:05&lt;00:00,  5.00s/it]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -8455,7 +8455,7 @@ Total sweep observations: 877
         <span class="s2">"markerfacecolor"</span><span class="p">:</span> <span class="s2">"black"</span><span class="p">,</span>
         <span class="s2">"markeredgecolor"</span><span class="p">:</span> <span class="s2">"black"</span>
     <span class="p">},</span>
-    <span class="s2">"LID on-state with SCH"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"LID on-state with SCH 23390"</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">"color"</span><span class="p">:</span> <span class="s2">"gray"</span><span class="p">,</span>  <span class="c1"># Changed back to gray for antagonist</span>
         <span class="s2">"marker"</span><span class="p">:</span> <span class="s2">"o"</span><span class="p">,</span>  <span class="c1"># Changed from "^" to "o" </span>
         <span class="s2">"linestyle"</span><span class="p">:</span> <span class="s2">"-"</span><span class="p">,</span>  <span class="c1"># Changed from "--" to "-"</span>
@@ -8466,7 +8466,7 @@ Total sweep observations: 877
 <span class="p">}</span>
 
 <span class="c1"># Process each condition</span>
-<span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"LID off-state"</span><span class="p">,</span> <span class="s2">"LID on-state"</span><span class="p">,</span> <span class="s2">"LID on-state with SCH"</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"LID off-state"</span><span class="p">,</span> <span class="s2">"LID on-state"</span><span class="p">,</span> <span class="s2">"LID on-state with SCH 23390"</span><span class="p">]:</span>
     <span class="k">if</span> <span class="n">condition</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_recordings</span><span class="p">[</span><span class="s2">"condition"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warning: </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2"> not found in data"</span><span class="p">)</span>
         <span class="k">continue</span>
@@ -8595,7 +8595,7 @@ LID on-state:
   200pA: 10.7 ± 1.1 APs (n=15)
   250pA: 13.6 ± 0.5 APs (n=29)
 
-LID on-state with SCH:
+LID on-state with SCH 23390:
   Sample: 210 recordings from 10 cells
   50pA: 0.0 ± 0.0 APs (n=20)
   100pA: 1.2 ± 0.8 APs (n=10)
@@ -8634,7 +8634,7 @@ LID on-state with SCH:
 <span class="n">valid_cells</span> <span class="o">=</span> <span class="n">df_cells</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"rheobase_pA"</span><span class="p">])</span>
 
 <span class="c1"># Prepare data for box plot</span>
-<span class="n">conditions_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"LID off-state"</span><span class="p">,</span> <span class="s2">"LID on-state"</span><span class="p">,</span> <span class="s2">"LID on-state with SCH"</span><span class="p">]</span>
+<span class="n">conditions_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"LID off-state"</span><span class="p">,</span> <span class="s2">"LID on-state"</span><span class="p">,</span> <span class="s2">"LID on-state with SCH 23390"</span><span class="p">]</span>
 <span class="n">condition_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"off"</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">,</span> <span class="s2">"on + SCH"</span><span class="p">]</span>  <span class="c1"># Shorter labels like reference</span>
 
 <span class="c1"># Get data for each condition</span>
@@ -8742,7 +8742,7 @@ LID on-state with SCH:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/ipykernel_2299/3448983558.py:24: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+<pre>/tmp/ipykernel_2303/3004387162.py:24: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   bp = ax.boxplot(
 </pre>
 </div>
@@ -8750,7 +8750,7 @@ LID on-state with SCH:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
-<img alt="No description has been provided for this image" class="" src="data:image/png;base64,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"/>
+<img alt="No description has been provided for this image" class="" src="data:image/png;base64,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"/>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -8770,7 +8770,7 @@ LID on-state (n=15):
   IQR: 100.0 - 140.0 pA
   Range: 60.0 - 180.0 pA
 
-LID on-state with SCH (n=10):
+LID on-state with SCH 23390 (n=10):
   Mean: 126.0 ± 8.5 pA
   Median: 140.0 pA
   IQR: 120.0 - 140.0 pA

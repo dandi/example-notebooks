@@ -7909,9 +7909,10 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">dandiset_id</span> <span class="o">=</span> <span class="s2">"000582"</span>
+<span class="n">dandiset_version</span> <span class="o">=</span> <span class="s2">"0.251111.2151"</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s2">"sub-10073/sub-10073_ses-17010302_behavior+ecephys.nwb"</span>
 <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="n">dandiset_version</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
     <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -8076,7 +8077,7 @@ a.anchor-link {
 <tr>
 <th>0</th>
 <td>MEC</td>
-<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x126895789465216\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x126895789464208\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
+<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x131527204201072\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x131527204200064\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
 <td>ElectrodeGroup</td>
 </tr>
 </tbody>
@@ -8099,7 +8100,7 @@ a.anchor-link {
 <tr>
 <th>0</th>
 <td>MEC</td>
-<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x126895789465216\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x126895789464208\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
+<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x131527204201072\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x131527204200064\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
 <td>ElectrodeGroup</td>
 </tr>
 </tbody>
@@ -8122,7 +8123,7 @@ a.anchor-link {
 <tr>
 <th>0</th>
 <td>MEC</td>
-<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x126895789465216\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x126895789464208\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
+<td>ElectrodeGroup pynwb.ecephys.ElectrodeGroup at 0x131527204201072\nFields:\n  description: The name of the ElectrodeGroup this electrode is a part of.\n  device: EEG pynwb.device.Device at 0x131527204200064\nFields:\n  description: The device used to record EEG signals.\n\n  location: MEC\n</td>
 <td>ElectrodeGroup</td>
 </tr>
 </tbody>
