@@ -7886,6 +7886,7 @@ a.anchor-link {
 
 
 <span class="n">DANDISET_ID</span> <span class="o">=</span> <span class="s2">"000458"</span>
+<span class="n">DANDISET_VERSION</span> <span class="o">=</span> <span class="s2">"0.230317.0039"</span>
 
 <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">parse_dandi_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">"https://dandiarchive.org/dandiset/</span><span class="si">{</span><span class="n">DANDISET_ID</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
@@ -7911,7 +7912,7 @@ a.anchor-link {
             <span class="s2">"download_url"</span><span class="p">:</span> <span class="n">asset_obj</span><span class="o">.</span><span class="n">download_url</span><span class="p">,</span>
             <span class="s2">"dandiset_id"</span><span class="p">:</span> <span class="n">DANDISET_ID</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">nwbfile</span><span class="p">,</span> <span class="n">io</span> <span class="o">=</span> <span class="n">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">asset</span><span class="p">[</span><span class="s2">"path"</span><span class="p">])</span>
+        <span class="n">nwbfile</span><span class="p">,</span> <span class="n">io</span> <span class="o">=</span> <span class="n">stream_nwbfile</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">asset</span><span class="p">[</span><span class="s2">"path"</span><span class="p">],</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span>
         <span class="n">md</span> <span class="o">=</span> <span class="s1">''</span>
         <span class="n">ns_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'https://neurosift.app/?p=/nwb&amp;url=</span><span class="si">{</span><span class="n">asset</span><span class="p">[</span><span class="s2">"download_url"</span><span class="p">]</span><span class="si">}</span><span class="s1">&amp;dandisetId=</span><span class="si">{</span><span class="n">DANDISET_ID</span><span class="si">}</span><span class="s1">'</span>
         <span class="n">md</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'**Asset </span><span class="si">{</span><span class="n">asset_index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: [</span><span class="si">{</span><span class="n">asset</span><span class="p">[</span><span class="s2">"path"</span><span class="p">]</span><span class="si">}</span><span class="s1">](</span><span class="si">{</span><span class="n">ns_url</span><span class="si">}</span><span class="s1">)**</span><span class="se">\n\n</span><span class="s1">'</span>
