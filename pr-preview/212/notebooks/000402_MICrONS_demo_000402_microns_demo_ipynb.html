@@ -7852,7 +7852,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="MICrONS-NWB-tutorial">MICrONS NWB tutorial<a class="anchor-link" href="#MICrONS-NWB-tutorial">¶</a></h1><p>This tutorial demonstrates how to access the <a href="https://dandiarchive.org/dandiset/000402/draft">MICrONS functional data</a> using <code>dandi</code>.</p>
+<h1 id="MICrONS-NWB-tutorial">MICrONS NWB tutorial<a class="anchor-link" href="#MICrONS-NWB-tutorial">¶</a></h1><p>This tutorial demonstrates how to access the <a href="https://dandiarchive.org/dandiset/000402/0.230307.2132">MICrONS functional data</a> using <code>dandi</code>.</p>
 <p>The functional data from the <a href="https://www.microns-explorer.org/cortical-mm3">MICrONS project</a> contains calcium imaging recorded from multiple cortical visual areas and behavioral measurements while a mouse viewed natural movies and parametric stimuli.</p>
 <h4 id="Contents:">Contents:<a class="anchor-link" href="#Contents:">¶</a></h4><ul>
 <li><a href="#stream-nwb">Streaming NWB files</a></li>
@@ -7888,11 +7888,12 @@ a.anchor-link {
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dandi.dandiapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">DandiAPIClient</span>
 
 <span class="n">dandiset_id</span> <span class="o">=</span> <span class="s2">"000402"</span>
+<span class="n">dandiset_version</span> <span class="o">=</span> <span class="s2">"0.230307.2132"</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb"</span> <span class="c1"># file size ~67GB</span>
 
 <span class="c1"># Get the location of the file on DANDI</span>
 <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="n">dandiset_version</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -9169,7 +9170,7 @@ The center of the volume was placed at the junction of primary visual cortex (VI
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>&lt;matplotlib.image.AxesImage at 0x7900e8d41810&gt;</pre>
+<pre>&lt;matplotlib.image.AxesImage at 0x701c921a1bd0&gt;</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -10083,7 +10084,7 @@ The original time references were relative to scan start which would have produc
 
 <span class="c1"># The file path on DANDI</span>
 <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="s1">'draft'</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="n">dandiset_version</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="n">dandiset_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">api_url</span>
 
 <span class="c1"># Download the file</span>
@@ -10119,7 +10120,7 @@ Summary:                                        66.8 GB 66.8 GB                 
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Downloading all NWB files for this dandiset</span>
 
-<span class="c1"># dandiset_url = "https://dandiarchive.org/dandiset/000402/draft"</span>
+<span class="c1"># dandiset_url = "https://dandiarchive.org/dandiset/000402/0.230307.2132"</span>
 <span class="c1"># dandi_download(urls=dandiset_url, output_dir=dandiset_folder_path, get_metadata=True, get_assets=True)</span>
 </pre></div>
 </div>
