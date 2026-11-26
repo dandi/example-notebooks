@@ -7870,7 +7870,8 @@ a.anchor-link {
 <span class="n">client</span> <span class="o">=</span> <span class="n">DandiAPIClient</span><span class="o">.</span><span class="n">for_dandi_instance</span><span class="p">(</span><span class="s2">"dandi"</span><span class="p">)</span>
 
 <span class="n">dandiset_id</span> <span class="o">=</span> <span class="s2">"000727"</span>
-<span class="n">dandiset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">)</span>
+<span class="n">dandiset_version</span> <span class="o">=</span> <span class="s2">"0.240106.0043"</span>
+<span class="n">dandiset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">dandiset_id</span><span class="p">,</span> <span class="n">dandiset_version</span><span class="p">)</span>
 <span class="n">asset_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">dandiset</span><span class="o">.</span><span class="n">get_assets</span><span class="p">()</span> <span class="k">if</span> <span class="s2">"nwb"</span> <span class="ow">in</span> <span class="n">asset</span><span class="o">.</span><span class="n">path</span><span class="p">]</span>
 <span class="c1"># The paths are:</span>
 <span class="p">[</span><span class="n">asset</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">asset_list</span><span class="p">]</span>

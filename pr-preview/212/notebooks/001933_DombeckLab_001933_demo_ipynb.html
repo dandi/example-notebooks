@@ -7889,11 +7889,12 @@ a.anchor-link {
 <span class="kn">from</span><span class="w"> </span><span class="nn">pynwb</span><span class="w"> </span><span class="kn">import</span> <span class="n">NWBHDF5IO</span>
 
 <span class="n">DANDISET_ID</span> <span class="o">=</span> <span class="s2">"001933"</span>
+<span class="n">DANDISET_VERSION</span> <span class="o">=</span> <span class="s2">"0.260825.1457"</span>
 <span class="n">ASSET_PATH</span>  <span class="o">=</span> <span class="s2">"sub-4007-anxa-gs/sub-4007-anxa-gs_ses-2025-08-13-0005_behavior.nwb"</span>
 
 <span class="c1"># Resolve the S3 streaming URL from the DANDI archive</span>
 <span class="k">with</span> <span class="n">DandiAPIClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="s2">"draft"</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">ASSET_PATH</span><span class="p">)</span>
+    <span class="n">asset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_dandiset</span><span class="p">(</span><span class="n">DANDISET_ID</span><span class="p">,</span> <span class="n">DANDISET_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">get_asset_by_path</span><span class="p">(</span><span class="n">ASSET_PATH</span><span class="p">)</span>
     <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Streaming: </span><span class="si">{</span><span class="n">s3_url</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
@@ -7925,6 +7926,13 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Loaded session: 2025-08-13-0005
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
 <pre>/opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/hdmf/spec/namespace.py:620: UserWarning: Ignoring the following cached namespace(s) because another version is already loaded:
 hdmf-common - cached version: 1.9.0, loaded version: 1.8.0
@@ -7932,13 +7940,6 @@ core - cached version: 2.10.0, loaded version: 2.9.0
 hdmf-experimental - cached version: 0.6.0, loaded version: 0.5.0
 Please update to the latest package versions.
   self.warn_for_ignored_namespaces(ignored_namespaces)
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Loaded session: 2025-08-13-0005
 </pre>
 </div>
 </div>
