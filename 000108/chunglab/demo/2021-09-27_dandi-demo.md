@@ -1,587 +1,609 @@
 ---
 jupyter:
   jupytext:
-    formats: ipynb,md
     text_representation:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.6
+      jupytext_version: 1.19.5
   kernelspec:
-    display_name: Python 3 (ipykernel)
+    display_name: Python 3
     language: python
     name: python3
 ---
 
-# Demo notebook for the Chung lab dataset
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb)
 
-This notebook demonstrates how to retrieve volume data from the Kwanghun Chung lab's
-[dandiset](https://gui.dandiarchive.org/#/dandiset/000108/draft). This dataset
-is composed of ~2mm brain sections (slabs) imaged with a nuclear stain (YO),
-a stain for NeuN (NN) and a stain for blood vessels (LEC). The tissue was
-scanned on a light-sheet microscope that took consecutive stacks (chunks) scanning along the X
-direction. The stacks were acquired to overlap by approximately 200 voxels in the
-Y direction.
 
-The data is organized into microscopy sessions, in which you will find the chunks and stains
-for a given microscopy acquisition. The chunks are .h5 files that store a pyramid of 2x
-downsampling: dataset "0" is the original, "1" is 2x downsampled, "2" is 4x downsampled, etc.
-Each chunk has associated sidecar metadata which give the chunk extents and offsets. The
-sidecar allows the various chunks to be stitched together to form the whole volume of
-the slab.
+## Installing requirements
 
-See the function, "read", below for how to simply read an arbitrary subvolume with stitching.
+The cell below installs every Python package needed to run this notebook, at fully pinned versions, using [`uv`](https://github.com/astral-sh/uv) for fast resolution. In Colab the cell is collapsed by default — click the ▶ button to run it.
+
+```python cellView="form"
+#@title Installing requirements (click ▶ to run) { display-mode: "form" }
+# Colab provides Python 3.13. We install with `uv --system` because Colab's
+# kernel runs outside a virtualenv. All versions (direct + transitive) are
+# pinned below so the notebook is reproducible regardless of resolver drift.
+!pip install -q uv
+!uv pip install --system \
+    "acres==0.5.0" \
+    "aiohappyeyeballs==2.7.1" \
+    "aiohttp==3.14.3" \
+    "aiosignal==1.4.0" \
+    "annotated-types==0.8.0" \
+    "arrow==1.4.0" \
+    "attrs==26.1.0" \
+    "bids-validator-deno==3.0.1" \
+    "bidsschematools==1.2.7" \
+    "blessed==1.48.0" \
+    "bokeh==3.8.2" \
+    "certifi==2026.7.22" \
+    "cffi==2.1.1" \
+    "charset-normalizer==3.4.9" \
+    "ci-info==0.4.0" \
+    "click==8.4.2" \
+    "click-didyoumean==0.3.1" \
+    "contourpy==1.3.3" \
+    "cryptography==50.0.0" \
+    "cycler==0.12.1" \
+    "dandi==0.77.0" \
+    "dandischema==0.14.0" \
+    "deno==2.9.5" \
+    "dnspython==2.8.0" \
+    "donfig==0.8.1.post1" \
+    "email-validator==2.3.0" \
+    "etelemetry==0.3.1" \
+    "fasteners==0.20" \
+    "fonttools==4.63.0" \
+    "fqdn==1.5.1" \
+    "frozenlist==1.8.0" \
+    "fscacher==0.4.4" \
+    "fsspec==2025.3.0" \
+    "google-crc32c==1.8.0" \
+    "h5py==3.16.0" \
+    "hdmf==6.2.0" \
+    "humanize==4.16.0" \
+    "idna==3.18" \
+    "imageio==2.37.4" \
+    "interleave==0.3.0" \
+    "isodate==0.7.2" \
+    "isoduration==20.11.0" \
+    "jaraco-classes==3.4.0" \
+    "jaraco-context==6.1.2" \
+    "jaraco-functools==4.6.0" \
+    "jeepney==0.9.0" \
+    "jinja2==3.1.6" \
+    "jinxed==2.1.0" \
+    "joblib==1.5.3" \
+    "jsonpointer==3.1.1" \
+    "jsonschema==4.26.0" \
+    "jsonschema-specifications==2025.9.1" \
+    "keyring==25.7.0" \
+    "keyrings-alt==5.0.2" \
+    "kiwisolver==1.5.0" \
+    "lazy-loader==0.5" \
+    "markupsafe==3.0.3" \
+    "matplotlib==3.10.0" \
+    "ml-dtypes==0.6.0" \
+    "more-itertools==10.8.0" \
+    "multidict==6.7.1" \
+    "narwhals==2.24.0" \
+    "natsort==8.4.0" \
+    "networkx==3.6.1" \
+    "numcodecs==0.16.5" \
+    "numpy==2.1.3" \
+    "nwbinspector==0.7.2" \
+    "packaging==26.3" \
+    "pandas==2.2.3" \
+    "pillow==11.3.0" \
+    "platformdirs==4.11.3" \
+    "propcache==0.5.2" \
+    "pycparser==3.0" \
+    "pycryptodomex==3.23.0" \
+    "pydantic==2.13.4" \
+    "pydantic-core==2.46.4" \
+    "pydantic-settings==2.15.0" \
+    "pynwb==4.1.0" \
+    "pyout==0.8.1" \
+    "pyparsing==3.3.2" \
+    "python-dateutil==2.9.0.post0" \
+    "python-dotenv==1.2.3" \
+    "pytz==2025.2" \
+    "pyyaml==6.0.3" \
+    "referencing==0.37.0" \
+    "requests==2.32.4" \
+    "rfc3339-validator==0.1.4" \
+    "rfc3987==1.3.8" \
+    "rpds-py==2026.6.3" \
+    "ruamel-yaml==0.19.1" \
+    "scikit-image==0.25.2" \
+    "scipy==1.16.3" \
+    "seaborn==0.13.2" \
+    "secretstorage==3.5.0" \
+    "semantic-version==2.10.0" \
+    "six==1.17.0" \
+    "tenacity==9.1.4" \
+    "tensorstore==0.1.85" \
+    "tifffile==2026.8.16" \
+    "tornado==6.5.7" \
+    "tqdm==4.67.3" \
+    "typing-extensions==4.16.0" \
+    "typing-inspection==0.4.4" \
+    "tzdata==2026.3" \
+    "uri-template==1.3.0" \
+    "urllib3==2.5.0" \
+    "wcwidth==0.8.2" \
+    "webcolors==25.10.0" \
+    "xyzservices==2026.3.0" \
+    "yarl==1.24.5" \
+    "zarr==3.1.5" \
+    "zarr-checksum==0.4.7"
+```
+
+> **⚠️ Restart runtime after install**
+>
+> The install may upgrade packages already loaded in the kernel. Go to **Runtime → Restart session**, then **Run all cells below** (skip this install cell on re-run).
+
+
+# Reading volumes from the Chung lab dataset (Dandiset 000108)
+
+This notebook shows how to read image volumes from the Kwanghun Chung lab's
+[Dandiset 000108](https://dandiarchive.org/dandiset/000108). The dataset is a whole human
+brain cut into roughly 2 mm sections (slabs), each imaged on a light sheet microscope with a
+nuclear stain (YO), a stain for NeuN (NN), and a stain for blood vessels (LEC).
+
+The microscope acquires a slab as a series of overlapping stacks, called chunks, that tile
+the slab along one axis. Reading a region of a slab therefore means finding the chunks that
+cover it, reading from each, and blending them where they overlap. That is what this notebook
+does, and it ends with a small blood vessel segmentation on the LEC channel.
+
+The data are stored as [OME-Zarr](https://ngff.openmicroscopy.org/latest/), one Zarr store per
+chunk, under each session's `micr/` directory. Each store holds a resolution pyramid, so an
+overview of a whole slab can be read at a coarse level in a second or two while the full
+resolution data stay available for detailed work. Nothing is downloaded in bulk: every read in
+this notebook streams only the blocks it needs, directly from the archive.
 
 ```python
-from dandi.dandiapi import DandiAPIClient, RemoteDandiset
-from dandi.exceptions import NotFoundError
-import h5py
-import hdf5plugin
 from io import BytesIO
-from matplotlib import pyplot, image
+
+import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
-import re
 import requests
-import typing
-from urllib.parse import urlencode
-from warnings import simplefilter
-simplefilter("ignore")
+import zarr
+from dandi.dandiapi import DandiAPIClient
+from PIL import Image
+
+DANDISET = "000108"
+SUBJECT = "MITU01"
+SAMPLE = "41"
+```
+
+## Finding the chunks of one slab
+
+Assets are named with BIDS-style key-value pairs, so a glob picks out the chunks belonging to
+one sample and stain:
 
 ```
+sub-MITU01/ses-.../micr/sub-MITU01_ses-..._sample-41_stain-YO_run-1_chunk-3_SPIM.ome.zarr
+```
+
+`get_assets_by_glob` returns those assets, and `get_content_url` gives an S3 URL that Zarr can
+open directly.
 
 ```python
-ASSET_URL_DB = {}
+def read_pyramid(url):
+    """Return one entry per resolution level, with its array, voxel size and origin.
 
-def get_asset_url(dandiset, asset_id, version="draft"):
-    """Return s3 url for a given asset id"""
-    if asset_id not in ASSET_URL_DB:
-        with DandiAPIClient.for_dandi_instance("dandi") as client:
-            dandiset = client.get_dandiset(dandiset, version)
-            asset = dandiset.get_asset(asset_id)
-            try:
-                asset_url = asset.get_content_url(r"s3\.amazonaws")
-            except NotFoundError:
-                return None
-        ASSET_URL_DB[asset_id] = asset_url
-    return ASSET_URL_DB[asset_id]
+    Voxel size and position come from the OME-NGFF `coordinateTransformations` of each
+    level. The axes are (t, c, z, y, x) and only the spatial three matter here. A level
+    that carries no transform of its own inherits the voxel size implied by its shape.
+    """
+    group = zarr.open_group(url, mode="r")
+    levels = []
+    base_scale = base_shape = None
+    for dataset in group.attrs["multiscales"][0]["datasets"]:
+        array = group[dataset["path"]]
+        shape = np.array(array.shape[2:])
+        transforms = dataset.get("coordinateTransformations", [])
+        scale = next((np.array(t["scale"][2:], float)
+                      for t in transforms if t["type"] == "scale"), None)
+        origin = next((np.array(t["translation"][2:], float)
+                       for t in transforms if t["type"] == "translation"), None)
+        if scale is not None and base_scale is None:
+            base_scale, base_shape = scale, shape
+        if scale is None and base_scale is not None:
+            scale = base_scale * base_shape / shape
+        levels.append({"array": array, "shape": shape, "scale": scale,
+                       "origin": np.zeros(3) if origin is None else origin})
+    return levels
 
-def get_json(url):
-    """
-    Read the given URL, returning the result interpreted as JSON
-    """
-    req = requests.get(url, headers={"accept": "application/json"})
-    return req.json()
-    
+
+def find_chunks(sample, stain, subject=SUBJECT, dandiset=DANDISET):
+    """Every chunk of one (sample, stain), ordered along the tiling axis."""
+    with DandiAPIClient() as client:
+        assets = client.get_dandiset(dandiset, "draft").get_assets_by_glob(
+            f"*sub-{subject}*_sample-{sample}_stain-{stain}_*SPIM.ome.zarr")
+        chunks = [{"chunk": int(a.path.split("_chunk-")[1].split("_")[0]),
+                   "path": a.path,
+                   "url": a.get_content_url(regex="s3")} for a in assets]
+    if not chunks:
+        raise LookupError(f"no chunks found for sample-{sample} stain-{stain}")
+    for rec in chunks:
+        rec["levels"] = read_pyramid(rec["url"])
+    return sorted(chunks, key=lambda r: r["levels"][0]["origin"][1])
+
+
+chunks_YO = find_chunks(SAMPLE, "YO")
+print(f"{len(chunks_YO)} chunks for sample-{SAMPLE} stain-YO")
+print(chunks_YO[0]["path"])
 ```
 
-Each microscope run is a different session. This method scans the
-directory for a given subject to find those sessions, returning the
-session name.
+## How the chunks are laid out
+
+Each chunk stores its voxel size and its position in the microscope's coordinate frame, both
+in micrometers. Printing them shows the tiling: the chunks sit at the same z and x, and step
+along y by less than their own width, so consecutive chunks overlap.
 
 ```python
-def find_all_sessions(dandiset, subject):
-    query = urlencode({"path_prefix":f"sub-{subject}"})
-    api = "https://api.dandiarchive.org"
-    url = f"/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
-    sessions = []
-    qresult = {'next': url}
-    while qresult['next'] is not None:
-        if "results" in qresult:
-            qresult["next"] += f"&{query}"
-        qresult = get_json(api + qresult['next'])
-        if "results" in qresult:
-            sessions.extend(sorted([_[4:] for _ in qresult["results"]["folders"] if _.startswith("ses-")]))
-    return sessions
+level0 = [rec["levels"][0] for rec in chunks_YO]
+scale = level0[0]["scale"]
+print(f"voxel size (z, y, x): {tuple(float(v) for v in scale)} um")
+print(f"chunk shape (z, y, x): {tuple(int(v) for v in level0[0]['shape'])} voxels\n")
+print(f"{'chunk':>5} {'y origin (um)':>14} {'y extent (um)':>28}")
+for rec, lev in zip(chunks_YO, level0):
+    y0 = lev["origin"][1]
+    print(f"{rec['chunk']:>5} {y0:>14.1f} {y0:>14.1f} to {y0 + lev['shape'][1] * lev['scale'][1]:>10.1f}")
 
-
-find_all_sessions("000108", "MITU01")
+steps = np.diff([lev["origin"][1] for lev in level0])
+overlap_um = level0[0]["shape"][1] * scale[1] - steps.min()
+print(f"\nchunks step {steps.min():.0f} um along y and overlap by "
+      f"{overlap_um:.0f} um ({overlap_um / scale[1]:.0f} voxels)")
 ```
 
-## Find chunks in a session
+## The resolution pyramid
 
-Here, we use a directory-listing API on the DANDI server to list the contents of the "microscopy"
-directory which contains the chunks. We can build a dictionary for each chunk that gives us
-the chunk's asset_id and the sidecar's asset_id.
+Every chunk holds the same volume at a series of resolutions, each one a factor of two coarser
+than the last. Level 0 is the acquired data and level 6 is 64 times smaller along each axis,
+which is what makes a whole-slab overview cheap to read.
 
 ```python
-class MissingSidecarError(ValueError):
-    pass
-
-def list_directory(dandiset, path):
-    query = urlencode({"path_prefix": path})
-    api = "https://api.dandiarchive.org"
-    url = f"/api/dandisets/{dandiset}/versions/draft/assets/paths/?{query}"
-    results = {"files": {}}
-    qresult = {'next': url}
-    while qresult['next'] is not None:
-        if "results" in qresult:
-            qresult["next"] += f"&{query}"
-        qresult = get_json(api + qresult['next'])
-        if "results" in qresult:
-            results["files"].update(qresult["results"]["files"])
-    return results
-
-def find_all_chunks(dandiset, subject, session):
-    """
-    return a dictionary whose keys are (sample, stain) and
-    whose values are a sequence of dictionaries for each
-    of the chunks in the volume, with keys of
-    
-    path - the path to the chunk h5 file
-    asset_id - the asset ID of the chunk h5 file
-    sidecar_path - the path to the sidecar json
-    sidecar_asset_id - the asset ID of the sidecar json
-    
-    :param dandiset: The dandiset ID, e.g. 000108
-    :param subject: The subject providing the sample, e.g. MITU01
-    :param session: The microscopy session, e.g. ses-20210521h17m17s06
-    """
-    metadata = list_directory(dandiset,  f"sub-{subject}/ses-{session}/microscopy")
-    ngff_dict = {}
-    sidecar_dict = {}
-    pattern = r"sub-(?P<subject>[^_]+)_ses-(?P<session>[^_]+)_run-(?P<run>[^_]+)_sample-(?P<sample>[^_]+)_stain-(?P<stain>[^_]+)_chunk-(?P<chunk>\d+)_spim.(?P<extension>.*)"
-    for filename, file_metadata in metadata["files"].items():
-        match = re.match(pattern, filename)
-        if match:
-            sample, stain, chunk, extension = [match.groupdict()[k] for k in ("sample", "stain", "chunk", "extension")]
-            chunk = int(chunk)
-            d = ngff_dict if extension == "h5" else sidecar_dict
-            if (sample, stain) not in d:
-                d[sample, stain] = {}
-            d[sample, stain][chunk] = dict(
-                path=file_metadata["path"],
-                asset_id=file_metadata["asset_id"]
-            )
-    output = {}
-    for sample, stain in ngff_dict:
-        output[sample, stain] = []
-        nd = ngff_dict[sample, stain]
-        sd = sidecar_dict[sample, stain]
-        for chunk in sorted(nd):
-            if chunk not in sd:
-                raise MissingSidecarError("Chunk %s is missing its sidecar" % nd[chunk]["path"])
-            output[sample, stain].append(dict(
-                asset_id=nd[chunk]["asset_id"],
-                path=nd[chunk]["path"],
-                sidecar_asset_id=sd[chunk]["asset_id"],
-                sidecar_path=sd[chunk]["path"]
-            ))
-    return output
-        
-    
-    
-#curl -X GET "https://api.dandiarchive.org/api/dandisets/000108/versions/draft/assets/?path=sub-MITU01%2Fses-20210521h17m17s06%2Fmicroscopy%2Fsub-MITU01_run-1_sample-178_stain-LEC_chunk-1_spim.h5" -H  "accept: application/json" 
-#curl -X GET "https://api.dandiarchive.org/api/dandisets/000108/versions/draft/assets/paths/?path_prefix=sub-MITU01%2Fses-20210521h17m17s06%2Fmicroscopy" -H  "accept: application/json" 
-find_all_chunks("000108", "MITU01", '20210820h19m29s49')
+print(f"{'level':>5} {'shape (z, y, x)':>22} {'voxel size (um)':>28}")
+for i, lev in enumerate(chunks_YO[0]["levels"]):
+    print(f"{i:>5} {str(tuple(int(v) for v in lev['shape'])):>22} "
+          f"{str(tuple(round(float(v), 3) for v in lev['scale'])):>28}")
 ```
 
-# Session photos
+## Stitching chunks into one image
 
-Each session in the dataset has a photo of the accompanying sample (the slab).
-This is a JPEG - the following code gets you the image as an RGB image array.
+To read a region of the slab we take every chunk that covers it, read the overlapping part of
+each, and combine them. In the overlap between two neighbours both chunks have valid data, and
+simply preferring one produces a visible seam, because the light sheet illuminates the edges of
+a chunk less evenly than its middle. Instead each chunk is given a weight that falls smoothly
+to zero over its overlapping margin (a raised cosine), and the result is the weighted average.
+The two weights sum to one across the overlap, so the transition is gradual.
 
-```python tags=[]
-def get_photo(dandiset, subject, session):
-    metadata = list_directory(dandiset,  f"sub-{subject}/ses-{session}/microscopy")
-    # example:
-    # sub-MITU01_ses-20210820h19m29s49_run-1_sample-41_photo.jpg
-    pattern = r"sub-(?P<subject>[^_]+)_ses-(?P<session>[^_]+)_run-(?P<run>[^_]+)_sample-(?P<sample>[^_]+)_photo.jpg"
-    for filename, file_metadata in metadata["files"].items():
-        match = re.match(pattern, filename)
-        if match:
-            url = get_asset_url(dandiset, file_metadata["asset_id"])
-            req = requests.get(url, headers={"accept": "image/jpeg"})
-            i = Image.open(BytesIO(req.content))
-            return np.asarray(i)
-
-subject =  "MITU01"
-session = '20210820h19m29s49'
-photo = get_photo("000108",subject, session)
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(photo)
-```
-
-## Reading a stitched volume
-
-The following notebook cells read arbitrary volumes from a particular sample / stain.
-
-We collect the relevant chunks for a sample and stain, then we find the extents of
-each chunk, then find the ones that overlap and then we can read the parts of the
-chunk that fall inside the requested volume and stitch them.
+Coordinates below are in micrometers within the slab, with the origin at the first chunk. To
+go from a voxel index to micrometers, multiply by the voxel size printed above.
 
 ```python
-CHUNKDB = {}
+def blend_weights(n, overlap):
+    """A raised-cosine ramp rising over the first `overlap` voxels and falling over the last."""
+    weights = np.ones(n)
+    ramp_length = int(min(max(overlap, 0), n // 2))
+    if ramp_length > 1:
+        ramp = 0.5 * (1 - np.cos(np.pi * (np.arange(ramp_length) + 0.5) / ramp_length))
+        weights[:ramp_length] = ramp
+        weights[n - ramp_length:] = ramp[::-1]
+    return weights
 
-def find_volume_chunks(dandiset, subject, sample, stain):
-    """
-    Find all the chunks needed to construct or sample from
-    a volume from a given sample (a slab of tissue) and stain.
-    
-    :param dandiset: The name of the dandiset, e.g. "000108"
-    :param subject: The name of the subject e.g. "MITU01"
-    :param sample: The name of the slab we are trying to find
-    :param stain: The name of the stain, e.g. "YO", "NN" or "LEC"
-    """
-    key  = (dandiset, subject, sample, stain)
-    if key not in CHUNKDB:
-        for session in find_all_sessions(dandiset, subject):
-            try:
-                all_chunks = find_all_chunks(dandiset, subject, session)
-            except MissingSidecarError:
-                # Need to debug this - the sidecar is available locally but not in Dandi
-                continue
-            for csample, cstain in all_chunks:
-                if csample == sample and cstain == stain:
-                    CHUNKDB[key] = all_chunks[sample, stain]
-                    return all_chunks[sample, stain]
-    else:
-        return CHUNKDB[key]
 
-chunks_41 = find_volume_chunks("000108", "MITU01", "41", "YO")
-chunks_41
+def mosaic_offsets(chunks, level):
+    """Chunk positions along y, in micrometers from the start of the slab."""
+    origins = np.array([rec["levels"][level]["origin"][1] for rec in chunks])
+    return origins - origins.min()
+
+
+def mosaic_shape(chunks, level):
+    """Size of the whole stitched slab at this level, in micrometers."""
+    lev = chunks[0]["levels"][level]
+    offsets = mosaic_offsets(chunks, level)
+    return np.array([lev["shape"][0] * lev["scale"][0],
+                     offsets.max() + lev["shape"][1] * lev["scale"][1],
+                     lev["shape"][2] * lev["scale"][2]])
+
+
+def micrometer_extent(lo, image, scale):
+    """imshow extent for a y-x image, so a micrometer is the same length on both axes.
+
+    The voxels are not cubic (3.625 um along y against 2.564 um along x), so an
+    image drawn on its voxel grid is stretched by about 1.4 along x. Passing this
+    extent puts both axes in micrometers and lets the default aspect keep them
+    equal.
+    """
+    return [lo[2], lo[2] + image.shape[1] * scale[2],
+            lo[1] + image.shape[0] * scale[1], lo[1]]
+
+
+def read_mosaic(chunks, lo, hi, level=0, blend=True):
+    """Read the box from `lo` to `hi` (z, y, x in micrometers), stitching every chunk in it."""
+    lo, hi = np.asarray(lo, float), np.asarray(hi, float)
+    scale = chunks[0]["levels"][level]["scale"]
+    offsets = mosaic_offsets(chunks, level)
+    shape = np.maximum(np.round((hi - lo) / scale).astype(int), 1)
+    overlap = chunks[0]["levels"][level]["shape"][1] - np.diff(np.sort(offsets)).min() / scale[1] \
+        if len(chunks) > 1 else 0
+
+    total = np.zeros(shape, np.float32)
+    weight = np.zeros(shape, np.float32)
+    for rec, y_offset in zip(chunks, offsets):
+        lev = rec["levels"][level]
+        origin = np.array([0.0, y_offset, 0.0])
+        start = np.maximum(np.floor((lo - origin) / scale).astype(int), 0)
+        stop = np.minimum(np.ceil((hi - origin) / scale).astype(int), lev["shape"])
+        if np.any(start >= stop):
+            continue
+        block = np.asarray(lev["array"][0, 0, start[0]:stop[0], start[1]:stop[1],
+                                        start[2]:stop[2]], dtype=np.float32)
+        ramp = blend_weights(lev["shape"][1], overlap if blend else 0)[start[1]:stop[1]]
+
+        at = np.round((origin + start * scale - lo) / scale).astype(int)
+        dst = tuple(slice(max(a, 0), min(a + n, s)) for a, n, s in zip(at, block.shape, shape))
+        if any(d.stop <= d.start for d in dst):
+            continue
+        src = tuple(slice(d.start - a, d.stop - a) for d, a in zip(dst, at))
+        piece = block[src]
+        piece_weight = ramp[src[1]][None, :, None]
+        total[dst] += piece * piece_weight
+        weight[dst] += np.broadcast_to(piece_weight, piece.shape)
+    return np.where(weight > 0, total / np.maximum(weight, 1e-6), 0.0)
+
+
+print("slab size (z, y, x):", np.round(mosaic_shape(chunks_YO, 0)).astype(int), "um")
 ```
 
-```python tags=[]
-# This is what our sidecar looks like - we're going to use
-# the pixel size and pieces of the chunk transform matrix.
+## An overview of the whole slab
 
-meta = get_json(get_asset_url("000108", chunks_41[0]["sidecar_asset_id"]))
-meta
-```
-
-```python tags=[]
-class Volume:
-    """
-    This is a chunk record + the chunk's bounds
-    
-    There are methods for reading the chunk data in global
-    coordinates and some methods that are needed for computing
-    the cosine blending.
-    """
-    
-    def __init__(self, rec, x0, x1, y0, y1, z0, z1, level):
-        """
-        :param rec: a record detailing where to get the asset ids and such
-        :param x0: the minimum coordinate of the chunk in the x direction in global coordinates (divided by 2**level if level > 0)
-        :param x1: the maximum coordinate of the chunk in the x direction in global coordinates
-        :param y0: the minimum coordinate of the chunk in the y direction in global coordinates
-        :param y1: the maximum coordinate of the chunk in the y direction in global coordinates
-        :param z0: the minimum coordinate of the chunk in the z direction in global coordinates
-        :param z1: the maximum coordinate of the chunk in the z direction in global coordinates
-        """
-        self.rec = rec
-        self.x0 = x0
-        self.x1 = x1
-        self.y0 = y0
-        self.y1 = y1
-        self.z0 = z0
-        self.z1 = z1
-        self.level = level
-        
-    def overlaps(self, x0, x1, y0, y1, z0, z1):
-        """
-        Return True if the given global coordinates overlap the chunk to some degree
-        """
-        return x1 > self.x0 and self.x1 > x0 and y1 > self.y0 and self.y1 > y0 and z1 > self.z0 and self.z1 > z0
-    
-    def read_block(self, dandiset, x0, x1, y0, y1, z0, z1):
-        """
-        Read the block indicated. For areas outside of the overlap, return an
-        intensity of zero.
-        """
-        x0a = int(max(x0, self.x0))
-        x1a = int(min(x1, self.x1))
-        y0a = int(max(y0, self.y0))
-        y1a = int(min(y1, self.y1))
-        z0a = int(max(z0, self.z0))
-        z1a = int(min(z1, self.z1))
-        result = np.zeros((z1 - z0, y1 - y0, x1 - x0), np.uint16)
-        asset_id = self.rec["asset_id"]
-        url = get_asset_url(dandiset, asset_id)
-        with h5py.File(url, "r", driver="ros3") as fd:
-            block = fd[str(self.level)]
-            result[z0a - z0:z1a - z0, y0a - y0:y1a - y0, x0a - x0:x1a - x0] = \
-                block[0, 0, z0a - self.z0:z1a - self.z0, y0a - self.y0:y1a - self.y0, x0a - self.x0:x1a - self.x0]
-        return result
-    
-    @property
-    def x_extent(self):
-        return self.x1 - self.x0
-    
-    @property
-    def y_extent(self):
-        return self.y1 - self.y0
-    
-    @property
-    def z_extent(self):
-        return self.z1 - self.z0
-
-    def distance_to_edge(self, x0: int, x1: int, y0: int, y1: int,
-                         z0: int, z1: int)\
-            -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """
-        Get the distance to the nearest edge for every voxel in the block
-        defined by x0:x1, y0:y1, z0:z1. Points outside of the volume are marked
-        with negative distance.
-
-        :param x0: the starting x, in global coordinates
-        :param x1: the ending x, in global coordinates
-        :param y0: the starting y, in global coordinates
-        :param y1: the ending y, in global coordinates
-        :param z0: the starting z, in global coordinates
-        :param z1: the ending z in global coordinates
-        :return: the distance to the nearest edge for every voxel in the block
-        for the z, y and x directions
-        """
-        z, y, x = np.mgrid[
-                  z0-self.z0:z1-self.z0,
-                  y0-self.y0:y1-self.y0,
-                  x0-self.x0:x1-self.x0]
-        to_x0 = x
-        to_x1 = self.x_extent - x
-        to_x = np.maximum(0, np.minimum(to_x0, to_x1))
-        to_y0 = y
-        to_y1 = self.y_extent - y
-        to_y = np.maximum(0, np.minimum(to_y0, to_y1))
-        to_z0 = z
-        to_z1 = self.z_extent - z
-        to_z = np.maximum(0, np.minimum(to_z0, to_z1))
-        mask = (x >= 0) & (x < self.x_extent) &\
-               (y >= 0) & (y < self.y_extent) &\
-               (z >= 0) & (z < self.z_extent)
-        to_x[~ mask] = -1
-        to_y[~ mask] = -1
-        to_z[~ mask] = -1
-        return to_z, to_y, to_x
-        
-def read(dandiset, subject, sample, stain, x0, x1, y0, y1, z0, z1, level=0):
-    """
-    Read a subvolume and return as a Numpy array.
-    :param dandiset: the name of the dandiset, e.g. "000108"
-    :param subject: the subject from which the material was derived, e.g. "MITU01"
-    :param session: the microscopy session for the volume, e.g. "20210521h17m17s06"
-    :param sample: the sample name, e.g. "178"
-    :param stain: the stain name, e.g. "YO", "NN" or "LEC"
-    :param x0: The x-minimum coordinate of the volume. If level > 0,
-               this should be (x0 of the original volume) / (2 ** level),
-               in other words, the x0 of the downsampled volume
-    :param x1: The x-maximum coordinate of the volume
-    :param y0: The y-minimum coordinate of the volume
-    :param y1: The y-maximum coordinate of the volume
-    :param z0: The z-minimum coordinate of the volume
-    :param z1: The z-maximum coordinate of the volume
-    """
-    chunkdb = find_volume_chunks(dandiset, subject, sample, stain)
-    volumes = []
-    #
-    # Collect the blocks that overlap
-    #
-    for rec in chunkdb:
-        volume = chunk_coords(dandiset, rec, level)
-        if volume.overlaps(x0, x1, y0, y1, z0, z1):
-            volumes.append(volume)
-
-    if len(volumes) == 0:
-        # Nothing overlaps
-        return np.zeros((z1-z0, y1-y0, x1-x0), np.uint16)
-    
-    elif len(volumes) == 1:
-        # One block overlaps
-        return volumes[0].read_block(dandiset, x0, x1, y0, y1, z0, z1)
-    else:
-        block = np.zeros((z1-z0, y1-y0, x1-x0), np.float32)
-        distances = [volume.distance_to_edge(x0, x1, y0, y1, z0, z1)
-                     for volume in volumes]
-        masks = [((dz >= 0) | (dy >= 0) | (dx >= 0)) for dz, dy, dx in distances]
-        total = np.zeros(block.shape, np.float32)
-        #
-        # Compute the cosine blending in overlapping regions. The idea here
-        # is to taper the intensity of an image as it approaches the image
-        # edge, relative to the other overlapping image
-        #
-        for volume, (dz, dy, dx), mask in zip(volumes, distances, masks):
-            vblock = volume.read_block(dandiset, x0, x1, y0, y1, z0, z1)
-            fraction = mask.astype(float)
-            for idx in [_ for _ in range(len(volumes))
-                        if volumes[_].rec["path"] != volume.rec["path"]]:
-                other = volumes[idx]
-                other_mask = masks[idx]
-                both_mask = mask & other_mask
-                other_dz, other_dy, other_dx = distances[idx]
-                distance = 100000000 * np.ones(dx.shape, np.float32)
-                other_distance = 100000000 * np.ones(other_dx.shape, np.float32)
-                if np.any(dx[both_mask] != other_dx[both_mask]):
-                    distance = dx
-                    other_distance = other_dx
-                if np.any(dy[both_mask] != other_dy[both_mask]):
-                    distance = np.minimum(distance, dy)
-                    other_distance = np.minimum(other_distance, other_dy)
-                if np.any(dz[both_mask] != other_dz[both_mask]):
-                    distance = np.minimum(distance, dz)
-                    other_distance = np.minimum(other_distance, other_dz)
-                angle = np.arctan2(distance[both_mask],
-                                   other_distance[both_mask])
-                blending = np.sin(angle) ** 2
-                fraction[both_mask] *= blending
-            total += fraction
-            block += (fraction * vblock).astype(block.dtype)
-        return block / (total + np.finfo(np.float32).eps)
-
-
-def chunk_coords(dandiset, rec, level):
-    """
-    Get the coordinates of a chunk relative to the slab
-    
-    Coordinates are returned as (z0, z1), (y0, y1), (x0, x1)
-    """
-    data = get_json(get_asset_url(dandiset, rec["sidecar_asset_id"]))
-    lpower = 2 ** level
-    x_extent, y_extent, z_extent = [int(np.round(b / a)) // lpower for a, b in zip(data["PixelSize"], data["FieldOfView"])]
-    #
-    # There's a shortcut here - the affine matrix is always just a transposition
-    # and the transposition part is just the last element of the row.
-    #
-    matrix = data["ChunkTransformMatrix"]
-    axes = data["ChunkTransformMatrixAxis"]
-    pixel_size = data["PixelSize"]
-    x_idx, y_idx, z_idx = [axes.index(_) for _ in ("X", "Y", "Z")]
-    x0, y0, z0 = [int(matrix[idx][-1] / lpower / um) for idx, um in zip((x_idx, y_idx, z_idx), pixel_size)]
-    return Volume(rec, x0, x0+x_extent, y0, y0+y_extent, z0, z0+z_extent, level)
-    
-```
-
-```python
-def find_extents(dandiset, subject, sample, stain, level=0):
-    min_x = min_y = min_z = np.inf
-    max_x = max_y = max_z = 0
-    for rec in find_volume_chunks(dandiset, subject, sample, stain):
-        volume = chunk_coords(dandiset, rec, level)
-        min_x, min_y, min_z = [min(a, b) for a, b in ((min_x, volume.x0), (min_y, volume.y0), (min_z, volume.z0))]
-        max_x, max_y, max_z = [max(a, b) for a, b in ((max_x, volume.x1), (max_y, volume.y1), (max_z, volume.z1))]
-    return dict(x0=min_x, x1=max_x, y0=min_y, y1=max_y, z0=min_z, z1=max_z)
-[find_extents("000108", "MITU01", "41", "YO", level) for level in range(0, 7)]
-```
+At level 6 a single plane through the entire slab is a few hundred pixels across and takes a
+couple of seconds to read. The photograph taken of the slab before imaging is stored alongside
+the image data, which makes a useful check that the reconstruction matches the tissue.
 
 ```python
 level = 6
-extents6 = find_extents("000108", "MITU01", "41", "YO", level)
-overview = read("000108", "MITU01", "41", "YO", 0, extents6["x1"], 0, extents6["y1"], 0, extents6["z1"], level)
+slab = mosaic_shape(chunks_YO, level)
+scale6 = chunks_YO[0]["levels"][level]["scale"]
+
+z_um = slab[0] / 2  # a plane through the middle of the slab
+overview = read_mosaic(chunks_YO, (z_um, 0, 0), (z_um + scale6[0], slab[1], slab[2]), level=level)[0]
+print("overview plane:", overview.shape, "pixels at", np.round(scale6, 1), "um")
 ```
 
 ```python
-overview.shape
+def photo_of(sample, subject=SUBJECT, dandiset=DANDISET):
+    """The photograph of the slab, as an RGB array."""
+    with DandiAPIClient() as client:
+        assets = list(client.get_dandiset(dandiset, "draft").get_assets_by_glob(
+            f"*sub-{subject}*_sample-{sample}_photo.jpg"))
+        if not assets:
+            return None
+        url = assets[0].get_content_url(regex="s3")
+    return np.asarray(Image.open(BytesIO(requests.get(url, timeout=120).content)))
+
+
+photo = photo_of(SAMPLE)
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 7))
+axes[0].imshow(overview, cmap="cubehelix", vmax=np.percentile(overview, 99.5),
+               extent=micrometer_extent((z_um, 0, 0), overview, scale6))
+axes[0].set_title(f"sample-{SAMPLE} stain-YO, level {level}")
+axes[0].set_xlabel("x (the scan axis, um)")
+axes[0].set_ylabel("y (chunks tile along this axis, um)")
+if photo is not None:
+    axes[1].imshow(photo[::-1, ::-1])
+    axes[1].set_title("photograph of the slab")
+axes[1].axis("off")
+plt.tight_layout()
 ```
 
-```python tags=[]
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(overview[16, :], cmap='cubehelix')
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(photo[::-1, ::-1])
-```
+The bands running across the overview are the chunk boundaries. They come from the light sheet
+illuminating the middle of a chunk more strongly than its edges, so the intensity varies within
+each chunk rather than across the join. Blending removes the discontinuity at the seam but not
+this underlying shading, which would need a flat-field correction.
 
-### Use neuroglancer to display the stitched volume
+## Full resolution across a seam
+
+The next cell reads a small region at full resolution that straddles the boundary between the
+first two chunks, with and without blending. At this scale the individual nuclei of the YO
+stain are visible.
 
 ```python
-import neuroglancer
-import os
+offsets = mosaic_offsets(chunks_YO, 0)
+seam_y = offsets[1] + 300.0        # just inside the overlap between chunk 1 and chunk 2
+centre_x = 46000.0                 # micrometers along the scan axis, near the middle of the slab
+z_plane = mosaic_shape(chunks_YO, 0)[0] / 2
+
+lo = (z_plane, seam_y - 700, centre_x - 500)
+hi = (z_plane + scale[0], seam_y + 700, centre_x + 500)
+blended = read_mosaic(chunks_YO, lo, hi, level=0, blend=True)[0]
+averaged = read_mosaic(chunks_YO, lo, hi, level=0, blend=False)[0]
+print("region:", blended.shape, "voxels")
 ```
-
-```python tags=[]
-viewer = neuroglancer.Viewer()
-```
-
-```python tags=[]
-# This volume handle can be used to notify the viewer that the data has changed.
-volume = neuroglancer.LocalVolume(
-    overview,
-    dimensions=neuroglancer.CoordinateSpace(
-        names=['x', 'y', 'z'],
-        units=['um', 'um', 'um'],
-        scales=[val*level for val in meta["PixelSize"]],
-    ),
-    voxel_offset=[0,0,0]
-    )
-with viewer.txn() as s:
-    s.layers['volume'] = neuroglancer.ImageLayer(
-        source=volume,
-        # Define a custom shader to display this mask array as red+alpha.
-        shader="""
-#uicontrol vec3 color color(default="green")
-#uicontrol float brightness slider(min=-1, max=1)
-#uicontrol float contrast slider(min=-9, max=-5, step=0.1)
-void main() {
-  emitRGB(color *
-          (toNormalized(getDataValue(0)) + brightness) *
-          exp(contrast));
-}
-""",
-    )
-    s.position = np.array(overview.shape)/2
-print("Neuroglancer URL:", viewer.get_viewer_url().replace("http://127.0.0.1:", f"https://hub.dandiarchive.org/user/{os.environ['GITHUB_USER']}/proxy/"))
-```
-
-```python tags=[]
-# This is approximately at the stitching between chunks 1 and 2
-x, y, z = 16080, 1957, 1024
-img = read("000108", "MITU01", "41", "YO", x-200, x+200, y-200, y+200, z, z+1)[0]
-```
-
-```python tags=[]
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(img, cmap='cubehelix')
-```
-
-## Demo of a simple blood vessel segmentation
-
-Get a portion of the Lectin channel which stains blood vessels. Compute vesselness
-on the block to enhance it and then threshold it to segment the blood vessels
 
 ```python
-block_LEC = read("000108", "MITU01", "41", "LEC", 19506, 19706, 8549, 8749, 1000, 1064)
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(block_LEC[32], cmap='cubehelix')
+fig, axes = plt.subplots(1, 2, figsize=(14, 7), sharex=True, sharey=True)
+for ax, img, title in ((axes[0], blended, "cosine blending"),
+                       (axes[1], averaged, "plain average")):
+    ax.imshow(img, cmap="cubehelix", vmax=np.percentile(blended, 99.5),
+              extent=micrometer_extent(lo, img, scale))
+    ax.set_title(title)
+    ax.set_xlabel("x (um)")
+axes[0].set_ylabel("y (um)")
+plt.tight_layout()
+
+difference = np.abs(blended - averaged)
+print(f"the two differ by at most {difference.max():.0f} counts "
+      f"({100 * difference.max() / max(blended.max(), 1):.1f}% of the peak)")
+```
+
+## The same comparison across the whole slab
+
+One seam at full resolution shows what blending does locally. Reading the whole slab both
+ways shows all eight boundaries at once. The profile below each image averages along the scan
+axis, which makes the steps easy to see: without blending the intensity jumps where one chunk
+gives way to the next, while the blended profile crosses the same boundaries smoothly. The
+slow undulation that survives in both is the illumination falloff within each chunk, which
+blending is not meant to correct.
+
+```python
+overview_averaged = read_mosaic(chunks_YO, (z_um, 0, 0),
+                                (z_um + scale6[0], slab[1], slab[2]),
+                                level=level, blend=False)[0]
+
+extent6 = micrometer_extent((z_um, 0, 0), overview, scale6)
+y_um = np.arange(overview.shape[0]) * scale6[1]
+boundaries = mosaic_offsets(chunks_YO, level)[1:]
+
+fig = plt.figure(figsize=(15, 9))
+grid = fig.add_gridspec(2, 2, height_ratios=[2.2, 1], hspace=0.3)
+for column, (image, title) in enumerate(((overview, "cosine blending"),
+                                         (overview_averaged, "plain average"))):
+    ax = fig.add_subplot(grid[0, column])
+    ax.imshow(image, cmap="cubehelix", vmax=np.percentile(overview, 99.5), extent=extent6)
+    ax.set_title(title)
+    ax.set_xlabel("x (um)")
+    ax.set_ylabel("y (um)")
+
+# Profiles averaged along the scan axis, over a few chunk boundaries. Tissue
+# structure dominates the overall shape, so the two are compared side by side:
+# the averaged profile steps where one chunk gives way to the next.
+window = (y_um > 19000) & (y_um < 42000)
+ax = fig.add_subplot(grid[1, :])
+ax.plot(y_um[window], overview[window].mean(axis=1), lw=1.2, label="cosine blending")
+ax.plot(y_um[window], overview_averaged[window].mean(axis=1), lw=1.2, label="plain average")
+for boundary in boundaries:
+    if window[np.argmin(np.abs(y_um - boundary))]:
+        ax.axvline(boundary, color="salmon", lw=0.8, ls="--", zorder=0)
+ax.set_xlabel("y (um), dashed lines mark where a chunk starts")
+ax.set_ylabel("mean over x")
+ax.legend(loc="upper right")
+
+difference = np.abs(overview - overview_averaged)
+print(f"the two overviews differ by at most {difference.max():.0f} counts "
+      f"({100 * difference.max() / max(overview.max(), 1):.1f}% of the peak), "
+      f"and differ at all only within {100 * (difference > 1).mean():.0f}% of the slab, "
+      "which is the overlapping margin")
+```
+
+## A caveat on the position metadata
+
+The y positions used above are consistent across the dataset, but the z position, which places
+a slab within the whole brain, is not always recorded. In sample 41 the LEC chunks disagree:
+some report the slab at 82000 um and others report 0. The stitching in this notebook depends
+only on the y positions, so it is unaffected, but code that assembles slabs into a whole brain
+should check rather than assume.
+
+```python
+chunks_LEC = find_chunks(SAMPLE, "LEC")
+
+for name, chunks in (("YO", chunks_YO), ("LEC", chunks_LEC)):
+    z_origins = sorted({float(rec["levels"][0]["origin"][0]) for rec in chunks})
+    status = "consistent" if len(z_origins) == 1 else "INCONSISTENT"
+    print(f"stain {name:>3}: z origins {z_origins} um  ({status})")
+```
+
+## A simple blood vessel segmentation
+
+The LEC channel stains blood vessels. Below we read a block at full resolution, enhance
+tube-like structures with a vesselness filter built from the eigenvalues of the Hessian, and
+threshold the result. The filter follows the formulation used by
+[MeVisLab](https://mevislabdownloads.mevis.de/docs/current/FMEstable/ReleaseMeVis/Documentation/Publish/ModuleReference/Vesselness.html)
+and described in [Lamy et al. 2020](https://hal.archives-ouvertes.fr/hal-02544493/file/Lamy_ICPR_2020.pdf).
+
+```python
+scale_LEC = chunks_LEC[0]["levels"][0]["scale"]
+block_origin = np.array([1000, 1700, 14700]) * scale_LEC   # voxel indices to micrometers
+block_size = np.array([64, 200, 200]) * scale_LEC
+
+block_LEC = read_mosaic(chunks_LEC, block_origin, block_origin + block_size, level=0)
+print("block:", block_LEC.shape, "voxels,", np.round(block_size).astype(int), "um")
 ```
 
 ```python
 from skimage.feature import hessian_matrix, hessian_matrix_eigvals
-hm = hessian_matrix(block_LEC, sigma=2)
-```
-
-```python
-evs = hessian_matrix_eigvals(hm)
-```
-
-```python
-def vesselness(evs, a1=.5, a2=2):
-    """
-    From https://mevislabdownloads.mevis.de/docs/current/FMEstable/ReleaseMeVis/Documentation/Publish/ModuleReference/Vesselness.html
-    https://hal.archives-ouvertes.fr/hal-02544493/file/Lamy_ICPR_2020.pdf
-    
-    """
-    mask0 = evs[1] >= 0
-    mask1 = (~ mask0) & (evs[2] < 0)
-    mask2 = (~ mask0) & (~ mask1)
-    result = np.zeros_like(evs[0])
-    result[mask1] = -evs[1, mask1] * np.exp(-np.square(evs[0, mask1]) / (2 * np.square(a1 * evs[1, mask1])))
-    result[mask2] = -evs[1, mask2] * np.exp(-np.square(evs[0, mask2]) / (2 * np.square(a2 * evs[1, mask2])))
-    return result
-ves = vesselness(evs)
-```
-
-```python
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(ves[35], cmap='cubehelix')
-```
-
-```python
 from skimage.filters import threshold_otsu
-seg = ves > threshold_otsu(ves)
-pyplot.figure(figsize=(12, 12))
-pyplot.imshow(block_LEC[35], cmap='gray')
-pyplot.imshow(seg[35], alpha=.3)
+
+
+def vesselness(eigenvalues, a1=0.5, a2=2):
+    """Enhance tube-like structures from the sorted Hessian eigenvalues."""
+    flat = eigenvalues[1] >= 0
+    tube = (~flat) & (eigenvalues[2] < 0)
+    plate = (~flat) & (~tube)
+    result = np.zeros_like(eigenvalues[0])
+    for mask, a in ((tube, a1), (plate, a2)):
+        result[mask] = -eigenvalues[1, mask] * np.exp(
+            -np.square(eigenvalues[0, mask]) / (2 * np.square(a * eigenvalues[1, mask])))
+    return result
+
+
+hessian = hessian_matrix(block_LEC, sigma=2, use_gaussian_derivatives=False)
+enhanced = vesselness(hessian_matrix_eigvals(hessian))
+
+# The Hessian is unreliable within a few voxels of the block face, where the
+# Gaussian derivatives run off the edge of the data, so trim a margin before
+# choosing a threshold.
+margin = 8
+interior = (slice(None), slice(margin, -margin), slice(margin, -margin))
+raw, enhanced = block_LEC[interior], enhanced[interior]
+segmentation = enhanced > threshold_otsu(enhanced)
+print(f"{100 * segmentation.mean():.1f}% of the block is segmented as vessel")
 ```
 
 ```python
-
+plane = raw.shape[0] // 2
+fig, axes = plt.subplots(1, 3, figsize=(16, 5.5), sharex=True, sharey=True)
+axes[0].imshow(raw[plane], cmap="cubehelix", vmax=np.percentile(raw, 99.5))
+axes[0].set_title("LEC channel")
+axes[1].imshow(enhanced[plane], cmap="cubehelix")
+axes[1].set_title("vesselness")
+axes[2].imshow(raw[plane], cmap="gray", vmax=np.percentile(raw, 99.5))
+axes[2].imshow(segmentation[plane], alpha=0.35)
+axes[2].set_title("segmentation")
+plt.tight_layout()
 ```
+
+## Viewing a slab in neuroglancer
+
+The chunks can also be browsed interactively, without any of the reading code above, by
+pointing [neuroglancer](https://neuroglancer-demo.appspot.com/) at the Zarr stores. The cell
+below prints a link that loads every chunk of one stain as a single layer; neuroglancer places
+the chunks using the same OME-NGFF metadata this notebook read. `neuroglancer-stitched.py`,
+next to this notebook, builds richer multi-stain links the same way.
+
+```python
+import json
+from urllib.parse import quote
+
+
+def neuroglancer_url(chunks, name="sample"):
+    layer = {"type": "image", "name": name, "tab": "rendering",
+             "source": [f"zarr://{rec['url']}" for rec in chunks]}
+    state = {"dimensions": {"z": [scale[0] * 1e-6, "m"],
+                            "y": [scale[1] * 1e-6, "m"],
+                            "x": [scale[2] * 1e-6, "m"]},
+             "displayDimensions": ["z", "y", "x"],
+             "layers": [layer], "layout": "yz",
+             "layerListPanel": {"visible": True}}
+    return "https://neuroglancer-demo.appspot.com/#!" + quote(json.dumps(state))
+
+
+from IPython.display import Markdown
+
+url = neuroglancer_url(chunks_YO, name=f"sample-{SAMPLE}-YO")
+print(f"{len(url)} character link covering {len(chunks_YO)} chunks")
+Markdown(f"[Open sample-{SAMPLE} stain-YO in neuroglancer]({url})")
+```
+
+## Where to go next
+
+`dashboard.ipynb` in this directory charts which samples and stains exist across the whole
+dandiset, which is a good way to pick another slab to look at. `validate_lev6.ipynb` walks
+every chunk and checks its coarsest level, which is how the gaps noted above were found.

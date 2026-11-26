@@ -1,0 +1,7 @@
+dandi
+h5py
+matplotlib
+pynwb
+remfile
+pynwb<4
+hdmf<5

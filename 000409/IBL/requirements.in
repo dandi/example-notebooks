@@ -1,0 +1,14 @@
+brainglobe-atlasapi
+dandi
+h5py
+iblatlas
+ipython
+matplotlib
+numpy
+nwb-video-widgets
+Psychofit
+pynapple
+pynwb
+remfile
+pynwb<4
+hdmf<5

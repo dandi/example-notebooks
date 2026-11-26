@@ -21,7 +21,7 @@ n_parts = 12  # number of participants
 # Determine all file paths
 with DandiAPIClient() as client:
     paths = []
-    for file in client.get_dandiset("000055", "draft").get_assets_under_path(""):
+    for file in client.get_dandiset("000055", "0.220127.0436").get_assets_under_path(""):
         paths.append(file.path)
 paths = natsort.natsorted(paths)
 
@@ -31,7 +31,7 @@ proj_mats = []
 for s in range(n_parts):
     fid = [val for val in paths if "sub-" + str(s + 1).zfill(2) in val][0]
     with DandiAPIClient() as client:
-        asset = client.get_dandiset("000055", "draft").get_asset_by_path(fid)
+        asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fid)
         s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
 
     with NWBHDF5IO(s3_path, mode="r", load_namespaces=True, driver="ros3") as io:
@@ -77,7 +77,7 @@ for part_ind in tqdm(range(n_parts)):
         pows_sbj = None
         for j, fid in enumerate(fids):
             with DandiAPIClient() as client:
-                asset = client.get_dandiset("000055", "draft").get_asset_by_path(fid)
+                asset = client.get_dandiset("000055", "0.220127.0436").get_asset_by_path(fid)
                 s3_path = asset.get_content_url(follow_redirects=1, strip_query=True)
 
             with NWBHDF5IO(s3_path, mode="r", load_namespaces=True, driver="ros3") as io:

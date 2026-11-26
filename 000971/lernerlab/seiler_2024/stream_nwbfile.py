@@ -3,7 +3,7 @@ from fsspec import filesystem
 from h5py import File
 from dandi.dandiapi import DandiAPIClient
 
-def stream_nwbfile(DANDISET_ID, file_path):
+def stream_nwbfile(DANDISET_ID, file_path, DANDISET_VERSION="draft"):
     '''Stream NWB file from DANDI archive.
     
     Parameters
@@ -12,6 +12,8 @@ def stream_nwbfile(DANDISET_ID, file_path):
         Dandiset ID
     file_path : str
         Path to NWB file in DANDI archive
+    DANDISET_VERSION : str
+        Dandiset version, e.g. a published version such as "0.230317.0039"
     
     Returns
     -------
@@ -25,7 +27,7 @@ def stream_nwbfile(DANDISET_ID, file_path):
     The io object must be closed after use.
     '''
     with DandiAPIClient() as client:
-        asset = client.get_dandiset(DANDISET_ID, 'draft').get_asset_by_path(file_path)
+        asset = client.get_dandiset(DANDISET_ID, DANDISET_VERSION).get_asset_by_path(file_path)
         s3_url = asset.get_content_url(follow_redirects=1, strip_query=True)
     fs = filesystem("http")
     file_system = fs.open(s3_url, "rb")

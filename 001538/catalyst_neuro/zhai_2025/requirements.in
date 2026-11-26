@@ -1,0 +1,12 @@
+dandi
+h5py
+matplotlib
+numpy
+pandas
+pynwb
+remfile
+scipy
+seaborn
+tqdm
+# The files of version 0.261124.1858 were written with pynwb 4.2
+pynwb>=4.2

@@ -1,0 +1,7 @@
+dandi
+fsspec
+ipywidgets
+matplotlib
+numpy
+opencv-python
+tqdm

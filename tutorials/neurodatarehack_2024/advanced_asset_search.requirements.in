@@ -1,0 +1,11 @@
+dandi
+h5py
+ipywidgets
+isodate
+numpy
+nwbinspector
+pynwb
+remfile
+tqdm
+pynwb>=4.2.0
+hdmf>=6.2.0

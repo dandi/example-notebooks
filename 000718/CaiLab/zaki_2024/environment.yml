@@ -1,0 +1,14 @@
+name: cailab_000718_demo
+channels:
+    - conda-forge
+dependencies:
+    - python==3.11
+    - ipywidgets
+    - pip
+    - pip:
+      - dandi
+      - jupyter
+      - plotly
+      - pynwb
+      - remfile
+      - matplotlib
