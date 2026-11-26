@@ -960,13 +960,15 @@
                             <a class="archive-link" href="https://dandiarchive.org/dandiset/001636" target="_blank" rel="noopener">View on DANDI Archive</a>
                         </div>
                         <h2>Pyramidal tract and corticostriatal neuron recordings in MPTP-treated macaque performing visuomotor tasks</h2>
-                        <p class="description">Longitudinal single-unit electrophysiology recordings from the primary motor cortex of two rhesus macaque monkeys (Macaca mulatta), acquired both before and after induction of parkinsonism by systemic MPTP (1-methyl-4-phenyl-1,2,3,6-tetrahydropyridine) intoxication. Recordings span two subjects (Leu, recorded in 1993; Venus, recorded between 1999 and 2000), covering both the healthy baseline state and the parkinsonian state, and support analyses of how dopaminergic lesion alters cortical motor encoding.
+                        <p class="description">Longitudinal single-unit electrophysiology recordings from the primary motor cortex of two rhesus macaque monkeys (Macaca mulatta), acquired both before and after induction of hemiparkinsonism by infusion of MPTP (1-methyl-4-phenyl-1,2,3,6-tetrahydropyridine) into the left internal carotid artery. Recordings span two subjects (Leu, recorded between August 1992 and December 1993; Venus, recorded between 1999 and 2000), covering both the healthy baseline state and the parkinsonian state, and support analyses of how dopaminergic lesion alters cortical motor encoding.
 
 Within primary motor cortex, two classes of cortical projection neurons are distinguished by antidromic activation from chronically implanted stimulating electrodes: pyramidal tract neurons (identified by stimulation from the cerebral peduncle) and corticostriatal neurons (identified by stimulation from the posterior putamen). Each recording site is verified as primary motor cortex by intracortical microstimulation at thresholds below 30 microamperes.
 
-The behavioral paradigm is a visuomotor step-tracking task in which the monkey produces flexion or extension elbow movements against a torque motor to align a cursor with visual targets, through a structured sequence of center hold, target presentation, movement execution, target hold, and liquid reward. A subset of trials includes unexpected torque perturbations that elicit muscle-stretch reflexes, enabling analyses of sensory feedback in the parkinsonian state.
+The behavioral paradigm is a visuomotor step-tracking task in which the monkey produces flexion or extension movements of the elbow (Venus) or wrist (Leu) against a torque motor to align a cursor with visual targets, through a structured sequence of center hold, target presentation, movement execution, target hold, and liquid reward. In Venus, a subset of trials includes unexpected torque perturbations that elicit muscle-stretch reflexes, enabling analyses of sensory feedback in the parkinsonian state.
 
-Original analyses on subsets of these data appear in three peer-reviewed papers (Pasquereau and Turner 2011, Cerebral Cortex; Pasquereau and Turner 2013, Frontiers in Systems Neuroscience; Pasquereau, DeLong, and Turner 2016, Brain), linked in the related-resources section.</p>
+Original analyses on subsets of these data appear in three peer-reviewed papers (Pasquereau and Turner 2011, Cerebral Cortex; Pasquereau and Turner 2013, Frontiers in Systems Neuroscience; Pasquereau, DeLong, and Turner 2016, Brain), linked in the related-resources section.
+
+Some properties of the files differ from the papers. The Leu files contain no perturbation times, so the Leu perturbation analyses of Pasquereau and Turner (2013) cannot be repeated from this dataset. The Leu analog signals are stored at 100 Hz, where the papers give 200 Hz. The Venus analog signals were digitized at 500 Hz and are stored interpolated to 1 kHz. In Venus, perturbations start about 1.7 s after the center target appears in most trials, where Pasquereau and Turner (2013) describe a random delay of 1 to 2 s after the monkey captures the center target. EMG, LFP and the torque command are in arbitrary units, because the amplifier gains are not in the MATLAB files the dataset was converted from.</p>
                         
                         <div class="notebooks">
                             <h3 class="notebooks-heading">Notebooks</h3>
@@ -1010,9 +1012,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_peth.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1028,9 +1030,9 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_peth.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener">TurnerLab/motor_cortex/turner_m1_glm.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_peth.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001636/TurnerLab/motor_cortex/turner_m1_glm.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1108,8 +1110,21 @@ Original analyses on subsets of these data appear in three peer-reviewed papers 
                             <a class="archive-link" href="https://dandiarchive.org/dandiset/001538" target="_blank" rel="noopener">View on DANDI Archive</a>
                         </div>
                         <h2>State-dependent modulation of spiny projection neurons controls levodopa-induced dyskinesia in a mouse model of Parkinson’s disease</h2>
-                        <p class="description">This Dandiset contains all raw and primary-processed data underlying the study “State-dependent modulation of striatal spiny projection neurons controls levodopa-induced dyskinesia in a mouse model of Parkinson’s disease”
-The collection spans multimodal recordings from adult C57BL/6J mice rendered hemiparkinsonian with a unilateral 6-hydroxydopamine (6-OHDA) lesion of the medial forebrain bundle, followed by chronic levodopa dosing to provoke on-/off-state dyskinesia</p>
+                        <p class="description">This Dandiset contains raw and primary-processed data underlying the study “State-dependent modulation of striatal spiny projection neurons controls levodopa-induced dyskinesia in a mouse model of Parkinson’s disease”.
+The collection spans multimodal recordings from adult C57BL/6J mice rendered hemiparkinsonian with a unilateral 6-hydroxydopamine (6-OHDA) lesion of the medial forebrain bundle, followed by chronic levodopa dosing to provoke on-/off-state dyskinesia.
+
+Not included: some data analyzed in the paper are not part of this Dandiset. Figure numbers refer to the published article in Science Advances.
+1. Somatic and dendritic patch-clamp recordings from unlesioned control and 6-OHDA-lesioned mice (Figures 1E, 1F, 1I, 3C, 3D and 3F). The excitability data here cover the levodopa off-state, on-state and on-state with antagonist groups.
+2. Open-field data (Figure 10).
+3. The first pair of dendritic recording sites of the dSPN recorded on 2019-04-11 (cell 1, on-state with SCH23390, Figure 1I). Only its second pair is available.
+4. Detector background images for the GRAB-ACh3.0 imaging (Figure 5). The paper subtracts a background measured at the same photomultiplier tube voltage with zero laser power. These images were not shared.
+5. One of the 12 off-state regions that the lab's analysis tables count for burst stimulation in the GRAB-ACh3.0 experiments (fig. S1). The other 11 are included.
+6. The 80 min video of the first levodopa session of mouse 1590 (Figure 8), on 2018-02-23. The lab's file for it is a copy of the mouse's 20 min video of its second session.
+7. Five of the 23 mice of Figure 8: wild type 7741, 7742 and 7744, and CDGI knockout 2346 and 2347.
+
+Items 1 and 2 are in the paper's raw-data archive on Zenodo (https://doi.org/10.5281/zenodo.17260198). The paper's measurements, such as spine densities and rotation counts, are in its tables on Zenodo (https://doi.org/10.5281/zenodo.14589035). The rows of the spine and rotation tables are numbered within each table, so they cannot be matched to the files here.
+
+Known limitations: in somatic excitability recordings, some cells skip or repeat a current step, and some steps were recorded again minutes after the rest of the series, as recorded. Each sweep's current is the step its stimulus protocol commanded. Spike counts computed from these files match the paper's per-cell table on Zenodo exactly in 90 of 123 cells. Cells in the SCH 23390 and sulpiride sessions may also have baseline sweeps recorded before the drug. The condition and drug columns of the intracellular recordings table give each sweep's group. In 57 of 1276 dendritic excitability trials (6 recording days), the voltage recording stops at 1 s, before the current injections, so these trials contain no record of the evoked spikes; their calcium imaging is complete. Two Sr2+-oEPSC cells hold more sweeps than the 10 that the paper's frequencies imply: 2023-02-22 cell 1 has 12 and 2023-04-06 cell 1 has 11, and the files do not say which sweeps the paper used. Two GRAB-ACh3.0 regions lack a calibration trial: 2024-04-02 Slice1Roi2 has no acetylcholine trial for the maximum fluorescence, and 2024-05-24 Slice1Roi1 has no tetrodotoxin trial for the minimum. The abnormal involuntary movement (AIM) scores of the CDGI mice are the lab's scoring sheets for 21 mice, which match the preprint. The published Figure 8 differs from them in most sessions and does not include mice 5871, 4123 and 4124. The scores of Figure 10 match the paper.</p>
                         
                         <div class="notebooks">
                             <h3 class="notebooks-heading">Notebooks</h3>
@@ -1117,9 +1132,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1153,9 +1168,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_5F_acetylcholine_biosensor.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1171,9 +1186,9 @@ The collection spans multimodal recordings from adult C57BL/6J mice rendered hem
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener">catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/how_to_use_this_dataset.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/001538/catalyst_neuro/zhai_2025/figure_1E_dspn_somatic_excitability.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1673,13 +1688,21 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        
+                                    </div>
+                                </li>
+                                
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a>
+                                        
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
-                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure-s1:latest"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
                                         <a class="docker-help-link" href="docker-help.html"
@@ -1709,21 +1732,13 @@ Grid cells in the medial entorhinal cortex (MEC) are part of an environment-inde
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S3.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb</a>
                                         
-                                        
-                                    </div>
-                                </li>
-                                
-                                <li>
-                                    <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener">dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb</a>
-                                        
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure1d.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000559/dattalab/markowitz_gillis_nature_2023/reproduce_figure_S1.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
-                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure1d:latest"
+                                                data-cmd="docker run --rm -p 127.0.0.1:8888:8888 ghcr.io/dandi/example-notebooks/000559-dattalab-markowitz-gillis-nature-2023-reproduce-figure-s1:latest"
                                                 title="Copy a docker run command for a verified container with this notebook and its dependencies preinstalled"
                                                 aria-label="Copy docker run command">docker</button>
                                         <a class="docker-help-link" href="docker-help.html"
@@ -1864,14 +1879,6 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a>
-                                        
-                                        
-                                    </div>
-                                </li>
-                                
-                                <li>
-                                    <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener">MICrONS/demo/000402_microns_demo.ipynb</a>
                                         
                                         <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000402/MICrONS/demo/000402_microns_demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
@@ -1884,6 +1891,14 @@ The functional data were co-registered with electron microscopy (EM) data. The s
                                         <a class="docker-help-link" href="docker-help.html"
                                            title="What is this? How to run this notebook with Docker"
                                            aria-label="Help: running notebooks with Docker">?</a>
+                                        
+                                    </div>
+                                </li>
+                                
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000402/MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb" target="_blank" rel="noopener">MICrONS/coregistration/microns_nwb_coreg_notebook.ipynb</a>
+                                        
                                         
                                     </div>
                                 </li>
@@ -1959,9 +1974,9 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -1985,9 +2000,9 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener">chunglab/demo/2021-09-27_dandi-demo.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener">chunglab/demo/dashboard.ipynb</a>
                                         
-                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/2021-09-27_dandi-demo.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+                                        <a class="colab-badge" href="https://colab.research.google.com/github/dandi/example-notebooks/blob/master/000108/chunglab/demo/dashboard.ipynb" target="_blank" rel="noopener" aria-label="Open in Colab"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
                                         
                                         
                                         <button class="docker-badge" type="button"
@@ -2020,7 +2035,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a>
                                         
                                         
                                     </div>
@@ -2036,7 +2051,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_coarse_labels.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_coarse_labels.ipynb</a>
                                         
                                         
                                     </div>
@@ -2044,7 +2059,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/Fig_pow_spectra.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/Fig_pow_spectra.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000055/BruntonLab/peterson21/dashboard.ipynb" target="_blank" rel="noopener">BruntonLab/peterson21/dashboard.ipynb</a>
                                         
                                         
                                     </div>
@@ -2112,7 +2127,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a>
                                         
                                         
                                     </div>
@@ -2120,7 +2135,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Schemas.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000015/DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Chen-2017/notebooks/Chen-2017-examples.ipynb</a>
                                         
                                         
                                     </div>
@@ -2170,14 +2185,6 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a>
-                                        
-                                        
-                                    </div>
-                                </li>
-                                
-                                <li>
-                                    <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-Daie-2016-examples.ipynb</a>
                                         
                                         
@@ -2186,7 +2193,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-Daie-2015-2016/notebooks/Li-2015-examples.ipynb</a>
                                         
                                         
                                     </div>
@@ -2195,6 +2202,14 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 <li>
                                     <div class="nb-row">
                                         <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Schemas.ipynb</a>
+                                        
+                                        
+                                    </div>
+                                </li>
+                                
+                                <li>
+                                    <div class="nb-row">
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000010/DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Li-2015b/notebooks/Li-2015b-examples.ipynb</a>
                                         
                                         
                                     </div>
@@ -2219,7 +2234,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a>
                                         
                                         
                                     </div>
@@ -2227,7 +2242,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-NWB-examples.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000009/DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Guo-Inagaki-2017/notebooks/Guo-Inagaki-2017-examples.ipynb</a>
                                         
                                         
                                     </div>
@@ -2252,7 +2267,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a>
                                         
                                         
                                     </div>
@@ -2260,7 +2275,7 @@ Supported by Simons Collaboration on the Global Brain, Janelia Visitor Project, 
                                 
                                 <li>
                                     <div class="nb-row">
-                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/erd.ipynb</a>
+                                        <a class="nb-link" href="https://github.com/dandi/example-notebooks/blob/master/000007/DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb" target="_blank" rel="noopener">DataJoint/DJ-NWB-Gao-2018/notebooks/Gao-2018-examples.ipynb</a>
                                         
                                         
                                     </div>
