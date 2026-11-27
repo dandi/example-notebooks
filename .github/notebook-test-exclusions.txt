@@ -33,6 +33,12 @@ dandi/archive_stats.ipynb
 # Legacy tutorial pinned to a years-old NWB API; superseded by newer tutorials.
 tutorials/cosyne_2020/NWB_tutorial_2019.ipynb
 
+# Workshop participant copy: its fill-in-the-blank exercise cells raise
+# NameError until a participant fills them in. The instructor copy,
+# workshop_solutions.ipynb, runs the same code with the blanks filled and
+# stays in the sweep.
+tutorials/neuromatch_isp_2026/workshop.ipynb
+
 # =============================================================================
 # Upstream-package blocked — depends on a package we can't install or use.
 # =============================================================================
