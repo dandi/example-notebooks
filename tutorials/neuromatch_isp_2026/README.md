@@ -11,8 +11,9 @@ The workshop is an entry-level, hands-on introduction to finding open neurophysi
   - **Part A. Find**: search Dandisets from Python and read their metadata.
   - **Part B. Stream**: open one session of the IBL Brain Wide Map ([DANDI:000409](https://dandiarchive.org/dandiset/000409)) and plot a psychometric curve from the trials table.
   - **Part C. Analyze**: align one motor cortex unit's spikes to stimulus and movement onset, then open an Allen Institute calcium imaging file ([DANDI:000728](https://dandiarchive.org/dandiset/000728)) with the same code.
+- `workshop_solutions.ipynb`: an instructor copy of the workshop with every blank filled in.
 
-Each part starts with a catch-up cell and ends with a checkpoint, so the notebook can be followed live in a large group. Exercises have hidden solutions.
+Each part starts with a catch-up cell and ends with a checkpoint, so the notebook can be followed live in a large group. Exercises are fill-in-the-blank: most of the code is given, and participants replace each `___` with the missing piece. Each exercise has a hidden solution right below it.
 
 ### Design
 
